@@ -39,7 +39,6 @@
   	networking = {
 		hostName = "nixosMathis"; # Define your hostname.
 		networkmanager.enable = true;
-		wireless.enable = true;
 		wireless.iwd.enable = true;
 		networkmanager.wifi.backend = "iwd";
 	};
