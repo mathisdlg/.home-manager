@@ -9,10 +9,18 @@
 
 	# Bootloader.
 	boot = {
-		loader.efi.canTouchEfiVariables = true;
-		loader.systemd-boot.enable = true;
+		loader = {
+			efi.canTouchEfiVariables = true;
+			systemd-boot = {
+				enable = true;
+				editor = false;
+			};
+			timeout = 1;
+		};
+		
 		supportedFilesystems = [ "ntfs" "btrfs" ];
-		tmp.cleanOnBoot = true;
+		tmp.useTmpfs = true;
+		plymouth.enable = true;
 	};
 	
   	# Monut shared disk
@@ -31,6 +39,7 @@
   	networking = {
 		hostName = "nixosMathis"; # Define your hostname.
 		networkmanager.enable = true;
+		wireless.enable = true;
 		wireless.iwd.enable = true;
 		networkmanager.wifi.backend = "iwd";
 	};
