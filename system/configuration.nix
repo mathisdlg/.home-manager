@@ -21,15 +21,23 @@
 		fsType = "ntfs-3g";
   	};
 
-  	networking.hostName = "nixosMathis"; # Define your hostname.
-  	# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+	# Activate Zram swap
+	zramSwap = {
+		enable = true;
+		memoryPercent = 100;
+		algorithm = "zstd";
+	};
+
+  	networking = {
+		hostName = "nixosMathis"; # Define your hostname.
+		networkmanager.enable = true;
+		wireless.iwd.enable = true;
+		networkmanager.wifi.backend = "iwd";
+	};
 
   	# Configure network proxy if necessary
   	# networking.proxy.default = "http://user:password@proxy:port/";
   	# networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  	# Enable networking
-  	networking.networkmanager.enable = true;
 
   	# Set your time zone.
   	time.timeZone = "Europe/Paris";
