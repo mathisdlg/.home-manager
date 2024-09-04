@@ -42,6 +42,7 @@
 
 				"git.confirmSync"=false;
 				"git.autofetch"=true;
+				"git.enableSmartCommit"=true;
 
 				"editor.fontFamily"="'JetBrains Mono'";
 				"editor.fontWeight"="normal";
