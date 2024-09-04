@@ -55,9 +55,6 @@
 					}
 				];
 				"editor.tabSize"=4;
-				"workbench.colorCustomizations"={
-					"editorRuler.foreground"="#00000000";
-				};
 			};
 		};
 	};
