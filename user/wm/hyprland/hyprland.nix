@@ -8,8 +8,13 @@
 	];
 
 	config = {
-		home.file = {
-			".config/hypr/hyprland.conf".source = ./hyprland.conf;
+		home = {
+			packages = {
+				wl-clipboard
+			};
+			file = {
+				".config/hypr/hyprland.conf".source = ./hyprland.conf;
+			};
 		};
 	};
 }
