@@ -3,7 +3,7 @@
 
 	config = {
 		home.file = {
-			".background/hyprlock.jpg".source = ./images/hyprlock.jpg;
+			".background/".source = ./images;
 		};
 	};
 }
