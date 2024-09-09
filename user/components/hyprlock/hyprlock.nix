@@ -8,6 +8,7 @@
 
 		home.file = {
 			".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
+			"Images/hyprlock.jpg".source = ./hyprlock.jpg;
 		};
 	};
 }
