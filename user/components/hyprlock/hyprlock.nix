@@ -1,5 +1,7 @@
 { config, pkgs, ... }: {
-	imports = [];
+	imports = [
+		../background/background.nix
+	];
 
 	config = {
 		home.packages = with pkgs; [
@@ -8,7 +10,6 @@
 
 		home.file = {
 			".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
-			"Images/hyprlock.jpg".source = ./hyprlock.jpg;
 		};
 	};
 }

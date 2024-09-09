@@ -5,7 +5,7 @@ general {
 
 background {
     monitor =
-    path = "~/.background/hyprlock.jpg"   # supports png, jpg, webp (no animations, though)
+    path = screenshot   # supports png, jpg, webp (no animations, though)
     # color = rgba(23, 20, 20, 1)
 
     # all these options are taken from hyprland, see https://wiki.hyprland.org/Configuring/Variables/#blur for explanations
@@ -63,3 +63,16 @@ label {
     halign = center
     valign = center
 }
+
+# label {
+#     monitor =
+#     text = cmd[update:10000] echo $TIME
+#     text_align = center # center/right or any value for default left. multi-line text alignment inside label container
+#     color = rgb(170, 229, 164)
+#     font_size = 10
+#     rotate = -90 # degrees, counter-clockwise
+
+#     position = 940, 510
+#     halign = center
+#     valign = center
+# }
