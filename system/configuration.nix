@@ -23,12 +23,6 @@
 		plymouth.enable = true;
 	};
 	
-  	# Monut shared disk
-  	fileSystems."/mnt/Disque" = {
-		device = "/dev/nvme0n1p4";
-		fsType = "ntfs-3g";
-  	};
-
 	# Activate Zram swap
 	zramSwap = {
 		enable = true;
