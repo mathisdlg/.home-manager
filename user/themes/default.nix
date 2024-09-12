@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }: {
-	imports = [];
+	imports = [
+		./background/background.nix
+	];
 
 	config = {
 		home.packages = with pkgs; [

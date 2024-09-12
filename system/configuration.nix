@@ -168,7 +168,10 @@
 	};
 
 	# Hardware graphics librairies
-	hardware.graphics.enable = true;
+	# hardware.graphics.enable = true; # problems with flake downgrade to stable version
+	hardware.opengl = {
+		enable = true;
+	};
 
 	# Some programs need SUID wrappers, can be configured further or are
 	# started in user sessions.
