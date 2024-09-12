@@ -1,4 +1,4 @@
-{ config, ... }: {
+{ config, pkgs, ... }: {
 	imports = [
 		../../components/hyprlock/hyprlock.nix
 		../../components/hypridle/hypridle.nix

@@ -7,6 +7,8 @@
 		../themes/default.nix
 		
 		../wm/hyprland/hyprland.nix
+
+		../keepass/keepass.nix
 	];
 
 	home.username = "mathisdlg";
