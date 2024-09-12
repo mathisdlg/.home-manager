@@ -12,10 +12,9 @@
 	outputs = {self, nixpkgs, home-manager, ...}: 
 	let
 		nixLib = nixpkgs.lib;
-		homeMgrLib = home-manager.lib;
+		homeCfg = home-manager.lib.homeManagerConfiguration;
 		system = "x86_64-linux";
 		pkgs = nixpkgs.legacyPackages.${system};
-		homeCfg = homeMgrLib.homeManagerConfiguration;
 
 	in {
 		nixosConfigurations = {
