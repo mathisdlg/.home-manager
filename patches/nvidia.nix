@@ -1,9 +1,9 @@
-{
+{ config, lib, ...}: {
 	imports = [];
 
 	options = {
-		enable = mkOption {
-			type = types.bool;
+		enable = lib.mkOption {
+			type = lib.types.bool;
 			default = false;
 			example = true;
 			description = ''
@@ -12,7 +12,7 @@
 		};
 	};
 
-	config = lib.mkIf cfg.enable {
+	config = lib.mkIf lib.config.nvidia.enable {
 		hardware.opengl = {
 			enable = true;
 		};
