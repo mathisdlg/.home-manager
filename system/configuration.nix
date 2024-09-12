@@ -170,7 +170,7 @@
 
 	# Hardware graphics librairies
 	# hardware.graphics.enable = true; # problems with flake downgrade to stable version
-	nvidia.enable = true; # Nvidia custom config for GTX 1660 Super
+	services.nvidia.enable = true; # Nvidia custom config for GTX 1660 Super
 
 	# Some programs need SUID wrappers, can be configured further or are
 	# started in user sessions.

@@ -1,18 +1,14 @@
-{ config, lib, ...}: {
-	imports = [];
-
-	options = {
-		enable = lib.mkOption {
-			type = lib.types.bool;
-			default = false;
-			example = true;
-			description = ''
-				Enable the NVIDIA driver.
-			'';
-		};
+{ config, lib, ... }:
+with lib;
+let
+	cfg = config.services.nvidia;
+in {
+	# Declare what settings a user of this "nvidia.nix" module CAN SET.
+	options.services.nvidia = {
+		enable = mkEnableOption "Enable the NVIDIA driver.";
 	};
 
-	config = lib.mkIf lib.config.nvidia.enable {
+	config = mkIf cfg.enable {
 		hardware.opengl = {
 			enable = true;
 		};
