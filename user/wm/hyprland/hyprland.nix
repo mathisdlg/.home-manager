@@ -9,9 +9,10 @@
 
 	config = {
 		home = {
-			packages = {
+			packages = with pkgs; [
 				wl-clipboard
-			};
+			];
+
 			file = {
 				".config/hypr/hyprland.conf".source = ./hyprland.conf;
 			};
