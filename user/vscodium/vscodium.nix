@@ -55,7 +55,7 @@
 					}
 				];
 				"editor.tabSize"=4;
-				"editor.renderWhitespace"="none";
+				"editor.renderWhitespace"="boundary";
 			};
 		};
 	};
