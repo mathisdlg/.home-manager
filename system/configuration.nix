@@ -5,6 +5,7 @@
 { config, pkgs, ... }: {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
+		../patches/nvidia.nix
 	];
 
 	# Bootloader.
@@ -17,12 +18,12 @@
 			};
 			timeout = 1;
 		};
-		
+
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
 	};
-	
+
 	# Activate Zram swap
 	zramSwap = {
 		enable = true;
@@ -41,8 +42,8 @@
   	# networking.proxy.default = "http://user:password@proxy:port/";
   	# networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  	# Set your time zone.
-  	time.timeZone = "Europe/Paris";
+	# Set your time zone.
+	time.timeZone = "Europe/Paris";
 
   	# Select internationalisation properties.
   	i18n.defaultLocale = "fr_FR.UTF-8";
@@ -123,10 +124,10 @@
 		gparted
 		alsa-utils
 		pciutils
-	
+
 		#NixOs
 		home-manager
-		
+
 		# Hyprland
 		kitty
 		wofi
@@ -134,11 +135,11 @@
 
 		# Browser
 		firefox-devedition
-		
+
 		# Communication
 		discord
 		thunderbird
-		
+
 		# Notification
 		mako
 		libnotify
@@ -169,9 +170,7 @@
 
 	# Hardware graphics librairies
 	# hardware.graphics.enable = true; # problems with flake downgrade to stable version
-	hardware.opengl = {
-		enable = true;
-	};
+	nvidia.enable = true; # Nvidia custom config for GTX 1660 Super
 
 	# Some programs need SUID wrappers, can be configured further or are
 	# started in user sessions.
