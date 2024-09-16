@@ -1,11 +1,11 @@
 { config, pkgs, ... }: {
 	imports = [
 		../shell/sh.nix
-		
+
 		../vscodium/vscodium.nix
-		
+
 		../themes/default.nix
-		
+
 		../wm/hyprland/hyprland.nix
 
 		../keepass/keepass.nix

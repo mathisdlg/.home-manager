@@ -3,7 +3,7 @@
 		../../components/hyprlock/hyprlock.nix
 		../../components/hypridle/hypridle.nix
 		../../components/hyprpicker/hyprpicker.nix
-		
+
 		../../components/waybar/waybar.nix
 	];
 

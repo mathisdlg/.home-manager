@@ -10,7 +10,7 @@
 			enable = true;
 
 			package = pkgs.vscodium;
-			
+
 			extensions = with pkgs.vscode-extensions; [
 				# Copilot
 				github.copilot
