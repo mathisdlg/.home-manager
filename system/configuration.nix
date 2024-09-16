@@ -5,6 +5,7 @@
 { config, pkgs, ... }: {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
+		../patches/nvidia.nix
 	];
 
 	# Bootloader.
@@ -168,9 +169,7 @@
 
 	# Hardware graphics librairies
 	# hardware.graphics.enable = true; # problems with flake downgrade to stable version
-	hardware.opengl = {
-		enable = true;
-	};
+	services.nvidia.enable = false; # Nvidia custom config for GTX 1660 Super
 
 	# Some programs need SUID wrappers, can be configured further or are
 	# started in user sessions.
