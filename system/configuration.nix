@@ -165,6 +165,8 @@
 	environment.sessionVariables = {
 		"XDG_SESSION_TYPE" = "wayland";
 		"NIXOS_OZONE_WL" = "1";
+		"QT_QPA_PLATFORM" = "wayland";
+		"GDK_BACKEND" = "wayland";
 	};
 
 	# Hardware graphics librairies
