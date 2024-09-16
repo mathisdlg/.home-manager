@@ -17,7 +17,6 @@
 			};
 			timeout = 1;
 		};
-		
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
@@ -123,10 +122,10 @@
 		gparted
 		alsa-utils
 		pciutils
-	
+
 		#NixOs
 		home-manager
-		
+
 		# Hyprland
 		kitty
 		wofi
@@ -134,11 +133,11 @@
 
 		# Browser
 		firefox-devedition
-		
+
 		# Communication
 		discord
 		thunderbird
-		
+
 		# Notification
 		mako
 		libnotify

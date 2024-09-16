@@ -4,7 +4,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-	imports = [ 
+	imports = [
 		(modulesPath + "/installer/scan/not-detected.nix")
 	];
 
@@ -13,12 +13,12 @@
 	boot.kernelModules = [ "kvm-intel" ];
 	boot.extraModulePackages = [ ];
 
-	fileSystems."/" = { 
+	fileSystems."/" = {
 		device = "/dev/disk/by-uuid/ec9b6ded-1137-489f-ae2b-fa7e28c52d91";
 		fsType = "ext4";
 	};
 
-	fileSystems."/boot" = { 
+	fileSystems."/boot" = {
 		device = "/dev/disk/by-uuid/3833-FBB7";
 		fsType = "vfat";
 		options = [ "fmask=0022" "dmask=0022" ];

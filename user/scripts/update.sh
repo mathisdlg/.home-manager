@@ -1,4 +1,4 @@
-printf "Flake update\n"  
+printf "Flake update\n"
 nix flake update /home/mathisdlg/.home-manager
 
 printf "\nNixOs rebuild switch\n"

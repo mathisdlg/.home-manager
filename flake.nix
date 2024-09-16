@@ -8,8 +8,8 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 	};
-	
-	outputs = {self, nixpkgs, home-manager, ...}: 
+
+	outputs = {self, nixpkgs, home-manager, ...}:
 	let
 		nixLib = nixpkgs.lib;
 		homeCfg = home-manager.lib.homeManagerConfiguration;
