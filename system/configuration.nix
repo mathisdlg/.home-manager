@@ -1,5 +1,5 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
+# your system. Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }: {
@@ -18,7 +18,6 @@
 			};
 			timeout = 1;
 		};
-
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
@@ -31,24 +30,24 @@
 		algorithm = "zstd";
 	};
 
-  	networking = {
+	networking = {
 		hostName = "nixosMathis"; # Define your hostname.
 		networkmanager.enable = true;
 		wireless.iwd.enable = true;
 		networkmanager.wifi.backend = "iwd";
 	};
 
-  	# Configure network proxy if necessary
-  	# networking.proxy.default = "http://user:password@proxy:port/";
-  	# networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+	# Configure network proxy if necessary
+	# networking.proxy.default = "http://user:password@proxy:port/";
+	# networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
 	# Set your time zone.
 	time.timeZone = "Europe/Paris";
 
-  	# Select internationalisation properties.
-  	i18n.defaultLocale = "fr_FR.UTF-8";
+	# Select internationalisation properties.
+	i18n.defaultLocale = "fr_FR.UTF-8";
 
-  	i18n.extraLocaleSettings = {
+	i18n.extraLocaleSettings = {
 		LC_ADDRESS = "fr_FR.UTF-8";
 		LC_IDENTIFICATION = "fr_FR.UTF-8";
 		LC_MEASUREMENT = "fr_FR.UTF-8";
@@ -58,30 +57,30 @@
 		LC_PAPER = "fr_FR.UTF-8";
 		LC_TELEPHONE = "fr_FR.UTF-8";
 		LC_TIME = "fr_FR.UTF-8";
-  	};
+	};
 
-  	# Enable the X11 windowing system.
-  	services.xserver.enable = true;
+	# Enable the X11 windowing system.
+	services.xserver.enable = true;
 
-  	# Enable the GNOME Desktop Environment.
-  	services.xserver.displayManager.gdm.enable = true;
-  	services.xserver.desktopManager.gnome.enable = true;
+	# Enable the GNOME Desktop Environment.
+	services.xserver.displayManager.gdm.enable = true;
+	services.xserver.desktopManager.gnome.enable = true;
 
-  	# Configure keymap in X11
-  	services.xserver.xkb = {
-  	  	layout = "fr";
+	# Configure keymap in X11
+	services.xserver.xkb = {
+		layout = "fr";
 		variant = "azerty";
-  	};
+	};
 
-  	# Configure console keymap
-  	console.keyMap = "fr-pc";
+	# Configure console keymap
+	console.keyMap = "fr-pc";
 
-  	# Enable CUPS to print documents.
-  	services.printing.enable = true;
+	# Enable CUPS to print documents.
+	services.printing.enable = true;
 
-  	hardware.pulseaudio.enable = false;
-  	security.rtkit.enable = true;
-  	services.pipewire = {
+	hardware.pulseaudio.enable = false;
+	security.rtkit.enable = true;
+	services.pipewire = {
 		enable = true;
 		alsa.enable = true;
 		alsa.support32Bit = true;
@@ -91,7 +90,7 @@
 		# use the example session manager (no others are packaged yet so this is enabled by default,
 		# no need to redefine it in your config for now)
 		#media-session.enable = true;
-  	};
+	};
 
 	# Enable touchpad support (enabled default in most desktopManager).
 	# services.xserver.libinput.enable = true;
@@ -176,8 +175,8 @@
 	# started in user sessions.
 	# programs.mtr.enable = true;
 	# programs.gnupg.agent = {
-	#   enable = true;
-	#   enableSSHSupport = true;
+	#	enable = true;
+	#	enableSSHSupport = true;
 	# };
 
 	# List services that you want to enable:
