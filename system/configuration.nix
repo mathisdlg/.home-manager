@@ -112,59 +112,65 @@
 		"flakes"
 	];
 
-	environment.systemPackages = with pkgs; [
-		# Essentials
-		neovim
-		brightnessctl
-		pavucontrol
-		libreoffice
-		git
-		tree
-		gparted
-		alsa-utils
-		pciutils
+	environment = {
+		systemPackages = with pkgs; [
+			# Essentials
+			neovim
+			brightnessctl
+			pavucontrol
+			libreoffice
+			git
+			tree
+			gparted
+			alsa-utils
+			pciutils
 
-		#NixOs
-		home-manager
+			#NixOs
+			home-manager
 
-		# Hyprland
-		kitty
-		wofi
-		waybar
+			# Hyprland
+			kitty
+			wofi
+			waybar
 
-		# Browser
-		firefox-devedition
+			# Browser
+			firefox-devedition
 
-		# Communication
-		discord
-		thunderbird
+			# Communication
+			discord
+			thunderbird
 
-		# Notification
-		mako
-		libnotify
+			# Notification
+			mako
+			libnotify
 
-		# Music
-		rhythmbox
+			# Music
+			rhythmbox
 
-		# Config
-		qt6ct
-	];
+			# Config
+			qt6ct
+		];
+
+		# Environment Variables
+		sessionVariables = {
+			"XDG_SESSION_TYPE" = "wayland";
+			"NIXOS_OZONE_WL" = "1";
+			"QT_QPA_PLATFORM" = "wayland";
+			"GDK_BACKEND" = "wayland";
+		};
+	};
 
 	# Steam
-	programs.steam = {
-		enable = true;
-	};
+	programs = {
+		steam = {
+			enable = true;
+		};
 
-	# Hyprland
-	programs.hyprland = {
-		enable = true;
-		xwayland.enable = true;
-	};
-
-	# Environment Variables
-	environment.sessionVariables = {
-		"XDG_SESSION_TYPE" = "wayland";
-		"NIXOS_OZONE_WL" = "1";
+		# Hyprland
+		hyprland = {
+			enable = true;
+			xwayland.enable = true;
+		};
 	};
 
 	# Hardware graphics librairies
