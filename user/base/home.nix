@@ -27,6 +27,9 @@
 		enable = true;
 		userName = "mathisdlg";
 		userEmail = "delage.mathis.1@gmail.com";
+		extraConfig = {
+			safe.directory = "*";
+		};
 	};
 
 	home.file = {
