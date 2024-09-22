@@ -32,6 +32,13 @@
 				bbenoist.nix
 				# Python pack
 				ms-python.python
+
+				# Sonar Linter
+				sonarsource.sonarlint-vscode
+
+				# PHP
+				devsense.phptools-vscode
+				devsense.composer-php-vscode
 			];
 
 			userSettings = {
