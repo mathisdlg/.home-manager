@@ -9,6 +9,8 @@
 		../wm/hyprland/hyprland.nix
 
 		../keepass/keepass.nix
+
+		../games/puzzles.nix
 	];
 
 	home.username = "mathisdlg";

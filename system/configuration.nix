@@ -149,6 +149,9 @@
 
 			# Config
 			qt6ct
+
+			# Space manager
+			baobab
 		];
 
 		# Environment Variables

@@ -27,9 +27,9 @@
 				# Code Snap
 				adpyke.codesnap
 
-				# Programmation
 				# Nix
 				bbenoist.nix
+
 				# Python pack
 				ms-python.python
 
@@ -39,6 +39,9 @@
 				# PHP
 				devsense.phptools-vscode
 				devsense.composer-php-vscode
+
+				# Web dev
+				formulahendry.auto-close-tag
 			];
 
 			userSettings = {
