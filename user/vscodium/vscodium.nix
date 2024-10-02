@@ -4,6 +4,7 @@
 	config = {
 		home.packages = with pkgs; [
 			jetbrains-mono
+			jre
 		];
 
 		programs.vscode = {
