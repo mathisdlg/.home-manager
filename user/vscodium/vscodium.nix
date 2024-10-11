@@ -43,6 +43,9 @@
 
 				# Web dev
 				formulahendry.auto-close-tag
+
+				# Database
+				cweijan.vscode-database-client2
 			];
 
 			userSettings = {
