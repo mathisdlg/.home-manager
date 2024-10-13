@@ -2,6 +2,10 @@
 	imports = [];
 
 	config = {
+		packages = with pkgs; [
+			wl-clipboard
+		];
+
 		programs.neovim = {
 			enable = true;
 			extraConfig = ''
