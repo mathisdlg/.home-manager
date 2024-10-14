@@ -2,7 +2,8 @@
 	imports = [
 		../shell/sh.nix
 
-		../vscodium/vscodium.nix
+		../editor/vscodium/vscodium.nix
+		../editor/neovim/neovim.nix
 
 		../themes/default.nix
 
@@ -19,9 +20,7 @@
 
 	nixpkgs.config.allowUnfree = true;
 
-	home.packages = with pkgs; [
-		osu-lazer-bin
-	];
+	home.packages = with pkgs; [];
 
 	home.sessionVariables = {};
 

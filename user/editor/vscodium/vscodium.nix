@@ -46,6 +46,9 @@
 
 				# Database
 				cweijan.vscode-database-client2
+
+				# Error lens
+				usernamehw.errorlens
 			];
 
 			userSettings = {
