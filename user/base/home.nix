@@ -12,6 +12,7 @@
 		../keepass/keepass.nix
 
 		../games/puzzles/puzzles.nix
+		../games/mines/mines.nix
 	];
 
 	home.username = "mathisdlg";
