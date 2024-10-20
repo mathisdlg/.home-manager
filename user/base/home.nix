@@ -15,7 +15,7 @@
 		../games/mines/mines.nix
 
 		../browser/brave/brave.nix
-		../browser/firefox/firefox.nix
+		# ../browser/firefox/firefox.nix
 		../browser/firefox/firefox-dev.nix
 	];
 
