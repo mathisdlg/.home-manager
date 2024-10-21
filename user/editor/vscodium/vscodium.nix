@@ -49,6 +49,9 @@
 
 				# Error lens
 				usernamehw.errorlens
+
+				# C#
+				ms-dotnettools.csharp
 			];
 
 			userSettings = {
