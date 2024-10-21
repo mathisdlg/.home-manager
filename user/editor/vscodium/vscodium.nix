@@ -52,6 +52,7 @@
 
 				# C#
 				ms-dotnettools.csharp
+				ms-dotnettools.csdevkit
 			];
 
 			userSettings = {
