@@ -133,9 +133,6 @@
 			wofi
 			waybar
 
-			# Browser
-			firefox-devedition
-
 			# Communication
 			discord
 			thunderbird
