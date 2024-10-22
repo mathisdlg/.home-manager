@@ -77,6 +77,11 @@
 				];
 				"editor.tabSize"=4;
 				"editor.renderWhitespace"="boundary";
+				"sonarlint.rules"={
+					"python:S125"={
+						"level"="off";
+					};
+				};
 			};
 		};
 	};
