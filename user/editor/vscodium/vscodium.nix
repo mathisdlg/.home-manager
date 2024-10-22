@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-	imports = [];
+	imports = [ ../../components/tabby/tabby.nix ];
 
 	config = {
 		home.packages = with pkgs; [
@@ -13,7 +13,7 @@
 			package = pkgs.vscodium;
 
 			extensions = with pkgs.vscode-extensions; [
-				# Copilot
+				# AI assistant
 				github.copilot
 
 				# Theme
@@ -82,6 +82,7 @@
 						"level"="off";
 					};
 				};
+				"tabby.endpoint"="http://localhost:8080";
 			};
 		};
 	};
