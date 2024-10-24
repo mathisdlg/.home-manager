@@ -33,6 +33,7 @@
 
 				# Python pack
 				ms-python.python
+				ms-python.debugpy
 
 				# Sonar Linter
 				sonarsource.sonarlint-vscode
