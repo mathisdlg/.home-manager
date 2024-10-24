@@ -133,9 +133,6 @@
 			wofi
 			waybar
 
-			# Browser
-			firefox-devedition
-
 			# Communication
 			discord
 			thunderbird
@@ -149,9 +146,6 @@
 
 			# Config
 			qt6ct
-
-			# Space manager
-			baobab
 		];
 
 		# Environment Variables

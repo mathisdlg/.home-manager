@@ -35,6 +35,7 @@
 		userEmail = "delage.mathis.1@gmail.com";
 		extraConfig = {
 			safe.directory = "*";
+			init.defaultBranch = "main";
 		};
 	};
 

@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-	imports = [];
+	imports = [ ../../components/tabby/tabby.nix ];
 
 	config = {
 		home.packages = with pkgs; [
@@ -13,7 +13,7 @@
 			package = pkgs.vscodium;
 
 			extensions = with pkgs.vscode-extensions; [
-				# Copilot
+				# AI assistant
 				github.copilot
 
 				# Theme
@@ -33,6 +33,7 @@
 
 				# Python pack
 				ms-python.python
+				ms-python.debugpy
 
 				# Sonar Linter
 				sonarsource.sonarlint-vscode
@@ -49,6 +50,10 @@
 
 				# Error lens
 				usernamehw.errorlens
+
+				# C#
+				ms-dotnettools.csharp
+				ms-dotnettools.csdevkit
 			];
 
 			userSettings = {
@@ -73,6 +78,13 @@
 				];
 				"editor.tabSize"=4;
 				"editor.renderWhitespace"="boundary";
+				"sonarlint.rules"={
+					"python:S125"={
+						"level"="off";
+					};
+				};
+				"tabby.endpoint"="http://localhost:8080";
+				"git.openRepositoryInParentFolders"="always";
 			};
 		};
 	};
