@@ -185,6 +185,12 @@
 	# List services that you want to enable:
 	services.fstrim.enable = true;
 
+	# Docker rootless
+	virtualisation.docker.rootless = {
+		enable = true;
+		setSocketVariable = true;
+	};
+
 	# Enable the OpenSSH daemon.
 	# services.openssh.enable = true;
 
