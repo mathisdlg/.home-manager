@@ -1,6 +1,7 @@
 { config, pkgs, ... }: {
 	imports = [
-		../shell/sh.nix
+		../terminal/shell/sh.nix
+		../terminal/kitty/kitty.nix
 
 		../editor/vscodium/vscodium.nix
 		../editor/neovim/neovim.nix
@@ -17,6 +18,7 @@
 		../browser/brave/brave.nix
 		# ../browser/firefox/firefox.nix
 		../browser/firefox/firefox-dev.nix
+
 	];
 
 	home.username = "mathisdlg";
