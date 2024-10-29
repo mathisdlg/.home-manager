@@ -20,7 +20,9 @@
 		nixosConfigurations = {
 			nixosMathis = nixLib.nixosSystem {
 				inherit system;
-				modules = [ ./system/configuration.nix ];
+				modules = [
+					./system/configuration.nix
+				];
 			};
 		};
 		homeConfigurations = {
