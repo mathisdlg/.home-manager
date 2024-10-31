@@ -2,7 +2,7 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }: {
-	imports = [ 
+	imports = [
 			(modulesPath + "/installer/scan/not-detected.nix")
 		];
 
@@ -14,7 +14,7 @@
 	fileSystems."/" = { 
 		device = "/dev/disk/by-uuid/ddb681e3-588e-482d-b102-673d81eb6e2c";
 		fsType = "ext4";
-	};
+		};
 
 	fileSystems."/boot" = { 
 		device = "/dev/disk/by-uuid/4A2C-AC3F";
@@ -32,8 +32,8 @@
 	# still possible to use this option, but it's recommended to use it in conjunction
 	# with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
 	networking.useDHCP = lib.mkDefault true;
-	# networking.interfaces.enp7s0.useDHCP = lib.mkDefault true;
-	# networking.interfaces.wlp6s0.useDHCP = lib.mkDefault true;
+	# networking.interfaces.enp9s0.useDHCP = lib.mkDefault true;
+	# networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
 
 	nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 	hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
