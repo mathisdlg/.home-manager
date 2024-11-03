@@ -12,6 +12,11 @@
 			kernelModules = [ ];
 		};
 		kernelModules = [ "kvm-amd" ];
+		kernelParams = [
+			"video=DP-3:1920x1080@60"
+			"video=HDMI-A-1:1024x600@60"
+		];
+
 		extraModulePackages = [ ];
 	};
 
