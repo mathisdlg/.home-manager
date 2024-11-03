@@ -6,25 +6,31 @@
 			(modulesPath + "/installer/scan/not-detected.nix")
 		];
 
-	boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-	boot.initrd.kernelModules = [ ];
-	boot.kernelModules = [ "kvm-amd" ];
-	boot.extraModulePackages = [ ];
-
-	fileSystems."/" = { 
-		device = "/dev/disk/by-uuid/ddb681e3-588e-482d-b102-673d81eb6e2c";
-		fsType = "ext4";
+	boot = {
+		initrd = {
+			availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+			kernelModules = [ ];
 		};
-
-	fileSystems."/boot" = { 
-		device = "/dev/disk/by-uuid/4A2C-AC3F";
-		fsType = "vfat";
-		options = [ "fmask=0077" "dmask=0077" ];
+		kernelModules = [ "kvm-amd" ];
+		extraModulePackages = [ ];
 	};
 
-	fileSystems."/mnt/Disk" = {
-		device = "/dev/sda2";
-		fsType = "ntfs-3g";
+	fileSystems = {
+		"/" = { 
+			device = "/dev/disk/by-uuid/ddb681e3-588e-482d-b102-673d81eb6e2c";
+			fsType = "ext4";
+			};
+
+		"/boot" = { 
+			device = "/dev/disk/by-uuid/4A2C-AC3F";
+			fsType = "vfat";
+			options = [ "fmask=0077" "dmask=0077" ];
+		};
+
+		"/mnt/Disk" = {
+			device = "/dev/sda2";
+			fsType = "ntfs-3g";
+		};
 	};
 
 	# Enables DHCP on each ethernet and wireless interface. In case of scripted networking
