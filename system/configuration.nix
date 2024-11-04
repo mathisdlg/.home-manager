@@ -21,6 +21,7 @@
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
+		initrd.kernelModules = [ "amdgpu" ];
 	};
 
 	# Activate Zram swap
@@ -60,23 +61,32 @@
 	};
 
 	# Enable the X11 windowing system.
-	services.xserver.enable = true;
+	services = {
+		xserver = {
+			enable = true;
 
-	# Enable the GNOME Desktop Environment.
-	services.xserver.displayManager.gdm.enable = true;
-	services.xserver.desktopManager.gnome.enable = true;
+			# Enable the GNOME Desktop Environment.
+			displayManager.gdm.enable = true;
+			desktopManager.gnome.enable = true;
+		
+			# Configure keymap in X11
+			xkb = {
+				layout = "fr";
+				variant = "azerty";
+			};
+		};
 
-	# Configure keymap in X11
-	services.xserver.xkb = {
-		layout = "fr";
-		variant = "azerty";
+		# Enable CUPS to print documents.
+		printing.enable = true;
+
+		# Enable nvidia driver patch
+		nvidia.enable = false; # I have an AMD GPU now! :happy:
 	};
+
+
 
 	# Configure console keymap
 	console.keyMap = "fr-pc";
-
-	# Enable CUPS to print documents.
-	services.printing.enable = true;
 
 	hardware.pulseaudio.enable = false;
 	security.rtkit.enable = true;
@@ -172,7 +182,6 @@
 
 	# Hardware graphics librairies
 	# hardware.graphics.enable = true; # problems with flake downgrade to stable version
-	services.nvidia.enable = false; # Nvidia custom config for GTX 1660 Super
 
 	# Some programs need SUID wrappers, can be configured further or are
 	# started in user sessions.
@@ -184,6 +193,12 @@
 
 	# List services that you want to enable:
 	services.fstrim.enable = true;
+
+	# Docker rootless
+	virtualisation.docker.rootless = {
+		enable = true;
+		setSocketVariable = true;
+	};
 
 	# Enable the OpenSSH daemon.
 	# services.openssh.enable = true;
