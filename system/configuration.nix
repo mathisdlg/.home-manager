@@ -144,9 +144,6 @@
 			discord
 			thunderbird
 
-			# Notifications
-			libnotify
-
 			# Music
 			rhythmbox
 
