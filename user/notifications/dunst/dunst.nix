@@ -17,6 +17,7 @@
 				vertical_alignment = "center";
 				width = "400";
 				height = "400";
+				notification_limit = 5;
 				scale = 0;
 				gap_size = 0;
 				progress_bar = true;
@@ -55,7 +56,7 @@
 				show_indicators = "yes";
 				shrink = "no";
 				word_wrap = "yes";
-				browser = "/usr/bin/env librewolf -new-tab";
+				browser = "/usr/bin/env firefox-devedition -new-tab";
 			};
 
 			fullscreen_delay_everything = {fullscreen = "delay";};
