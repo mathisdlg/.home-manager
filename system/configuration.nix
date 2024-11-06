@@ -138,7 +138,6 @@
 			# Hyprland
 			kitty
 			wofi
-			waybar
 
 			# Communication
 			discord

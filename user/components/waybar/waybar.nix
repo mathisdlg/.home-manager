@@ -3,7 +3,7 @@
 
 	config = {
 		home.packages = with pkgs; [
-			font-awesome
+			waybar
 		];
 
 		home.file = {
