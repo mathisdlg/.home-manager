@@ -193,6 +193,12 @@
 		setSocketVariable = true;
 	};
 
+	nix.gc = {
+		automatic = true;
+		dates = "weekly";
+		options = "--delete-older-than 30d";
+	};
+
 	# Enable the OpenSSH daemon.
 	# services.openssh.enable = true;
 
