@@ -140,14 +140,10 @@
 			# Hyprland
 			kitty
 			wofi
-			waybar
 
 			# Communication
 			discord
 			thunderbird
-
-			# Notifications
-			libnotify
 
 			# Music
 			rhythmbox
@@ -196,6 +192,18 @@
 	virtualisation.docker.rootless = {
 		enable = true;
 		setSocketVariable = true;
+	};
+
+	nix = {
+		gc = {
+			automatic = true;
+			dates = "weekly";
+			options = "--delete-older-than 30d";
+		};
+
+		optimise = {
+			automatic = true;
+		};
 	};
 
 	# Enable the OpenSSH daemon.
