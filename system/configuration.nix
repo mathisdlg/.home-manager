@@ -21,7 +21,6 @@
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
-		initrd.kernelModules = [ "amdgpu" ];
 	};
 
 	# Activate Zram swap
@@ -82,8 +81,6 @@
 		# Enable nvidia driver patch
 		nvidia.enable = false; # I have an AMD GPU now! :happy:
 	};
-
-
 
 	# Configure console keymap
 	console.keyMap = "fr-pc";
