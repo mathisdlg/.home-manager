@@ -147,10 +147,6 @@
 			discord
 			thunderbird
 
-			# Notification
-			mako
-			libnotify
-
 			# Music
 			rhythmbox
 
