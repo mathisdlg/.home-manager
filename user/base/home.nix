@@ -1,6 +1,6 @@
 { config, pkgs, ... }: {
 	imports = [
-		../terminal/shell/sh.nix
+		../terminal/shell/shell.nix
 		../terminal/kitty/kitty.nix
 
 		../editor/vscodium/vscodium.nix
@@ -19,6 +19,7 @@
 		# ../browser/firefox/firefox.nix
 		../browser/firefox/firefox-dev.nix
 
+		../notifications/dunst/dunst.nix
 	];
 
 	home.username = "mathisdlg";

@@ -84,8 +84,6 @@
 		nvidia.enable = false; # I have an AMD GPU now! :happy:
 	};
 
-
-
 	# Configure console keymap
 	console.keyMap = "fr-pc";
 
@@ -148,8 +146,7 @@
 			discord
 			thunderbird
 
-			# Notification
-			mako
+			# Notifications
 			libnotify
 
 			# Music
