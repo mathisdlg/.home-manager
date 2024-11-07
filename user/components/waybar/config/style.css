@@ -19,7 +19,7 @@ window#waybar.hidden {
 }
 
 tooltip {
-    background: #EAB2C2;
+    background: #205376;
     color: @main-fg;
     border-radius: 8px;
     border-width: 0px;
