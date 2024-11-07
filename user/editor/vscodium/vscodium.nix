@@ -85,6 +85,10 @@
 				};
 				"tabby.endpoint"="http://localhost:8080";
 				"git.openRepositoryInParentFolders"="always";
+
+				"files.associations"={
+					"config"="jsonc"
+				};
 			};
 		};
 	};
