@@ -142,7 +142,6 @@
 			wofi
 
 			# Communication
-			discord
 			thunderbird
 
 			# Music

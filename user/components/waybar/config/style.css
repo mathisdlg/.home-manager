@@ -1,19 +1,28 @@
+@import "themes/theme.css";
+
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    border: none;
+    border-radius: 0px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
     font-size: 13px;
+    min-height: 21px;
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: #ffffff;
-    transition-property: background-color;
-    transition-duration: .5s;
+    background-color: @bar-bg;
+    border-radius: 7px;
 }
 
 window#waybar.hidden {
     opacity: 0.2;
+}
+
+tooltip {
+    background: #205376;
+    color: @main-fg;
+    border-radius: 8px;
+    border-width: 0px;
 }
 
 /*
