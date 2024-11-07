@@ -86,7 +86,7 @@
 	"cpu": {
 		"format": "{usage}% 📈",
 		"tooltip": false,
-		"onclick": "gnome-system-monitor"
+		"on-click": "gnome-system-monitor"
 	},
 	"memory": {
 		"format": "{}% 💿"
