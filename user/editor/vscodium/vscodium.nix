@@ -87,7 +87,7 @@
 				"git.openRepositoryInParentFolders"="always";
 
 				"files.associations"={
-					"config"="jsonc"
+					"config"="jsonc";
 				};
 			};
 		};
