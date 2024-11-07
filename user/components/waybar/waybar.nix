@@ -4,6 +4,7 @@
 	config = {
 		home.packages = with pkgs; [
 			waybar
+			jetbrains-mono
 		];
 
 		home.file = {
