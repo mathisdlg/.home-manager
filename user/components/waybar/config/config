@@ -7,7 +7,8 @@
     "passthrough": false,
     "gtk-layer-shell": true,
     "width": 1900,
-    "margin-top": 10,
+    "margin-top": 5,
+	"margin-bottom": 5,
 	"spacing": 5,
 	
 	"modules-left": ["hyprland/workspaces"],
@@ -84,7 +85,8 @@
 	},
 	"cpu": {
 		"format": "{usage}% 📈",
-		"tooltip": false
+		"tooltip": false,
+		"onclick": "gnome-system-monitor"
 	},
 	"memory": {
 		"format": "{}% 💿"
