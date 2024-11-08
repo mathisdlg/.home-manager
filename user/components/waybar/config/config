@@ -17,12 +17,14 @@
 	"modules-right": ["pulseaudio", "network", "memory", "cpu", "temperature", "battery"],
 
 	// Modules configuration
-	// "hyprland/workspaces": {
-	// 	 "disable-scroll": true,
-	// 	 "all-outputs": true,
-	// 	 "warp-on-scroll": true,
-	// 	 "format": "{name}"
-	// },
+	"hyprland/workspaces": {
+		"disable-scroll": true,
+		"all-outputs": false,
+		"warp-on-scroll": true,
+		"format": "{name}",
+		"on-scroll-up": "hyprctl dispatch workspace e+1",
+		"on-scroll-down": "hyprctl dispatch workspace e-1"
+	},
 	"keyboard-state": {
 		"numlock": true,
 		"capslock": true,
