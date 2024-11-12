@@ -89,6 +89,8 @@
 				"files.associations"={
 					"config"="jsonc";
 				};
+
+				"database-client.autoSync"=true;
 			};
 		};
 	};
