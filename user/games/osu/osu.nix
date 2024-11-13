@@ -1,9 +1,11 @@
 { config, pkgs, ... }: {
 	config = {
-		home.packages = with pkgs; [];
+		home.packages = with pkgs; [
+			appimage-run
+		];
 
-		programs.appimage-run.enable = true;
-
-		home.file."Games/osu/".source = ./osu/;
+		home.file = {
+			"Games/osu".source = ./osu.d;
+		};
 	};
 }

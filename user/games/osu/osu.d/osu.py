@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 USERNAME = "mathisdlg"
 URL = "https://github.com/ppy/osu/releases/latest"
-GAME_REPO = f"/home/{USERNAME}/Games/osu"
+GAME_REPO = f"/home/{USERNAME}/Games"
 
 page = requests.get(URL)
 
