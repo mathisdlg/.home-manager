@@ -14,6 +14,7 @@
 
 		../games/puzzles/puzzles.nix
 		../games/mines/mines.nix
+		../games/osu/osu.nix
 
 		../browser/brave/brave.nix
 		# ../browser/firefox/firefox.nix
