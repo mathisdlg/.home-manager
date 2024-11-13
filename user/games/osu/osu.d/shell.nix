@@ -14,6 +14,6 @@ pkgs.mkShellNoCC {
 	shellHook = ''
 		export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 		python osu.py
-		appimage-run ~/Games/osu/osu.AppImage
+		appimage-run ~/Games/osu.AppImage
 	'';
 }
