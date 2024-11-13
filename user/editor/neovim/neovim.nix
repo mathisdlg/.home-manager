@@ -13,11 +13,38 @@
 			vimAlias = true;
 
 			plugins =  with pkgs.vimPlugins; [
-				nvim-tree-lua
+				{
+					plugin = nvim-tree-lua;
+					config = ''
+						packadd! nvim-tree.lua
+						lua << END
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
+
+require("nvim-tree").setup({
+  sort = {
+    sorter = "case_sensitive",
+  },
+  view = {
+    width = 30,
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+END
+					'';
+				}
+
 				feline-nvim
 				nvim-cokeline
 				copilot-vim
 				tokyonight-nvim
+				tabby-nvim
 			];
 
 			extraConfig = ''
@@ -31,6 +58,7 @@
 
 				" Set the font with ligatures
 				set guifont=JetBrains\ Mono:h12
+				set guifont=Material\ Design\ Icons:h12
 
 				" Set the tab size
 				set tabstop=4

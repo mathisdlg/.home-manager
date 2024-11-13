@@ -1,10 +1,11 @@
 { config, pkgs, ... }: {
-	imports = [];
-
 	config = {
 		home.packages = with pkgs; [
-			hyprpicker
-			wl-clipboard
+			appimage-run
 		];
+
+		home.file = {
+			"Games/osu".source = ./osu.d;
+		};
 	};
 }
