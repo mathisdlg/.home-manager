@@ -21,6 +21,8 @@
 		../browser/firefox/firefox-dev.nix
 
 		../notifications/dunst/dunst.nix
+
+		../blender/blender.nix
 	];
 
 	home.username = "mathisdlg";
