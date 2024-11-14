@@ -1,7 +1,7 @@
 printf "Flake update\n"
 nix flake update /home/mathisdlg/.home-manager
 
-printf "\nNixOs rebuild switch\n"
+printf "\nNixOs rebuild boot\n"
 sudo nixos-rebuild boot --flake /home/mathisdlg/.home-manager
 
 printf "\nHome Manager rebuild switch\n"
