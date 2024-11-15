@@ -2,10 +2,17 @@
 	imports = [];
 
 	config = {
-		home.packages = with pkgs; [
-			wl-clipboard
-			jetbrains-mono
-		];
+		home = {
+			packages = with pkgs; [
+				wl-clipboard
+				jetbrains-mono
+			];
+
+			sessionVariables = {
+				EDITOR = "nvim";
+				VISUAL = "nvim";
+			};
+		};
 
 		programs.neovim = {
 			enable = true;
@@ -65,11 +72,6 @@ END
 				set shiftwidth=4
 				set expandtab
 			'';
-		};
-
-		home.sessionVariables = {
-			EDITOR = "nvim";
-			VISUAL = "nvim";
 		};
 	};
 }

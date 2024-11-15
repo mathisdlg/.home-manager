@@ -2,13 +2,15 @@
 	imports = [];
 
 	config = {
-		home.packages = with pkgs; [
-			waybar
-			jetbrains-mono
-		];
+		home = {
+			packages = with pkgs; [
+				waybar
+				jetbrains-mono
+			];
 
-		home.file = {
-			".config/waybar".source = ./config;
+			file = {
+				".config/waybar".source = ./config;
+			};
 		};
 	};
 }

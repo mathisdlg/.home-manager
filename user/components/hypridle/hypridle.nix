@@ -2,12 +2,14 @@
 	imports = [];
 
 	config = {
-		home.packages = with pkgs; [
-			hypridle
-		];
+		home = {
+			packages = with pkgs; [
+				hypridle
+			];
 
-		home.file = {
-			".config/hypr/hypridle.conf".source = ./hypridle.conf;
+			file = {
+				".config/hypr/hypridle.conf".source = ./hypridle.conf;
+			};
 		};
 	};
 }

@@ -46,21 +46,21 @@
 	time.timeZone = "Europe/Paris";
 
 	# Select internationalisation properties.
-	i18n.defaultLocale = "fr_FR.UTF-8";
-
-	i18n.extraLocaleSettings = {
-		LC_ADDRESS = "fr_FR.UTF-8";
-		LC_IDENTIFICATION = "fr_FR.UTF-8";
-		LC_MEASUREMENT = "fr_FR.UTF-8";
-		LC_MONETARY = "fr_FR.UTF-8";
-		LC_NAME = "fr_FR.UTF-8";
-		LC_NUMERIC = "fr_FR.UTF-8";
-		LC_PAPER = "fr_FR.UTF-8";
-		LC_TELEPHONE = "fr_FR.UTF-8";
-		LC_TIME = "fr_FR.UTF-8";
+	i18n = {
+		defaultLocale = "fr_FR.UTF-8";
+		extraLocaleSettings = {
+			LC_ADDRESS = "fr_FR.UTF-8";
+			LC_IDENTIFICATION = "fr_FR.UTF-8";
+			LC_MEASUREMENT = "fr_FR.UTF-8";
+			LC_MONETARY = "fr_FR.UTF-8";
+			LC_NAME = "fr_FR.UTF-8";
+			LC_NUMERIC = "fr_FR.UTF-8";
+			LC_PAPER = "fr_FR.UTF-8";
+			LC_TELEPHONE = "fr_FR.UTF-8";
+			LC_TIME = "fr_FR.UTF-8";
+		};
 	};
 
-	# Enable the X11 windowing system.
 	services = {
 		xserver = {
 			enable = true;
@@ -82,6 +82,18 @@
 
 		# Enable nvidia driver patch
 		nvidia.enable = false; # I have an AMD GPU now! :happy:
+
+		fstrim.enable = true;
+
+		pipewire = {
+			enable = true;
+			alsa = {
+				enable = true;
+				support32Bit = true;
+			};
+			pulse.enable = true;
+			jack.enable = true;
+		};
 	};
 
 	# Configure console keymap
@@ -89,17 +101,6 @@
 
 	hardware.pulseaudio.enable = false;
 	security.rtkit.enable = true;
-	services.pipewire = {
-		enable = true;
-		alsa.enable = true;
-		alsa.support32Bit = true;
-		pulse.enable = true;
-		jack.enable = true;
-
-		# use the example session manager (no others are packaged yet so this is enabled by default,
-		# no need to redefine it in your config for now)
-		#media-session.enable = true;
-	};
 
 	# Enable touchpad support (enabled default in most desktopManager).
 	# services.xserver.libinput.enable = true;
@@ -114,12 +115,6 @@
 
 	# Allow unfree packages
 	nixpkgs.config.allowUnfree = true;
-
-	# Allow experimental features
-	nix.settings.experimental-features = [
-		"nix-command"
-		"flakes"
-	];
 
 	environment = {
 		systemPackages = with pkgs; [
@@ -160,8 +155,8 @@
 		};
 	};
 
-	# Steam
 	programs = {
+		# Steam
 		steam = {
 			enable = true;
 		};
@@ -185,7 +180,6 @@
 	# };
 
 	# List services that you want to enable:
-	services.fstrim.enable = true;
 
 	# Docker rootless
 	virtualisation.docker.rootless = {
@@ -197,11 +191,19 @@
 		gc = {
 			automatic = true;
 			dates = "weekly";
-			options = "--delete-older-than 30d";
+			options = "--delete-older-than 10d";
 		};
 
 		optimise = {
 			automatic = true;
+		};
+
+		settings = {
+			experimental-features = [
+				"nix-command"
+				"flakes"
+			];
+			auto-optimise-store = true;
 		};
 	};
 

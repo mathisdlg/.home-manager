@@ -25,29 +25,34 @@
 		../blender/blender.nix
 	];
 
-	home.username = "mathisdlg";
-	home.homeDirectory = "/home/mathisdlg";
-	home.stateVersion = "23.11"; # Please read the comment before changing.
+	home = {
+		username = "mathisdlg";
+		homeDirectory = "/home/mathisdlg";
+		stateVersion = "23.11"; # Please read the comment before changing.
 
-	nixpkgs.config.allowUnfree = true;
+		packages = with pkgs; [];
 
-	home.packages = with pkgs; [];
+		sessionVariables = {};
 
-	home.sessionVariables = {};
-
-	programs.git = {
-		enable = true;
-		userName = "mathisdlg";
-		userEmail = "delage.mathis.1@gmail.com";
-		extraConfig = {
-			safe.directory = "*";
-			init.defaultBranch = "main";
+		file = {
+			".update.sh".source = ../scripts/update.sh;
 		};
 	};
 
-	home.file = {
-		".update.sh".source = ../scripts/update.sh;
-	};
+	nixpkgs.config.allowUnfree = true;
 
-	programs.home-manager.enable = true;
+	programs = {
+		git = {
+			enable = true;
+			userName = "mathisdlg";
+			userEmail = "delage.mathis.1@gmail.com";
+			extraConfig = {
+				safe.directory = "*";
+				init.defaultBranch = "main";
+			};
+		};
+		home-manager = {
+			enable = true;
+		};
+	};
 }
