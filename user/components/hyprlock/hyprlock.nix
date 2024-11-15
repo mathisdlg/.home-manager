@@ -2,12 +2,14 @@
 	imports = [];
 
 	config = {
-		home.packages = with pkgs; [
-			hyprlock
-		];
+		home = {
+			packages = with pkgs; [
+				hyprlock
+			];
 
-		home.file = {
-			".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
+			file = {
+				".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
+			};
 		};
 	};
 }

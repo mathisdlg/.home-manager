@@ -8,27 +8,33 @@
 		(modulesPath + "/installer/scan/not-detected.nix")
 	];
 
-	boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
-	boot.initrd.kernelModules = [ ];
-	boot.kernelModules = [ "kvm-intel" ];
-	boot.extraModulePackages = [ ];
-
-	fileSystems."/" = {
-		device = "/dev/disk/by-uuid/ec9b6ded-1137-489f-ae2b-fa7e28c52d91";
-		fsType = "ext4";
+	boot = {
+		initrd = {
+			availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
+			kernelModules = [ ];
+		};
+		kernelModules = [ "kvm-intel" ];
+		extraModulePackages = [ ];
 	};
 
-	fileSystems."/boot" = {
-		device = "/dev/disk/by-uuid/3833-FBB7";
-		fsType = "vfat";
-		options = [ "fmask=0022" "dmask=0022" ];
-	};
+	fileSystems = {
+		"/" = {
+			device = "/dev/disk/by-uuid/ec9b6ded-1137-489f-ae2b-fa7e28c52d91";
+			fsType = "ext4";
+		};
+
+		"/boot" = {
+			device = "/dev/disk/by-uuid/3833-FBB7";
+			fsType = "vfat";
+			options = [ "fmask=0022" "dmask=0022" ];
+		};
 
 
-	# Monut shared disk
-	fileSystems."/mnt/Disk" = {
-		device = "/dev/nvme0n1p4";
-		fsType = "ntfs-3g";
+		# Monut shared disk
+		"/mnt/Disk" = {
+			device = "/dev/nvme0n1p4";
+			fsType = "ntfs-3g";
+		};
 	};
 
 	# Enables DHCP on each ethernet and wireless interface. In case of scripted networking
