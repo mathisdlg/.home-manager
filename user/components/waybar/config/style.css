@@ -74,7 +74,9 @@ button:hover {
 #mode,
 #idle_inhibitor,
 #scratchpad,
-#mpd {
+#mpd,
+#window,
+#custom-power {
     padding: 0 10px;
     color: #ffffff;
 
@@ -254,4 +256,8 @@ label:focus {
 
 #scratchpad.empty {
 	background-color: transparent;
+}
+
+#custom-power {
+    background-color: navy;
 }
