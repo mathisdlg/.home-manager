@@ -92,6 +92,11 @@
 			pulse.enable = true;
 			jack.enable = true;
 		};
+
+		mysql = {
+			enable = true;
+			package = pkgs.mariadb;
+		};
 	};
 
 	# Configure console keymap
