@@ -7,6 +7,9 @@
 		"on-scroll-up": "hyprctl dispatch workspace e-1 &> /dev/null",
 		"on-scroll-down": "hyprctl dispatch workspace e+1 &> /dev/null"
 	},
+	"hyprland/window": {
+		"format": "{class}",
+	},
 	"keyboard-state": {
 		"numlock": true,
 		"capslock": true,
@@ -60,6 +63,7 @@
 		}
 	},
 	"tray": {
+		"show-passives-items": true,
 		"icon-size": 23,
 		"spacing": 10
 	},
@@ -75,7 +79,7 @@
 		"interval": 5
 	},
 	"memory": {
-		"format": "{}% 💿",
+		"format": "{used:0.1f}Gi 💿",
 		"interval": 5
 	},
 	"temperature": {
@@ -144,5 +148,10 @@
 		"escape": true,
 		"exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
 		// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-	}
+	},
+	"custom/power": {
+		"tooltip": false,
+		"on-click": "wlogout -p layer-shell &",
+		"format": "⏻",
+	},
 }

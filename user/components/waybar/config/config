@@ -11,7 +11,9 @@
 	"spacing": 5,
 	
 	"modules-left": [
-		"hyprland/workspaces"
+		"hyprland/workspaces",
+		"hyprland/window",
+
 	],
 	"modules-center": [
 		"idle_inhibitor",
@@ -24,6 +26,7 @@
 		"cpu",
 		"temperature",
 		"battery",
-		"tray"
+		"tray",
+		"custom/power",
 	]
 }
