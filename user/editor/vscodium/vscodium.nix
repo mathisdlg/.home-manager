@@ -77,7 +77,10 @@
 					}
 				];
 				"editor.tabSize"=4;
+				"editor.insertSpaces"=true;
+				"editor.detectIndentation"=false;
 				"editor.renderWhitespace"="boundary";
+				"explorer.confirmDelete"=false;
 				"sonarlint.rules"={
 					"python:S125"={
 						"level"="off";
