@@ -158,6 +158,31 @@
 			"QT_QPA_PLATFORM" = "wayland";
 			"GDK_BACKEND" = "wayland";
 		};
+
+		gnome.excludePackages = (with pkgs; [
+			gnome-photos
+			gnome-tour
+			gnome-music
+			gnome-font-viewer
+			gnome-connections
+			gnome-terminal
+			gnome-console
+			gnome-weather
+			gnome-calendar
+			gnome-characters
+			gnome-clocks
+			gnome-contacts
+			gnome-color-manager
+			gnome-logs
+			gnome-maps
+			seahorse # password manager
+			gedit # text editor
+			cheese # webcam tool
+			epiphany # web browser
+			geary # email reader
+			evince # document viewer
+			totem # video player
+		]);
 	};
 
 	programs = {
