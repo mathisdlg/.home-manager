@@ -178,10 +178,12 @@
 			seahorse # password manager
 			gedit # text editor
 			cheese # webcam tool
+			snapshot # Camera tool
 			epiphany # web browser
 			geary # email reader
 			evince # document viewer
 			totem # video player
+			loupe # image viewer
 		]);
 	};
 
