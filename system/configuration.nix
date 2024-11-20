@@ -164,6 +164,7 @@
 			gnome-font-viewer
 			gnome-connections
 			gnome-terminal
+			gnome-console
 			gnome-weather
 			gnome-calendar
 			gnome-characters
