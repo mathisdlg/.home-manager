@@ -23,6 +23,8 @@
 		../notifications/dunst/dunst.nix
 
 		../blender/blender.nix
+
+		../media_player/mpv/mpv.nix
 	];
 
 	home = {
