@@ -3,6 +3,7 @@
 
 	config = {
 		home.packages = with pkgs; [
+			socat
 		];
 
 		programs.mpv = {
