@@ -91,6 +91,9 @@
 				};
 
 				"database-client.autoSync"=true;
+
+				"explorer.confirmDelete"=false;
+				"explorer.confirmDragAndDrop"=false;
 			};
 		};
 	};
