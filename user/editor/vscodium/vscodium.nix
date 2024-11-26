@@ -92,8 +92,8 @@
 
 				"database-client.autoSync"=true;
 
-				"explorer.confirmDragAndDrop"=false;
 				"explorer.confirmDelete"=false;
+				"explorer.confirmDragAndDrop"=false;
 			};
 		};
 	};
