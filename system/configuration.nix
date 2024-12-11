@@ -106,7 +106,6 @@
 
 	hardware = {
 		pulseaudio.enable = false;
-		opentabletdriver.enable = true;
 	};
 	security.rtkit.enable = true;
 
@@ -124,12 +123,12 @@
 	# Allow unfree packages
 	nixpkgs.config = {
 		allowUnfree = true;
-		permittedInsecurePackages = [
-			"dotnet-runtime-wrapped-6.0.36"
-			"dotnet-runtime-6.0.36"
-			"dotnet-sdk-wrapped-6.0.428"
-			"dotnet-sdk-6.0.428"
-		];
+		# permittedInsecurePackages = [
+		# 	"dotnet-runtime-wrapped-6.0.36"
+		# 	"dotnet-runtime-6.0.36"
+		# 	"dotnet-sdk-wrapped-6.0.428"
+		# 	"dotnet-sdk-6.0.428"
+		# ];
 	};
 
 	environment = {
