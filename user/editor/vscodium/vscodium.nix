@@ -35,9 +35,6 @@
 				ms-python.python
 				ms-python.debugpy
 
-				# Sonar Linter
-				sonarsource.sonarlint-vscode
-
 				# PHP
 				devsense.phptools-vscode
 				devsense.composer-php-vscode
