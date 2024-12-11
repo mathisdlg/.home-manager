@@ -58,7 +58,7 @@
 
 				"workbench.colorTheme"="One Dark Pro";
 				"workbench.iconTheme"="material-icon-theme";
-				"workbench.editor.enablePreview=true";
+				"workbench.editor.enablePreview"=true;
 
 				"git.confirmSync"=false;
 				"git.autofetch"=true;
