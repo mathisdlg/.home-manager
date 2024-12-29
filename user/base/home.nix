@@ -27,6 +27,8 @@
 		../media_player/mpv/mpv.nix
 
 		../krita/krita.nix
+
+		../baobab/baobab.nix
 	];
 
 	home = {
@@ -58,5 +60,9 @@
 		home-manager = {
 			enable = true;
 		};
+	};
+
+	services = {
+		baobab.enable = true;
 	};
 }
