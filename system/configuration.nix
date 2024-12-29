@@ -182,6 +182,7 @@
 			evince # document viewer
 			totem # video player
 			loupe # image viewer
+			baobab # disk usage analyzer
 		]);
 	};
 
