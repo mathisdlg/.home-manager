@@ -20,8 +20,6 @@
 		# ../browser/firefox/firefox.nix
 		../browser/firefox/firefox-dev.nix
 
-		../notifications/dunst/dunst.nix
-
 		../blender/blender.nix
 
 		../media_player/mpv/mpv.nix
