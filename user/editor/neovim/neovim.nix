@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.neovim; in {
+	options.services.neovim.enable = mkEnableOption "Enable neovim editor.";
 
-	config = {
+	config = mkIf cfg.enable {
 		home = {
 			packages = with pkgs; [
 				wl-clipboard
