@@ -7,7 +7,7 @@ with lib; let
 	};
 	cfg = config.services.bash;
 in {
-	options.services.osu.enable = mkEnableOption "Enable bash.";
+	options.services.bash.enable = mkEnableOption "Enable bash.";
 
 	config = mkIf cfg.enable {
 		programs.bash = {
