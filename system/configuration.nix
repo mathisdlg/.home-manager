@@ -136,14 +136,10 @@
 			home-manager
 
 			# Hyprland
-			kitty
 			wofi
 
 			# Communication
 			thunderbird
-
-			# Music
-			rhythmbox
 
 			# Config
 			qt6ct
