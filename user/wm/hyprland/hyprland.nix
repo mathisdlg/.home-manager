@@ -3,7 +3,12 @@ with lib; let cfg = config.services.hyprland; in {
 	options.services.hyprland.enable = mkEnableOption "Enable hyprland.";
 
 	imports = [
-		../../components/.
+		../../components/hyprlock/hyprlock.nix
+		../../components/hypridle/hypridle.nix
+		../../components/hyprpicker/hyprpicker.nix
+		../../components/wlogout/wlogout.nix
+		../../components/waybar/waybar.nix
+		../../components/notifications/dunst/dunst.nix
 	];
 
 	config = mkIf cfg.enable{
@@ -19,11 +24,11 @@ with lib; let cfg = config.services.hyprland; in {
 
 		services = {
 			hyprlock.enable = true;
-			hypridle.enable = true;
+			hypridle-custom.enable = true;
 			hyprpicker.enable = true;
 			wlogout.enable = true;
 			waybar.enable = true;
-			dunst.enable = true;
+			dunst-custom.enable = true;
 		};
 	};
 }
