@@ -29,4 +29,43 @@
 
 		../wm/hyprland/hyprland.nix
 	];
+
+	services = {
+		art = {
+			blender.enable = true;
+			krita.enable = true;
+		};
+
+		baobab.enable = true;
+
+		browser = {
+			brave.enable = false;
+			firefox.enable = true;
+			firefox-dev.enable = false;
+		};
+
+		tabby.enable = true;
+
+		editor = {
+			vscodium.enable = true;
+			neovim.enable = true;
+		};
+
+		games = {
+			puzzles.enable = true;
+			mines.enable = true;
+			osu.enable = true;
+		};
+
+		keepassxc.enable = true;
+
+		mpv.enable = true;
+
+		terminal = {
+			bash.enable = true;
+			kitty.enable = true;
+		};
+
+		hyprland.enable = true;
+	};
 }

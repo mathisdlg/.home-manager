@@ -33,33 +33,4 @@
 			enable = true;
 		};
 	};
-
-	services = {
-		blender.enable = true;
-		krita.enable = true;
-
-		baobab.enable = true;
-
-		brave.enable = true;
-		firefox-dev.enable = true;
-		firefox.enable = false;
-
-		tabby.enable = true;
-
-		neovim.enable = true;
-		vscodium.enable = true;
-
-		mines.enable = true;
-		osu.enable = true;
-		puzzles.enable = true;
-
-		keepassxc.enable = true;
-
-		mpv.enable = true;
-
-		bash.enable = true;
-		kitty.enable = true;
-
-		hyprland.enable = true;
-	};
 }
