@@ -5,9 +5,9 @@ with lib; let
 		fupdate="nix flake update";
 		tupdate="nvim ~/.config/nix/nix.conf";
 	};
-	cfg = config.services.bash;
+	cfg = config.services.terminal.bash;
 in {
-	options.services.bash.enable = mkEnableOption "Enable bash.";
+	options.services.terminal.bash.enable = mkEnableOption "Enable bash.";
 
 	config = mkIf cfg.enable {
 		programs.bash = {

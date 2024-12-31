@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.kitty; in {
-	options.services.kitty.enable = mkEnableOption "Enable kitty terminal emulator.";
+with lib; let cfg = config.services.terminal.kitty; in {
+	options.services.terminal.kitty.enable = mkEnableOption "Enable kitty terminal emulator.";
 
 	config = mkIf cfg.enable {
 		programs.kitty = {
