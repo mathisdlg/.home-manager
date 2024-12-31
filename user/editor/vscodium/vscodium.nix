@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.vscodium; in {
-	options.services.vscodium.enable = mkEnableOption "Enable visual studio code (open source).";
+with lib; let cfg = config.services.editor.vscodium; in {
+	options.services.editor.vscodium.enable = mkEnableOption "Enable visual studio code (open source).";
 
 	config = mkIf cfg.enable {
 		home.packages = with pkgs; [

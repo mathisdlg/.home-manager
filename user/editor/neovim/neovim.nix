@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.neovim; in {
-	options.services.neovim.enable = mkEnableOption "Enable neovim editor.";
+with lib; let cfg = config.services.editor.neovim; in {
+	options.services.editor.neovim.enable = mkEnableOption "Enable neovim editor.";
 
 	config = mkIf cfg.enable {
 		home = {
