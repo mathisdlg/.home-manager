@@ -53,7 +53,7 @@
 		osu.enable = true;
 		puzzles.enable = true;
 
-		keepass.enable = true;
+		keepassxc.enable = true;
 
 		mpv.enable = true;
 
