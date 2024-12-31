@@ -39,9 +39,9 @@
 		baobab.enable = true;
 
 		browser = {
-			brave.enable = false;
-			firefox.enable = true;
-			firefox-dev.enable = false;
+			brave.enable = true;
+			firefox.enable = false;
+			firefox-dev.enable = true;
 		};
 
 		tabby.enable = true;
