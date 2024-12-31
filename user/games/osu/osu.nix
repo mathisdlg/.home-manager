@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.osu; in {
-	options.services.osu.enable = mkEnableOption "Enable my own osu downloader and updater for nixos.";
+with lib; let cfg = config.services.games.osu; in {
+	options.services.games.osu.enable = mkEnableOption "Enable my own osu downloader and updater for nixos.";
 
 	config = mkIf cfg.enable {
 		home = {
