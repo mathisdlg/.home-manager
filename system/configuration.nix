@@ -148,14 +148,10 @@
 			home-manager
 
 			# Hyprland
-			kitty
 			wofi
 
 			# Communication
 			thunderbird
-
-			# Music
-			rhythmbox
 
 			# Config
 			qt6ct
@@ -194,6 +190,7 @@
 			evince # document viewer
 			totem # video player
 			loupe # image viewer
+			baobab # disk usage analyzer
 		]);
 	};
 

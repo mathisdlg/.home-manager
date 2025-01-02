@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [ ../../components/tabby/tabby.nix ];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.editor.vscodium; in {
+	options.services.editor.vscodium.enable = mkEnableOption "Enable visual studio code (open source).";
 
-	config = {
+	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
 			jetbrains-mono
 			jre

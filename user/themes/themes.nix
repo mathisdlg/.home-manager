@@ -1,9 +1,12 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.themes; in {
+	options.services.themes.enable = mkEnableOption "Enable themes.";
+
 	imports = [
 		./background/background.nix
 	];
 
-	config = {
+	config = mkIf cfg.enable {
 		home = {
 			packages = with pkgs; [
 				nordzy-cursor-theme

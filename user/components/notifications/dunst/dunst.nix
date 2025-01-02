@@ -1,5 +1,8 @@
-{ config, lib, pkgs, ... }: {
-	config = {
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.dunst-custom; in {
+	options.services.dunst-custom.enable = mkEnableOption "Enable dunst (notifications manager).";
+
+	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
 			libnotify
 		];

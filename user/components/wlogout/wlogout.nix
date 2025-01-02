@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.wlogout; in {
+	options.services.wlogout.enable = mkEnableOption "Enable wayland logout menu.";
 
-	config = {
+	config = mkIf cfg.enable {
 		home = {
 			packages = with pkgs; [
 				wlogout
