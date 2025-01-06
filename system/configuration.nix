@@ -147,7 +147,6 @@
 			# Virtualisation
 			spice
 			spice-protocol
-			gnome-boxes
 		];
 
 		# Environment Variables
