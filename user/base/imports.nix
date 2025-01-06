@@ -66,6 +66,8 @@
 			kitty.enable = true;
 		};
 
+		themes.enable = true;
+
 		hyprland.enable = true;
 	};
 }
