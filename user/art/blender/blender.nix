@@ -4,7 +4,7 @@ with lib; let cfg = config.services.art.blender; in {
 
 	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
-			blender
+			blender-hip
 		];
 	};
 }

@@ -52,6 +52,9 @@ with lib; let cfg = config.services.editor.vscodium; in {
 				# C#
 				ms-dotnettools.csharp
 				ms-dotnettools.csdevkit
+
+				# Swift
+				sswg.swift-lang
 			];
 
 			userSettings = {

@@ -116,7 +116,7 @@
 	users.users.mathisdlg = {
 		isNormalUser = true;
 		description = "mathisdlg";
-		extraGroups = [ "networkmanager" "wheel" ];
+		extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" ];
 		packages = with pkgs; [];
 	};
 
@@ -134,7 +134,6 @@
 	environment = {
 		systemPackages = with pkgs; [
 			# Essentials
-			neovim
 			brightnessctl
 			pavucontrol
 			libreoffice
@@ -155,6 +154,10 @@
 
 			# Config
 			qt6ct
+
+			# Virtualisation
+			spice
+			spice-protocol
 		];
 
 		# Environment Variables
@@ -205,6 +208,9 @@
 			enable = true;
 			xwayland.enable = true;
 		};
+
+		# Virtualisation
+		virt-manager.enable = true;
 	};
 
 	# Hardware graphics librairies
@@ -221,10 +227,25 @@
 	# List services that you want to enable:
 
 	# Docker rootless
-	virtualisation.docker.rootless = {
-		enable = true;
-		setSocketVariable = true;
+	virtualisation = {
+		docker.rootless = {
+			enable = true;
+			setSocketVariable = true;
+		};
+
+		libvirtd = {
+			enable = true;
+			qemu = {
+				swtpm.enable = true;
+				ovmf.enable = true;
+				ovmf.packages = [ pkgs.OVMF.fd ]; # pkgs.OVMFFull.fd
+			};
+		};
+
+		spiceUSBRedirection.enable = true;
 	};
+
+	services.spice-vdagentd.enable = true;
 
 	nix = {
 		gc = {
