@@ -4,7 +4,7 @@ with lib; let cfg = config.services.programming.python; in {
 
 	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
-			python
+			python3
 		];
 	};
 }
