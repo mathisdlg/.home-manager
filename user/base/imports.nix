@@ -71,13 +71,8 @@
 		hyprland.enable = true;
 
 		programming = {
-			python = {
-				enable = true;
-			};
-
-			swift = {
-				enable = true;
-			};
+			python.enable = true;
+			swift.enable = true;
 		};
 	};
 }
