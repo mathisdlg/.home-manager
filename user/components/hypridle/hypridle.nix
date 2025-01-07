@@ -7,6 +7,10 @@ with lib; let cfg = config.services.hypridle-custom; in {
 			file = {
 				".config/hypr/hypridle.conf".source = ./hypridle.conf;
 			};
+
+			packages = with pkgs; [
+				hypridle
+			];
 		};
 
 		services.hypridle.enable = true;
