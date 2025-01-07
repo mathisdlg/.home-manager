@@ -22,6 +22,9 @@
 
 		../media_player/mpv/mpv.nix
 
+		../programming/python/python.nix
+		../programming/swift/swift.nix
+
 		../terminal/shell/shell.nix
 		../terminal/kitty/kitty.nix
 
