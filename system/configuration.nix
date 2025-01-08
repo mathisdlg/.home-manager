@@ -146,12 +146,6 @@
 			#NixOs
 			home-manager
 
-			# Hyprland
-			wofi
-
-			# Communication
-			thunderbird
-
 			# Config
 			qt6ct
 
