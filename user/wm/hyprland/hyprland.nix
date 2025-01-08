@@ -9,6 +9,7 @@ with lib; let cfg = config.services.hyprland; in {
 		../../components/wlogout/wlogout.nix
 		../../components/waybar/waybar.nix
 		../../components/notifications/dunst/dunst.nix
+		../../components/wofi/wofi.nix
 	];
 
 	config = mkIf cfg.enable{
@@ -29,6 +30,7 @@ with lib; let cfg = config.services.hyprland; in {
 			wlogout.enable = true;
 			waybar.enable = true;
 			dunst-custom.enable = true;
+			wofi-custom.enable = true;
 		};
 	};
 }
