@@ -137,9 +137,6 @@
 			# Hyprland
 			wofi
 
-			# Communication
-			thunderbird
-
 			# Config
 			qt6ct
 
