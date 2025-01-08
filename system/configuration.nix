@@ -136,7 +136,6 @@
 			# Essentials
 			brightnessctl
 			pavucontrol
-			libreoffice
 			git
 			tree
 			gparted

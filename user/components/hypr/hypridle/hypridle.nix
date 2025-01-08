@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.hypridle-custom; in {
-	options.services.hypridle-custom.enable = mkEnableOption "Enable hyprland idle manager.";
+with lib; let cfg = config.services.component.hypr.hypridle; in {
+	options.services.component.hypr.hypridle.enable = mkEnableOption "Enable hyprland idle manager.";
 
 	config = mkIf cfg.enable {
 		home = {

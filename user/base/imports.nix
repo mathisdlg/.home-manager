@@ -13,6 +13,7 @@
 
 		../components/tabby/tabby.nix
 
+		../editor/libreoffice/libreoffice.nix
 		../editor/vscodium/vscodium.nix
 		../editor/neovim/neovim.nix
 
@@ -53,9 +54,12 @@
 			thunderbird.enable = true;
 		};
 
-		tabby.enable = true;
+		component = {
+			tabby.enable = true;
+		};
 
 		editor = {
+			libreoffice.enable = true;
 			vscodium.enable = true;
 			neovim.enable = true;
 		};

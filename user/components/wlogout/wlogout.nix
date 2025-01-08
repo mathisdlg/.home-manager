@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
-with lib; let cfg = config.services.wlogout; in {
-	options.services.wlogout.enable = mkEnableOption "Enable wayland logout menu.";
+with lib; let cfg = config.services.component.wlogout; in {
+	options.services.component.wlogout.enable = mkEnableOption "Enable wayland logout menu.";
 
 	config = mkIf cfg.enable {
 		home = {
