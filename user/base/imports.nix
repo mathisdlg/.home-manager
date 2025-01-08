@@ -54,7 +54,9 @@
 			thunderbird.enable = true;
 		};
 
-		tabby.enable = true;
+		component = {
+			tabby.enable = true;
+		};
 
 		editor = {
 			libreoffice.enable = true;
