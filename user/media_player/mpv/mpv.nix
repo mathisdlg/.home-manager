@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.mpv; in {
+	options.services.mpv.enable = mkEnableOption "Enable mpv (hackable media player)";
 
-	config = {
+	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
 			socat
 		];

@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.browser.firefox; in {
+	options.services.browser.firefox.enable = mkEnableOption "Enable firefox browser.";
 
-	config = {
+	config = mkIf cfg.enable {
 		programs.firefox = {
 			enable = true;
 			package = pkgs.firefox; # -devedition-bin

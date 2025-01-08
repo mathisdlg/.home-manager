@@ -1,7 +1,8 @@
-{ config, pkgs, ... }: {
-	imports = [];
+{ config, pkgs, lib, ... }:
+with lib; let cfg = config.services.editor.neovim; in {
+	options.services.editor.neovim.enable = mkEnableOption "Enable neovim editor.";
 
-	config = {
+	config = mkIf cfg.enable {
 		home = {
 			packages = with pkgs; [
 				wl-clipboard
@@ -30,18 +31,18 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
 require("nvim-tree").setup({
-  sort = {
-    sorter = "case_sensitive",
-  },
-  view = {
-    width = 30,
-  },
-  renderer = {
-    group_empty = true,
-  },
-  filters = {
-    dotfiles = true,
-  },
+sort = {
+	sorter = "case_sensitive",
+},
+view = {
+	width = 30,
+},
+renderer = {
+	group_empty = true,
+},
+filters = {
+	dotfiles = true,
+},
 })
 END
 					'';
