@@ -30,6 +30,6 @@
 			wlogout.enable = true;
 			
 			wofi.enable = true;
-		}
+		};
 	};
 }
