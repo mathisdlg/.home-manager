@@ -3,13 +3,7 @@ with lib; let cfg = config.services.hyprland; in {
 	options.services.hyprland.enable = mkEnableOption "Enable hyprland.";
 
 	imports = [
-		../../components/hyprlock/hyprlock.nix
-		../../components/hypridle/hypridle.nix
-		../../components/hyprpicker/hyprpicker.nix
-		../../components/wlogout/wlogout.nix
-		../../components/waybar/waybar.nix
-		../../components/notifications/dunst/dunst.nix
-		../../components/wofi/wofi.nix
+		./imports.nix
 	];
 
 	config = mkIf cfg.enable{
