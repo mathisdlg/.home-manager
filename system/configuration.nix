@@ -134,9 +134,6 @@
 			#NixOs
 			home-manager
 
-			# Hyprland
-			wofi
-
 			# Config
 			qt6ct
 
