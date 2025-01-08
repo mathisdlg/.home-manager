@@ -9,6 +9,8 @@
 		../browser/firefox/firefox.nix
 		../browser/firefox/firefox-dev.nix
 
+		../communication/thunderbird/thunderbird.nix
+
 		../components/tabby/tabby.nix
 
 		../editor/vscodium/vscodium.nix
@@ -45,6 +47,10 @@
 			brave.enable = true;
 			firefox.enable = false;
 			firefox-dev.enable = true;
+		};
+
+		communication = {
+			thunderbird.enable = true;
 		};
 
 		tabby.enable = true;
