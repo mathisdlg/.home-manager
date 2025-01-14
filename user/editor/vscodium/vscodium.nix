@@ -58,9 +58,6 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 				# Swift
 				sswg.swift-lang
-
-				# Docker
-				ms-vscode-remote.remote-containers
 			];
 
 			userSettings = {
