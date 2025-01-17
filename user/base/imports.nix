@@ -85,7 +85,7 @@
 
 		programming = {
 			python.enable = true;
-			swift.enable = true;
+			swift.enable = false;
 		};
 	};
 }
