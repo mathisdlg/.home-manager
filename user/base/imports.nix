@@ -25,6 +25,8 @@
 
 		../media_player/mpv/mpv.nix
 
+		../screenshare/screenshare.nix
+
 		../programming/python/python.nix
 		../programming/swift/swift.nix
 
@@ -73,6 +75,8 @@
 		keepassxc.enable = true;
 
 		mpv.enable = true;
+
+		screenshare.screenshare.enable = true;
 
 		terminal = {
 			bash.enable = true;
