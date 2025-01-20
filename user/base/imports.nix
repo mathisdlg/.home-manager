@@ -11,7 +11,6 @@
 
 		../communication/thunderbird/thunderbird.nix
 
-		../components/screenrec/screenrec.nix
 		../components/tabby/tabby.nix
 
 		../editor/libreoffice/libreoffice.nix
@@ -56,7 +55,6 @@
 		};
 
 		component = {
-			screenrec.enable = true;
 			tabby.enable = true;
 		};
 
