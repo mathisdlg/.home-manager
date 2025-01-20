@@ -55,6 +55,7 @@
 		};
 
 		component = {
+			screenrec.enable = true;
 			tabby.enable = true;
 		};
 
