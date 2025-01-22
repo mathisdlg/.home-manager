@@ -48,13 +48,6 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 				# Error lens
 				usernamehw.errorlens
-
-				# C#
-				ms-dotnettools.csharp
-				ms-dotnettools.csdevkit
-
-				# Swift
-				sswg.swift-lang
 			];
 
 			userSettings = {

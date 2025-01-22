@@ -25,6 +25,8 @@
 
 		../media_player/mpv/mpv.nix
 
+		../screenshare/screenshare.nix
+
 		../programming/python/python.nix
 		../programming/swift/swift.nix
 
@@ -74,6 +76,8 @@
 
 		mpv.enable = true;
 
+		screenshare.screenshare.enable = true;
+
 		terminal = {
 			bash.enable = true;
 			kitty.enable = true;
@@ -85,7 +89,7 @@
 
 		programming = {
 			python.enable = true;
-			swift.enable = true;
+			swift.enable = false;
 		};
 	};
 }
