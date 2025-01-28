@@ -165,6 +165,7 @@
 			gnome-color-manager
 			gnome-logs
 			gnome-maps
+			gnome-system-monitor
 			seahorse # password manager
 			gedit # text editor
 			cheese # webcam tool
