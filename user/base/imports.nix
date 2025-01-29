@@ -25,10 +25,13 @@
 
 		../media_player/mpv/mpv.nix
 
-		../screenshare/screenshare.nix
-
 		../programming/python/python.nix
 		../programming/swift/swift.nix
+
+		../screenshare/screenshare.nix
+
+		../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
+		../system-monitor/mission-center/mission-center.nix
 
 		../terminal/shell/shell.nix
 		../terminal/kitty/kitty.nix
@@ -77,6 +80,11 @@
 		mpv.enable = true;
 
 		screenshare.screenshare.enable = true;
+
+		system-monitor = {
+			gnome-system-monitor.enable = false;
+			mission-center.enable = true;
+		};
 
 		terminal = {
 			bash.enable = true;
