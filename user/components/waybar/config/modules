@@ -75,11 +75,12 @@
 	"cpu": {
 		"format": "{usage}% 📈",
 		"tooltip": false,
-		"on-click": "gnome-system-monitor",
+		"on-click": "missioncenter",
 		"interval": 5
 	},
 	"memory": {
 		"format": "{used:0.1f}Gi 💿",
+		"on-click": "missioncenter",
 		"interval": 5
 	},
 	"temperature": {
@@ -89,6 +90,7 @@
 		"format-critical": "⚠ {temperatureC}°C {icon}",
 		"format": "{temperatureC}°C {icon}",
 		"format-icons": ["❄️", "⛅", "☀️"],
+		"on-click": "missioncenter",
 		"interval": 5
 	},
 	"backlight": {
@@ -107,7 +109,7 @@
 		"format-charging": "{capacity}% 🔌",
 		"format-plugged": "{capacity}% 🔌",
 		"format-alt": "{time} {icon}",
-		"format-icons": ["🌑", "🌘", "🌓", "🌖", "🌕"],
+		"format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
 		"interval": 30
 	},
 	"network": {
