@@ -192,11 +192,6 @@
 	};
 
 	programs = {
-		# Steam
-		steam = {
-			enable = true;
-		};
-
 		# Hyprland
 		hyprland = {
 			enable = true;
