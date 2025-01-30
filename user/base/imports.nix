@@ -17,6 +17,7 @@
 		../editor/vscodium/vscodium.nix
 		../editor/neovim/neovim.nix
 
+		../games/epic-games/epic-games.nix
 		../games/puzzles/puzzles.nix
 		../games/mines/mines.nix
 		../games/osu/osu.nix
@@ -70,6 +71,7 @@
 		};
 
 		games = {
+			epic-games.enable = true;
 			puzzles.enable = true;
 			mines.enable = true;
 			osu.enable = true;
