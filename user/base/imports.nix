@@ -21,6 +21,7 @@
 		../games/puzzles/puzzles.nix
 		../games/mines/mines.nix
 		../games/osu/osu.nix
+		../games/steam/steam.nix
 
 		../keepass/keepass.nix
 
@@ -75,6 +76,7 @@
 			puzzles.enable = true;
 			mines.enable = true;
 			osu.enable = true;
+			steam.enable = true;
 		};
 
 		keepassxc.enable = true;
