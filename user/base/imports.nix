@@ -72,7 +72,7 @@
 		};
 
 		games = {
-			epic-games.enable = true;
+			epic-games.enable = false;
 			puzzles.enable = true;
 			mines.enable = true;
 			osu.enable = true;
