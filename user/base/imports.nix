@@ -17,9 +17,11 @@
 		../editor/vscodium/vscodium.nix
 		../editor/neovim/neovim.nix
 
+		../games/epic-games/epic-games.nix
 		../games/puzzles/puzzles.nix
 		../games/mines/mines.nix
 		../games/osu/osu.nix
+		../games/steam/steam.nix
 
 		../keepass/keepass.nix
 
@@ -70,9 +72,11 @@
 		};
 
 		games = {
+			epic-games.enable = false;
 			puzzles.enable = true;
 			mines.enable = true;
 			osu.enable = true;
+			steam.enable = true;
 		};
 
 		keepassxc.enable = true;

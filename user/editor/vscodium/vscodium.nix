@@ -58,6 +58,7 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 				"workbench.colorTheme"="One Dark Pro";
 				"workbench.iconTheme"="material-icon-theme";
+				"workbench.editor.enablePreview"=true;
 
 				"git.confirmSync"=false;
 				"git.autofetch"=true;

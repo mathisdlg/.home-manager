@@ -102,7 +102,9 @@
 	# Configure console keymap
 	console.keyMap = "fr-pc";
 
-	hardware.pulseaudio.enable = false;
+	hardware = {
+		pulseaudio.enable = false;
+	};
 	security.rtkit.enable = true;
 
 	# Enable touchpad support (enabled default in most desktopManager).
@@ -117,7 +119,15 @@
 	};
 
 	# Allow unfree packages
-	nixpkgs.config.allowUnfree = true;
+	nixpkgs.config = {
+		allowUnfree = true;
+		# permittedInsecurePackages = [
+		# 	"dotnet-runtime-wrapped-6.0.36"
+		# 	"dotnet-runtime-6.0.36"
+		# 	"dotnet-sdk-wrapped-6.0.428"
+		# 	"dotnet-sdk-6.0.428"
+		# ];
+	};
 
 	environment = {
 		systemPackages = with pkgs; [
@@ -180,11 +190,6 @@
 	};
 
 	programs = {
-		# Steam
-		steam = {
-			enable = true;
-		};
-
 		# Hyprland
 		hyprland = {
 			enable = true;
