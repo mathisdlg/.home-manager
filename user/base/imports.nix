@@ -79,7 +79,7 @@
 		};
 
 		ia = {
-			tabby.enable = true;
+			tabby.enable = false;
 		};
 
 		keepassxc.enable = true;
