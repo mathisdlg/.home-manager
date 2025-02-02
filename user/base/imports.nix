@@ -62,7 +62,6 @@
 		};
 
 		component = {
-			tabby.enable = true;
 		};
 
 		editor = {
@@ -77,6 +76,10 @@
 			mines.enable = true;
 			osu.enable = true;
 			steam.enable = true;
+		};
+
+		ia = {
+			tabby.enable = true;
 		};
 
 		keepassxc.enable = true;
