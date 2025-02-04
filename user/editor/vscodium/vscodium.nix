@@ -36,6 +36,9 @@ with lib; let cfg = config.services.editor.vscodium; in {
 				ms-python.python
 				ms-python.debugpy
 
+				# Sonar Linter
+				sonarsource.sonarlint-vscode
+
 				# PHP
 				devsense.phptools-vscode
 				devsense.composer-php-vscode
