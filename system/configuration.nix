@@ -97,6 +97,8 @@
 			enable = true;
 			package = pkgs.mariadb;
 		};
+
+		spice-vdagentd.enable = true;
 	};
 
 	# Configure console keymap
@@ -224,15 +226,15 @@
 			enable = true;
 			qemu = {
 				swtpm.enable = true;
-				ovmf.enable = true;
-				ovmf.packages = [ pkgs.OVMF.fd ]; # pkgs.OVMFFull.fd
+				ovmf = {
+					enable = true;
+					packages = [ pkgs.OVMF.fd ]; # pkgs.OVMFFull.fd
+				};
 			};
 		};
 
 		spiceUSBRedirection.enable = true;
 	};
-
-	services.spice-vdagentd.enable = true;
 
 	nix = {
 		gc = {

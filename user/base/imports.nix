@@ -11,8 +11,6 @@
 
 		../communication/thunderbird/thunderbird.nix
 
-		../components/tabby/tabby.nix
-
 		../editor/libreoffice/libreoffice.nix
 		../editor/vscodium/vscodium.nix
 		../editor/neovim/neovim.nix
@@ -22,6 +20,8 @@
 		../games/mines/mines.nix
 		../games/osu/osu.nix
 		../games/steam/steam.nix
+
+		../ia/tabby/tabby.nix
 
 		../keepass/keepass.nix
 
@@ -62,7 +62,6 @@
 		};
 
 		component = {
-			tabby.enable = true;
 		};
 
 		editor = {
@@ -77,6 +76,10 @@
 			mines.enable = true;
 			osu.enable = true;
 			steam.enable = true;
+		};
+
+		ia = {
+			tabby.enable = false;
 		};
 
 		keepassxc.enable = true;
