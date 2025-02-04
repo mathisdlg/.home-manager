@@ -4,9 +4,10 @@ with lib; let cfg = config.services.editor.libreoffice; in {
 
 	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
-			libreoffice-qt6
+			libreoffice
 			hunspell
 			hunspellDicts.fr-moderne
+			hunspellDicts.fr-any
 			hunspellDicts.en_US
 		];
 	};
