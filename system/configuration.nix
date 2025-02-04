@@ -6,6 +6,7 @@
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
 		../patches/nvidia.nix
+		./modules/zram.nix
 	];
 
 	# Bootloader.
@@ -21,13 +22,6 @@
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
 		plymouth.enable = true;
-	};
-
-	# Activate Zram swap
-	zramSwap = {
-		enable = true;
-		memoryPercent = 100;
-		algorithm = "zstd";
 	};
 
 	networking = {
@@ -80,6 +74,13 @@
 
 		# Enable nvidia driver patch
 		nvidia.enable = false; # I have an AMD GPU now! :happy:
+
+		# Activate zram
+		zram = {
+			enable = true;
+			size = 100;
+		};
+
 
 		fstrim.enable = true;
 
