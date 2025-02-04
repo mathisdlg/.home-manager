@@ -6,7 +6,7 @@ with lib; let cfg = config.services.editor.libreoffice; in {
 		home.packages = with pkgs; [
 			libreoffice-qt6
 			hunspell
-			hunspellDicts.fr_FR
+			hunspellDicts.fr-moderne
 			hunspellDicts.en_US
 		];
 	};
