@@ -2,7 +2,6 @@
 with lib; let
 	cfg = config.services.zram;
 in {
-	# Declare what settings a user of this "nvidia.nix" module CAN SET.
 	options.services.zram = {
 		enable = mkEnableOption "Enable zram swap.";
 		size = mkOption {
@@ -12,9 +11,11 @@ in {
 		};
 	};
 
-	zramSwap = mkIf cfg.enable {
-		enable = true;
-		memoryPercent = cfg.size;
-		algorithm = "zstd";
+	config = mkIf cfg.enable {
+		zramSwap = {
+			enable = true;
+			memoryPercent = cfg.size;
+			algorithm = "zstd";
+		};
 	};
 }
