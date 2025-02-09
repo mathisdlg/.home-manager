@@ -5,7 +5,7 @@ with lib; let cfg = config.services.rgb.openrgb; in {
 	config = mkIf cfg.enable {
 		services.hardware.openrgb.enable = true;
 
-		home.packages = with pkgs; [
+		environment.systemPackages = with pkgs; [
 			openrgb-with-all-plugins
 		];
 	};

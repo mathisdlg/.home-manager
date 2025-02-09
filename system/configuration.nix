@@ -82,7 +82,7 @@
 			size = 100;
 		};
 
-		openrgb = {
+		rgb.openrgb = {
 			enable = true;
 		};
 
