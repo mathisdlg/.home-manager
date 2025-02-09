@@ -7,6 +7,7 @@
 		./hardware-configuration.nix
 		../patches/nvidia.nix
 		./modules/zram.nix
+		./modules/openrgb.nix
 	];
 
 	# Bootloader.
@@ -81,6 +82,9 @@
 			size = 100;
 		};
 
+		openrgb = {
+			enable = true;
+		};
 
 		fstrim.enable = true;
 
