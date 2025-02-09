@@ -30,8 +30,6 @@
 		../programming/python/python.nix
 		../programming/swift/swift.nix
 
-		../rgb/openrgb/openrgb.nix
-
 		../screenshare/screenshare.nix
 
 		../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
@@ -91,10 +89,6 @@
 		programming = {
 			python.enable = true;
 			swift.enable = false;
-		};
-
-		rgb = {
-			openrgb.enable = false;
 		};
 
 		screenshare.screenshare.enable = true;
