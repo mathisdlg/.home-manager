@@ -86,6 +86,11 @@
 
 		mpv.enable = true;
 
+		programming = {
+			python.enable = true;
+			swift.enable = false;
+		};
+
 		screenshare.screenshare.enable = true;
 
 		system-monitor = {
@@ -101,10 +106,5 @@
 		themes.enable = true;
 
 		hyprland.enable = true;
-
-		programming = {
-			python.enable = true;
-			swift.enable = false;
-		};
 	};
 }
