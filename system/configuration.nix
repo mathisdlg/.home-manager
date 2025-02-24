@@ -121,7 +121,7 @@
 	users.users.mathisdlg = {
 		isNormalUser = true;
 		description = "mathisdlg";
-		extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" ];
+		extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" "dialout" ];
 		packages = with pkgs; [];
 	};
 
