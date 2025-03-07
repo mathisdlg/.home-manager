@@ -1,6 +1,11 @@
 { config, pkgs, lib, ... }:
 with lib; let cfg = config.services.editor.vscodium; in {
 	options.services.editor.vscodium.enable = mkEnableOption "Enable visual studio code (open source).";
+	options.services.editor.vscodium.package = mkOption {
+		type = types.package;
+		default = pkgs.vscodium;
+		description = "The package to install for visual studio code (open source).";
+	};
 
 	config = mkIf cfg.enable {
 		home.packages = with pkgs; [
@@ -11,7 +16,7 @@ with lib; let cfg = config.services.editor.vscodium; in {
 		programs.vscode = {
 			enable = true;
 
-			package = pkgs.vscodium;
+			package = cfg.package;
 
 			extensions = with pkgs.vscode-extensions; [
 				# AI assistant
