@@ -14,12 +14,12 @@
 	boot = {
 		loader = {
 			efi.canTouchEfiVariables = false;
-			systemd-boot = {
-				enable = true;
-				editor = false;
-			};
 			timeout = 1;
-			grub.useOSProber = true; 
+			grub = {
+				devices = [ "nodev" ];
+				useOSProber = true;
+				efiSupport = true;
+			};
 		};
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
