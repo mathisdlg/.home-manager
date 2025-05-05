@@ -3,38 +3,33 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }: {
 	imports = [
-			(modulesPath + "/installer/scan/not-detected.nix")
-		];
+		(modulesPath + "/installer/scan/not-detected.nix")
+	];
 
 	boot = {
 		initrd = {
-			availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+			availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+			luks.devices."luks-0f72d0f9-7c94-424b-a0b0-adbda733a5d6".device = "/dev/disk/by-uuid/0f72d0f9-7c94-424b-a0b0-adbda733a5d6";
 			kernelModules = [ ];
 		};
 		kernelModules = [ "kvm-amd" ];
-		kernelParams = [
-			"video=DP-3:1920x1080@60"
-			"video=HDMI-A-1:1024x600@60"
-		];
-
+			kernelParams = [
+				"video=DP-3:1920x1080@60"
+				"video=HDMI-A-1:1024x600@60"
+			];
 		extraModulePackages = [ ];
 	};
 
 	fileSystems = {
-		"/" = { 
-			device = "/dev/disk/by-uuid/ddb681e3-588e-482d-b102-673d81eb6e2c";
+		"/" =
+		{
+			device = "/dev/disk/by-uuid/df60971b-b712-4b73-8c07-07bf4ee451d0";
 			fsType = "ext4";
-			};
-
-		"/boot" = { 
-			device = "/dev/disk/by-uuid/4A2C-AC3F";
-			fsType = "vfat";
-			options = [ "fmask=0077" "dmask=0077" ];
 		};
 
-		"/mnt/Disk" = {
-			device = "/dev/sda2";
-			fsType = "ntfs-3g";
+		"/boot" = {
+			device = "/dev/disk/by-uuid/C356-8893";
+			fsType = "vfat";
 		};
 	};
 
@@ -43,8 +38,7 @@
 	# still possible to use this option, but it's recommended to use it in conjunction
 	# with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
 	networking.useDHCP = lib.mkDefault true;
-	# networking.interfaces.enp9s0.useDHCP = lib.mkDefault true;
-	# networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
+	# networking.interfaces.enp11s0f4u1.useDHCP = lib.mkDefault true;
 
 	nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 	hardware = {
