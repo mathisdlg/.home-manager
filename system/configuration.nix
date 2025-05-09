@@ -13,12 +13,13 @@
 	# Bootloader.
 	boot = {
 		loader = {
-			efi.canTouchEfiVariables = true;
-			systemd-boot = {
-				enable = true;
-				editor = false;
-			};
+			efi.canTouchEfiVariables = false;
 			timeout = 1;
+			grub = {
+				devices = [ "nodev" ];
+				useOSProber = true;
+				efiSupport = true;
+			};
 		};
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
@@ -83,7 +84,7 @@
 		};
 
 		rgb.openrgb = {
-			enable = true;
+			enable = false;
 		};
 
 		fstrim.enable = true;

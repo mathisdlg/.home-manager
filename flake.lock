@@ -9,8 +9,11 @@
       "locked": {
         "lastModified": 1746171682,
         "narHash": "sha256-EyXUNSa+H+YvGVuQJP1nZskXAowxKYp79RNUsNdQTj4=",
+        "lastModified": 1746171682,
+        "narHash": "sha256-EyXUNSa+H+YvGVuQJP1nZskXAowxKYp79RNUsNdQTj4=",
         "owner": "nix-community",
         "repo": "home-manager",
+        "rev": "50eee705bbdbac942074a8c120e8194185633675",
         "rev": "50eee705bbdbac942074a8c120e8194185633675",
         "type": "github"
       },
