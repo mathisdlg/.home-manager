@@ -157,6 +157,9 @@
 			# Virtualisation
 			spice
 			spice-protocol
+
+			# Steam
+			steam
 		];
 
 		# Environment Variables

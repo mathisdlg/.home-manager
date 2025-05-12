@@ -78,7 +78,7 @@
 			puzzles.enable = true;
 			mines.enable = true;
 			osu.enable = true;
-			steam.enable = true;
+			steam.enable = false;
 		};
 
 		ia = {
