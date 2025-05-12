@@ -204,6 +204,11 @@
 			xwayland.enable = true;
 		};
 
+		# Steam
+		steam = {
+			enable = true;
+		};
+
 		# Virtualisation
 		virt-manager.enable = true;
 	};
