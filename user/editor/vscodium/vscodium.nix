@@ -56,6 +56,9 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 				# Error lens
 				usernamehw.errorlens
+
+				# Rainbow CSV
+				mechatroner.rainbow-csv
 			];
 
 			userSettings = {
