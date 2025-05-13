@@ -20,7 +20,15 @@ with lib; let cfg = config.services.bootloader-mod; in {
 			};
 			supportedFilesystems = [ "ntfs" "btrfs" ];
 			tmp.useTmpfs = true;
-			plymouth.enable = true;
+			plymouth = {
+				enable = true;
+				theme = "deus_ex";
+				themePackages = with pkgs; [
+					(adi1090x-plymouth-themes.override {
+						selected_themes = [ "deus_ex" ];
+					})
+				];
+			};
 		};
 	};
 }
