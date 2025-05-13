@@ -6,28 +6,10 @@
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
 		../patches/nvidia.nix
-		./modules/zram.nix
-		./modules/openrgb.nix
+		./modules/zram/zram.nix
+		./modules/openrgb/openrgb.nix
+		./modules/bootloader/bootloader.nix
 	];
-
-	# Bootloader.
-	boot = {
-		loader = {
-			efi = {
-				canTouchEfiVariables = true;
-			};
-			timeout = 1;
-			grub = {
-				enable = true;
-				efiSupport = true;
-				useOSProber = true;
-				devices = [ "nodev" ];
-			};
-		};
-		supportedFilesystems = [ "ntfs" "btrfs" ];
-		tmp.useTmpfs = true;
-		plymouth.enable = true;
-	};
 
 	networking = {
 		hostName = "nixosMathis"; # Define your hostname.
@@ -108,6 +90,8 @@
 		};
 
 		spice-vdagentd.enable = true;
+
+		bootloader-mod.enable = true;
 	};
 
 	# Configure console keymap
