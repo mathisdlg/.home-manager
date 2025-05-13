@@ -13,12 +13,15 @@
 	# Bootloader.
 	boot = {
 		loader = {
-			efi.canTouchEfiVariables = false;
+			efi = {
+				canTouchEfiVariables = true;
+			};
 			timeout = 1;
 			grub = {
-				devices = [ "nodev" ];
-				useOSProber = true;
+				enable = true;
 				efiSupport = true;
+				useOSProber = true;
+				devices = [ "nodev" ];
 			};
 		};
 		supportedFilesystems = [ "ntfs" "btrfs" ];
@@ -157,9 +160,6 @@
 			# Virtualisation
 			spice
 			spice-protocol
-
-			# Steam
-			steam
 		];
 
 		# Environment Variables
