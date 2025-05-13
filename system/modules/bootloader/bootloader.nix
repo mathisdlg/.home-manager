@@ -16,6 +16,7 @@ with lib; let cfg = config.services.bootloader-mod; in {
 					useOSProber = true;
 					devices = [ "nodev" ];
 					# efiInstallAsRemovable = false;
+					theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
 				};
 			};
 			supportedFilesystems = [ "ntfs" "btrfs" ];
