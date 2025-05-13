@@ -6,7 +6,7 @@ with lib; let cfg = config.services.bootloader-mod; in {
 		boot = {
 			loader = {
 				efi = {
-					canTouchEfiVariables = true;
+					canTouchEfiVariables = false;
 					efiSysMountPoint = "/boot/efi";
 				};
 				timeout = 1;
@@ -18,8 +18,7 @@ with lib; let cfg = config.services.bootloader-mod; in {
 					# efiInstallAsRemovable = false;
 				};
 			};
-			supportedFilesystems = [ "ntfs" "btrfs" ];
-			tmp.useTmpfs = true;
+
 			plymouth = {
 				enable = true;
 				theme = "deus_ex";
@@ -29,6 +28,9 @@ with lib; let cfg = config.services.bootloader-mod; in {
 					})
 				];
 			};
+			
+			supportedFilesystems = [ "ntfs" "btrfs" ];
+			tmp.useTmpfs = true;
 		};
 	};
 }
