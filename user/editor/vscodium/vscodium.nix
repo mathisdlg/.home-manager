@@ -11,6 +11,7 @@ with lib; let cfg = config.services.editor.vscodium; in {
 		home.packages = with pkgs; [
 			jetbrains-mono
 			jre
+			platformio-core
 		];
 
 		programs.vscode = {
@@ -100,6 +101,8 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 				"explorer.confirmDelete"=false;
 				"explorer.confirmDragAndDrop"=false;
+
+				"platformio-ide.useBuiltinPIOCore"=false;
 			};
 		};
 	};
