@@ -13,7 +13,10 @@
 	# Bootloader.
 	boot = {
 		loader = {
-			efi.canTouchEfiVariables = true;
+			efi = {
+				canTouchEfiVariables = true;
+				efiSysMountPoint = "/boot";
+			};
 			timeout = 1;
 			grub = {
 				devices = [ "nodev" ];
