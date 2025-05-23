@@ -9,7 +9,7 @@
 	boot = {
 		initrd = {
 			availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-			luks.devices."luks-0f72d0f9-7c94-424b-a0b0-adbda733a5d6".device = "/dev/disk/by-uuid/0f72d0f9-7c94-424b-a0b0-adbda733a5d6";
+			luks.devices."luks-77d6ba04-d5fb-4612-b088-34a836863f50".device = "/dev/disk/by-uuid/77d6ba04-d5fb-4612-b088-34a836863f50";
 			kernelModules = [ ];
 		};
 		kernelModules = [ "kvm-amd" ];
@@ -23,13 +23,14 @@
 	fileSystems = {
 		"/" =
 		{
-			device = "/dev/disk/by-uuid/df60971b-b712-4b73-8c07-07bf4ee451d0";
+			device = "/dev/disk/by-uuid/b6e8a893-96af-4ebf-8b5a-70a1d42ad259";
 			fsType = "ext4";
 		};
 
 		"/boot" = {
-			device = "/dev/disk/by-uuid/C356-8893";
+			device = "/dev/disk/by-uuid/040D-2540";
 			fsType = "vfat";
+			# options = [ "fmask=0077" "dmask=0077" ];
 		};
 	};
 
