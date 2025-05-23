@@ -14,15 +14,16 @@
 	boot = {
 		loader = {
 			efi = {
-				canTouchEfiVariables = true;
-				efiSysMountPoint = "/boot";
+				# canTouchEfiVariables = true;
+				efiSysMountPoint = "/boot/efi";
 			};
-			timeout = 1;
 			grub = {
 				devices = [ "nodev" ];
 				useOSProber = true;
 				efiSupport = true;
+				efiInstallAsRemovable = true; # When canTouchEfiVariables don't work
 			};
+			timeout = 1;
 		};
 		supportedFilesystems = [ "ntfs" "btrfs" ];
 		tmp.useTmpfs = true;
