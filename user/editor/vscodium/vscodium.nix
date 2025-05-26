@@ -18,88 +18,90 @@ with lib; let cfg = config.services.editor.vscodium; in {
 
 			package = cfg.package;
 
-			extensions = with pkgs.vscode-extensions; [
-				# AI assistant
-				github.copilot
+			profiles.default = {
+				extensions = with pkgs.vscode-extensions; [
+					# AI assistant
+					github.copilot
 
-				# Theme
-				# One dark pro
-				zhuangtongfa.material-theme
-				# Material icon
-				pkief.material-icon-theme
+					# Theme
+					# One dark pro
+					zhuangtongfa.material-theme
+					# Material icon
+					pkief.material-icon-theme
 
-				# Bookmark
-				alefragnani.bookmarks
+					# Bookmark
+					alefragnani.bookmarks
 
-				# Code Snap
-				adpyke.codesnap
+					# Code Snap
+					adpyke.codesnap
 
-				# Nix
-				bbenoist.nix
+					# Nix
+					bbenoist.nix
 
-				# Python pack
-				ms-python.python
-				ms-python.debugpy
+					# Python pack
+					ms-python.python
+					ms-python.debugpy
 
-				# Sonar Linter
-				sonarsource.sonarlint-vscode
+					# Sonar Linter
+					sonarsource.sonarlint-vscode
 
-				# PHP
-				# devsense.phptools-vscode
-				devsense.composer-php-vscode
+					# PHP
+					# devsense.phptools-vscode
+					devsense.composer-php-vscode
 
-				# Web dev
-				formulahendry.auto-close-tag
+					# Web dev
+					formulahendry.auto-close-tag
 
-				# Database
-				cweijan.vscode-database-client2
+					# Database
+					cweijan.vscode-database-client2
 
-				# Error lens
-				usernamehw.errorlens
+					# Error lens
+					usernamehw.errorlens
 
-				# Rainbow CSV
-				mechatroner.rainbow-csv
-			];
-
-			userSettings = {
-				"files.autoSave"="afterDelay";
-
-				"workbench.colorTheme"="One Dark Pro";
-				"workbench.iconTheme"="material-icon-theme";
-				"workbench.editor.enablePreview"=true;
-
-				"git.confirmSync"=false;
-				"git.autofetch"=true;
-				"git.enableSmartCommit"=true;
-
-				"editor.fontFamily"="'JetBrains Mono'";
-				"editor.fontWeight"="normal";
-				"editor.fontLigatures"=true;
-				"editor.smoothScrolling"=true;
-				"editor.rulers"=[
-					{
-						"column"=120;
-						"color"="#aae5a4";
-					}
+					# Rainbow CSV
+					mechatroner.rainbow-csv
 				];
-				"editor.tabSize"=4;
-				"editor.renderWhitespace"="boundary";
-				"sonarlint.rules"={
-					"python:S125"={
-						"level"="off";
+
+				userSettings = {
+					"files.autoSave"="afterDelay";
+
+					"workbench.colorTheme"="One Dark Pro";
+					"workbench.iconTheme"="material-icon-theme";
+					"workbench.editor.enablePreview"=true;
+
+					"git.confirmSync"=false;
+					"git.autofetch"=true;
+					"git.enableSmartCommit"=true;
+
+					"editor.fontFamily"="'JetBrains Mono'";
+					"editor.fontWeight"="normal";
+					"editor.fontLigatures"=true;
+					"editor.smoothScrolling"=true;
+					"editor.rulers"=[
+						{
+							"column"=120;
+							"color"="#aae5a4";
+						}
+					];
+					"editor.tabSize"=4;
+					"editor.renderWhitespace"="boundary";
+					"sonarlint.rules"={
+						"python:S125"={
+							"level"="off";
+						};
 					};
+					"tabby.endpoint"="http://localhost:8080";
+					"git.openRepositoryInParentFolders"="always";
+
+					"files.associations"={
+						"config"="jsonc";
+					};
+
+					"database-client.autoSync"=true;
+
+					"explorer.confirmDelete"=false;
+					"explorer.confirmDragAndDrop"=false;
 				};
-				"tabby.endpoint"="http://localhost:8080";
-				"git.openRepositoryInParentFolders"="always";
-
-				"files.associations"={
-					"config"="jsonc";
-				};
-
-				"database-client.autoSync"=true;
-
-				"explorer.confirmDelete"=false;
-				"explorer.confirmDragAndDrop"=false;
 			};
 		};
 	};
