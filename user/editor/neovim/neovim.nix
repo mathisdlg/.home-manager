@@ -48,7 +48,6 @@ END
 					'';
 				}
 
-				feline-nvim
 				nvim-cokeline
 				copilot-vim
 				tokyonight-nvim

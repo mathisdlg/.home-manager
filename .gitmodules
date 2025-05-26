@@ -1,0 +1,3 @@
+[submodule "system/modules/bootloader/GRUB-Theme"]
+	path = system/modules/bootloader/GRUB-Theme
+	url = git@github.com:13atm01/GRUB-Theme.git
