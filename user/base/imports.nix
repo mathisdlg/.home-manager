@@ -66,7 +66,10 @@
 
 		editor = {
 			libreoffice.enable = true;
-			vscodium.enable = true;
+			vscodium = {
+				enable = true;
+				package = pkgs.vscode;
+			};
 			neovim.enable = true;
 		};
 
