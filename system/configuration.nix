@@ -97,9 +97,7 @@
 	# Configure console keymap
 	console.keyMap = "fr-pc";
 
-	hardware = {
-		pulseaudio.enable = false;
-	};
+	hardware.pulseaudio.enable = false;
 	security.rtkit.enable = true;
 
 	# Enable touchpad support (enabled default in most desktopManager).
