@@ -6,29 +6,10 @@
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
 		../patches/nvidia.nix
-		./modules/zram.nix
-		./modules/openrgb.nix
+		./modules/zram/zram.nix
+		./modules/openrgb/openrgb.nix
+		./modules/bootloader/bootloader.nix
 	];
-
-	# Bootloader.
-	boot = {
-		loader = {
-			efi = {
-				# canTouchEfiVariables = true;
-				efiSysMountPoint = "/boot/efi";
-			};
-			grub = {
-				devices = [ "nodev" ];
-				useOSProber = true;
-				efiSupport = true;
-				efiInstallAsRemovable = true; # When canTouchEfiVariables don't work
-			};
-			timeout = 1;
-		};
-		supportedFilesystems = [ "ntfs" "btrfs" ];
-		tmp.useTmpfs = true;
-		plymouth.enable = true;
-	};
 
 	networking = {
 		hostName = "nixosMathis"; # Define your hostname.
@@ -109,6 +90,8 @@
 		};
 
 		spice-vdagentd.enable = true;
+
+		bootloader-mod.enable = true;
 	};
 
 	# Configure console keymap
@@ -126,7 +109,7 @@
 	users.users.mathisdlg = {
 		isNormalUser = true;
 		description = "mathisdlg";
-		extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" ];
+		extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" "dialout" ];
 		packages = with pkgs; [];
 	};
 
@@ -208,6 +191,11 @@
 			xwayland.enable = true;
 		};
 
+		# Steam
+		steam = {
+			enable = true;
+		};
+
 		# Virtualisation
 		virt-manager.enable = true;
 	};
@@ -269,8 +257,8 @@
 	# services.openssh.enable = true;
 
 	# Open ports in the firewall.
-	# networking.firewall.allowedTCPPorts = [ ... ];
-	# networking.firewall.allowedUDPPorts = [ ... ];
+	# networking.firewall.allowedTCPPorts = [ 6060 ];
+	# networking.firewall.allowedUDPPorts = [ 9876 ];
 	# Or disable the firewall altogether.
 	# networking.firewall.enable = false;
 
