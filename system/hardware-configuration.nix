@@ -9,7 +9,7 @@
 	boot = {
 		initrd = {
 			availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-			luks.devices."luks-77d6ba04-d5fb-4612-b088-34a836863f50".device = "/dev/disk/by-uuid/77d6ba04-d5fb-4612-b088-34a836863f50";
+			luks.devices."luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
 			kernelModules = [ ];
 		};
 		kernelModules = [ "kvm-amd" ];
@@ -21,16 +21,15 @@
 	};
 
 	fileSystems = {
-		"/" =
-		{
-			device = "/dev/disk/by-uuid/b6e8a893-96af-4ebf-8b5a-70a1d42ad259";
+		"/" = {
+			device = "/dev/disk/by-uuid/8516ef91-5030-4fd2-ac32-4cb809c9dbb8";
 			fsType = "ext4";
 		};
 
-		"/boot/efi" = {
-			device = "/dev/disk/by-uuid/040D-2540";
+		"/boot" = {
+			device = "/dev/disk/by-uuid/AC7E-9C17";
 			fsType = "vfat";
-			# options = [ "fmask=0077" "dmask=0077" ];
+			options = [ "fmask=0077" "dmask=0077" ];
 		};
 	};
 
@@ -39,7 +38,7 @@
 	# still possible to use this option, but it's recommended to use it in conjunction
 	# with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
 	networking.useDHCP = lib.mkDefault true;
-	# networking.interfaces.enp11s0f4u1.useDHCP = lib.mkDefault true;
+	# networking.interfaces.enp9s0f4u1u4.useDHCP = lib.mkDefault true;
 
 	nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 	hardware = {
