@@ -5,9 +5,10 @@ with lib; let cfg = config.services.bootloader-mod; in {
 	config = mkIf cfg.enable {
 		boot = {
 			loader = {
+				systemd-boot.enable = false;
 				efi = {
 					canTouchEfiVariables = false;
-					efiSysMountPoint = "/boot/efi";
+					efiSysMountPoint = "/boot";
 				};
 				timeout = 1;
 				grub = {
@@ -15,7 +16,8 @@ with lib; let cfg = config.services.bootloader-mod; in {
 					efiSupport = true;
 					useOSProber = true;
 					devices = [ "nodev" ];
-					# efiInstallAsRemovable = false;
+					efiInstallAsRemovable = true;
+					configurationLimit = 10;
 					theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
 				};
 			};
