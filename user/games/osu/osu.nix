@@ -9,7 +9,7 @@ with lib; let cfg = config.services.games.osu; in {
 			];
 
 			file = {
-				"Games/osu".source = ./osu.d;
+				"$HOME/Games/osu".source = ./osu.d;
 			};
 		};
 	};
