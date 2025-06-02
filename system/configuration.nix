@@ -92,12 +92,13 @@
 		spice-vdagentd.enable = true;
 
 		bootloader-mod.enable = true;
+
+		pulseaudio.enable = false;
 	};
 
 	# Configure console keymap
 	console.keyMap = "fr-pc";
 
-	hardware.pulseaudio.enable = false;
 	security.rtkit.enable = true;
 
 	# Enable touchpad support (enabled default in most desktopManager).
