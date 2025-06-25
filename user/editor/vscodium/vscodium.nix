@@ -55,7 +55,7 @@ in
           sonarsource.sonarlint-vscode
 
           # PHP
-          # devsense.phptools-vscode
+          devsense.phptools-vscode
           devsense.composer-php-vscode
 
           # Web dev
