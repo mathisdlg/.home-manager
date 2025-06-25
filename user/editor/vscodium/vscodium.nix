@@ -69,6 +69,9 @@ in
 
           # Rainbow CSV
           mechatroner.rainbow-csv
+
+          # Prettier
+          esbenp.prettier-vscode
         ];
 
         userSettings = {
