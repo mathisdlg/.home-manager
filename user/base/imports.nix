@@ -76,13 +76,13 @@
       neovim.enable = true;
     };
 
-		games = {
-			epic-games.enable = false;
-			puzzles.enable = true;
-			mines.enable = true;
-			osu.enable = true;
-			steam.enable = true;
-		};
+    games = {
+      epic-games.enable = false;
+      puzzles.enable = true;
+      mines.enable = true;
+      osu.enable = true;
+      steam.enable = true;
+    };
 
     ia = {
       tabby.enable = false;

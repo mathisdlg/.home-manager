@@ -11,25 +11,25 @@ in
 {
   options.services.bootloader-mod.enable = mkEnableOption "Enable grub bootloader with theme.";
 
-	config = mkIf cfg.enable {
-		boot = {
-			loader = {
-				systemd-boot.enable = false;
-				efi = {
-					canTouchEfiVariables = false;
-					efiSysMountPoint = "/boot";
-				};
-				timeout = 1;
-				grub = {
-					enable = true;
-					efiSupport = true;
-					useOSProber = true;
-					devices = [ "nodev" ];
-					efiInstallAsRemovable = true;
-					configurationLimit = 10;
-					theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
-				};
-			};
+  config = mkIf cfg.enable {
+    boot = {
+      loader = {
+        systemd-boot.enable = false;
+        efi = {
+          canTouchEfiVariables = false;
+          efiSysMountPoint = "/boot";
+        };
+        timeout = 1;
+        grub = {
+          enable = true;
+          efiSupport = true;
+          useOSProber = true;
+          devices = [ "nodev" ];
+          efiInstallAsRemovable = true;
+          configurationLimit = 10;
+          theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
+        };
+      };
 
       plymouth = {
         enable = true;
