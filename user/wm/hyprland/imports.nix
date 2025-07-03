@@ -1,35 +1,36 @@
-{config, pkgs, ...}: {
-	imports = [
-		../../components/hypr/hyprlock/hyprlock.nix
-		../../components/hypr/hypridle/hypridle.nix
-		../../components/hypr/hyprpicker/hyprpicker.nix
+{ config, pkgs, ... }:
+{
+  imports = [
+    ../../components/hypr/hyprlock/hyprlock.nix
+    ../../components/hypr/hypridle/hypridle.nix
+    ../../components/hypr/hyprpicker/hyprpicker.nix
 
-		../../components/notifications/dunst/dunst.nix
-		
-		../../components/waybar/waybar.nix
+    ../../components/notifications/dunst/dunst.nix
 
-		../../components/wlogout/wlogout.nix
+    ../../components/waybar/waybar.nix
 
-		../../components/wofi/wofi.nix
-	];
+    ../../components/wlogout/wlogout.nix
 
-	services = {
-		component = {
-			hypr = {
-				hyprlock.enable = true;
-				hypridle.enable = true;
-				hyprpicker.enable = true;
-			};
+    ../../components/wofi/wofi.nix
+  ];
 
-			notifications = {
-				dunst.enable = true;
-			};
+  services = {
+    component = {
+      hypr = {
+        hyprlock.enable = true;
+        hypridle.enable = true;
+        hyprpicker.enable = true;
+      };
 
-			waybar.enable = true;
+      notifications = {
+        dunst.enable = true;
+      };
 
-			wlogout.enable = true;
-			
-			wofi.enable = true;
-		};
-	};
+      waybar.enable = true;
+
+      wlogout.enable = true;
+
+      wofi.enable = true;
+    };
+  };
 }

@@ -1,9 +1,10 @@
-{ config, ... }: {
-	imports = [];
+{ config, ... }:
+{
+  imports = [ ];
 
-	config = {
-		home.file = {
-			".background/".source = ./images;
-		};
-	};
+  config = {
+    home.file = {
+      ".background/".source = ./images;
+    };
+  };
 }

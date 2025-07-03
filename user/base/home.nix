@@ -1,36 +1,37 @@
-{ config, pkgs, ... }: {
-	imports = [
-		./imports.nix
-	];
+{ config, pkgs, ... }:
+{
+  imports = [
+    ./imports.nix
+  ];
 
-	home = {
-		username = "mathisdlg";
-		homeDirectory = "/home/mathisdlg";
-		stateVersion = "23.11"; # Please read the comment before changing.
+  home = {
+    username = "mathisdlg";
+    homeDirectory = "/home/mathisdlg";
+    stateVersion = "23.11"; # Please read the comment before changing.
 
-		packages = with pkgs; [];
+    packages = with pkgs; [ ];
 
-		sessionVariables = {};
+    sessionVariables = { };
 
-		file = {
-			".update.sh".source = ../scripts/update.sh;
-		};
-	};
+    file = {
+      ".update.sh".source = ../scripts/update.sh;
+    };
+  };
 
-	nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
-	programs = {
-		git = {
-			enable = true;
-			userName = "mathisdlg";
-			userEmail = "delage.mathis.1@gmail.com";
-			extraConfig = {
-				safe.directory = "*";
-				init.defaultBranch = "main";
-			};
-		};
-		home-manager = {
-			enable = true;
-		};
-	};
+  programs = {
+    git = {
+      enable = true;
+      userName = "mathisdlg";
+      userEmail = "delage.mathis.1@gmail.com";
+      extraConfig = {
+        safe.directory = "*";
+        init.defaultBranch = "main";
+      };
+    };
+    home-manager = {
+      enable = true;
+    };
+  };
 }
