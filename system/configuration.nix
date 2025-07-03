@@ -188,7 +188,7 @@
         geary # email reader
         evince # document viewer
         totem # video player
-        loupe # image viewer
+        # loupe # image viewer
         baobab # disk usage analyzer
       ]
     );
