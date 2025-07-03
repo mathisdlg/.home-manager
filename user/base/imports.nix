@@ -10,6 +10,7 @@
     ../browser/firefox/firefox.nix
     ../browser/firefox/firefox-dev.nix
 
+    ../communication/discord/discord.nix
     ../communication/thunderbird/thunderbird.nix
 
     ../editor/libreoffice/libreoffice.nix
