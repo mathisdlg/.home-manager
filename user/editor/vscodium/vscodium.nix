@@ -72,6 +72,9 @@ in
 
           # Prettier
           esbenp.prettier-vscode
+
+          # C/C++
+          ms-vscode.cpptools-extension-pack
         ];
 
         userSettings = {
@@ -113,6 +116,12 @@ in
 
           "explorer.confirmDelete" = false;
           "explorer.confirmDragAndDrop" = false;
+
+          "github.copilot.enable" = {
+            "*" = true;
+            "plaintext" = false;
+            "markdown" = true;
+          };
         };
       };
     };
