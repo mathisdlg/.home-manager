@@ -3,6 +3,7 @@
   imports = [
     ../art/blender/blender.nix
     ../art/krita/krita.nix
+    ../art/gimp/gimp.nix
 
     ../baobab/baobab.nix
 
@@ -48,6 +49,7 @@
     art = {
       blender.enable = true;
       krita.enable = true;
+      gimp.enable = true;
     };
 
     baobab.enable = true;
