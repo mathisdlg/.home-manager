@@ -122,6 +122,7 @@ in
             "plaintext" = false;
             "markdown" = true;
           };
+          "github.copilot.nextEditSuggestions.enabled" = true;
         };
       };
     };
