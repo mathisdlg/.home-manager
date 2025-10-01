@@ -161,9 +161,8 @@
       "GDK_BACKEND" = "wayland";
     };
 
-    gnome.excludePackages = (
-      with pkgs;
-      [
+    gnome = {
+      excludePackages = with pkgs; [
         gnome-photos
         gnome-tour
         gnome-music
@@ -188,10 +187,10 @@
         geary # email reader
         evince # document viewer
         totem # video player
-        loupe # image viewer
+          # loupe # image viewer
         baobab # disk usage analyzer
-      ]
-    );
+      ];
+    };
   };
 
   programs = {
