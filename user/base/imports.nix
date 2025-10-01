@@ -11,7 +11,6 @@
     ../browser/firefox/firefox.nix
     ../browser/firefox/firefox-dev.nix
 
-    ../communication/discord/discord.nix
     ../communication/thunderbird/thunderbird.nix
 
     ../editor/libreoffice/libreoffice.nix
@@ -62,7 +61,6 @@
     };
 
     communication = {
-      discord.enable = true;
       thunderbird.enable = true;
     };
 
@@ -83,7 +81,7 @@
       puzzles.enable = true;
       mines.enable = true;
       osu.enable = true;
-      steam.enable = true;
+      steam.enable = false;
     };
 
     ia = {

@@ -161,40 +161,37 @@
       "GDK_BACKEND" = "wayland";
     };
 
-    gnome = {
-      excludePackages = (
-        with pkgs;
-        [
-          gnome-photos
-          gnome-tour
-          gnome-music
-          gnome-font-viewer
-          gnome-connections
-          gnome-terminal
-          gnome-console
-          gnome-weather
-          gnome-calendar
-          gnome-characters
-          gnome-clocks
-          gnome-contacts
-          gnome-color-manager
-          gnome-logs
-          gnome-maps
-          gnome-system-monitor
-          seahorse # password manager
-          gedit # text editor
-          cheese # webcam tool
-          snapshot # Camera tool
-          epiphany # web browser
-          geary # email reader
-          evince # document viewer
-          totem # video player
-          # loupe # image viewer
-          baobab # disk usage analyzer
-        ]
-      );
-
-    };
+    gnome.excludePackages = (
+      with pkgs;
+      [
+        gnome-photos
+        gnome-tour
+        gnome-music
+        gnome-font-viewer
+        gnome-connections
+        gnome-terminal
+        gnome-console
+        gnome-weather
+        gnome-calendar
+        gnome-characters
+        gnome-clocks
+        gnome-contacts
+        gnome-color-manager
+        gnome-logs
+        gnome-maps
+        gnome-system-monitor
+        seahorse # password manager
+        gedit # text editor
+        cheese # webcam tool
+        snapshot # Camera tool
+        epiphany # web browser
+        geary # email reader
+        evince # document viewer
+        totem # video player
+        loupe # image viewer
+        baobab # disk usage analyzer
+      ]
+    );
   };
 
   programs = {
@@ -211,8 +208,6 @@
 
     # Virtualisation
     virt-manager.enable = true;
-
-    dconf.enable = true;
   };
 
   # Hardware graphics librairies

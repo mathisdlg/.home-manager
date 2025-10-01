@@ -8,6 +8,7 @@
   modulesPath,
   ...
 }:
+
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -16,43 +17,37 @@
   boot = {
     initrd = {
       availableKernelModules = [
-        "nvme"
         "xhci_pci"
         "ahci"
-        "usbhid"
+        "nvme"
         "usb_storage"
         "sd_mod"
       ];
-      luks.devices."luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device =
-        "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
       kernelModules = [ ];
     };
-    kernelModules = [ "kvm-amd" ];
-    kernelParams = [
-      "video=DP-3:1920x1080@60"
-      "video=HDMI-A-1:1024x600@60"
-    ];
+    kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/8516ef91-5030-4fd2-ac32-4cb809c9dbb8";
+      device = "/dev/disk/by-uuid/ec9b6ded-1137-489f-ae2b-fa7e28c52d91";
       fsType = "ext4";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/AC7E-9C17";
+    "/boot/efi" = {
+      device = "/dev/disk/by-uuid/3833-FBB7";
       fsType = "vfat";
       options = [
-        "fmask=0077"
-        "dmask=0077"
+        "fmask=0022"
+        "dmask=0022"
       ];
     };
 
-    "/disks/data" = {
-      device = "/dev/disk/by-uuid/06A0F33EA0F332B3";
-      fsType = "ntfs";
+    # Monut shared disk
+    "/mnt/Disk" = {
+      device = "/dev/nvme0n1p4";
+      fsType = "ntfs-3g";
     };
   };
 
@@ -61,14 +56,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp9s0f4u1u4.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware = {
-    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    graphics.extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      amdvlk
-    ];
-  };
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

@@ -3,7 +3,6 @@
   imports = [
     ../../components/hypr/hyprlock/hyprlock.nix
     ../../components/hypr/hypridle/hypridle.nix
-    ../../components/hypr/hyprpaper/hyprpaper.nix
     ../../components/hypr/hyprpicker/hyprpicker.nix
 
     ../../components/notifications/dunst/dunst.nix
@@ -21,7 +20,6 @@
         hyprlock.enable = true;
         hypridle.enable = true;
         hyprpicker.enable = true;
-        hyprpaper.enable = true;
       };
 
       notifications = {

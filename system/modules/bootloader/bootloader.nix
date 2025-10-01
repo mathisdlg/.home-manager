@@ -14,10 +14,9 @@ in
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        systemd-boot.enable = false;
         efi = {
           canTouchEfiVariables = false;
-          efiSysMountPoint = "/boot";
+          efiSysMountPoint = "/boot/efi";
         };
         timeout = 1;
         grub = {
@@ -25,8 +24,7 @@ in
           efiSupport = true;
           useOSProber = true;
           devices = [ "nodev" ];
-          efiInstallAsRemovable = true;
-          configurationLimit = 10;
+          # efiInstallAsRemovable = false;
           theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
         };
       };
