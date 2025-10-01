@@ -3,6 +3,7 @@
   imports = [
     ../art/blender/blender.nix
     ../art/krita/krita.nix
+    ../art/gimp/gimp.nix
 
     ../baobab/baobab.nix
 
@@ -10,7 +11,6 @@
     ../browser/firefox/firefox.nix
     ../browser/firefox/firefox-dev.nix
 
-    ../communication/discord/discord.nix
     ../communication/thunderbird/thunderbird.nix
 
     ../editor/libreoffice/libreoffice.nix
@@ -49,6 +49,7 @@
     art = {
       blender.enable = true;
       krita.enable = true;
+      gimp.enable = true;
     };
 
     baobab.enable = true;
@@ -60,7 +61,6 @@
     };
 
     communication = {
-      discord.enable = true;
       thunderbird.enable = true;
     };
 
@@ -81,7 +81,7 @@
       puzzles.enable = true;
       mines.enable = true;
       osu.enable = true;
-      steam.enable = true;
+      steam.enable = false;
     };
 
     ia = {
