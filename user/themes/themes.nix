@@ -32,5 +32,16 @@ in
     };
 
     fonts.fontconfig.enable = true;
+
+    dconf.settings = {
+      "org/gnome/desktop/interface" = {
+        cursor-theme = "Nordzy-cursors";
+        cursor-size = 24;
+        gtk-theme = "Nordzy-dark";
+
+        enable-animations = false;
+        color-scheme = "prefer-dark";
+      };
+    };
   };
 }
