@@ -1,8 +1,9 @@
 { config, pkgs, ... }:
 {
   imports = [
-    ../../components/hypr/hyprlock/hyprlock.nix
     ../../components/hypr/hypridle/hypridle.nix
+    ../../components/hypr/hyprlock/hyprlock.nix
+    ../../components/hypr/hyprpanel/hyprpanel.nix
     ../../components/hypr/hyprpaper/hyprpaper.nix
     ../../components/hypr/hyprpicker/hyprpicker.nix
 
@@ -18,8 +19,9 @@
   services = {
     component = {
       hypr = {
-        hyprlock.enable = true;
         hypridle.enable = true;
+        hyprlock.enable = true;
+        hyprpanel.enable = true;
         hyprpicker.enable = true;
         hyprpaper.enable = true;
       };
