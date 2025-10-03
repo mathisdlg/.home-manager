@@ -30,7 +30,7 @@
         dunst.enable = true;
       };
 
-      waybar.enable = true;
+      waybar.enable = false;
 
       wlogout.enable = true;
 
