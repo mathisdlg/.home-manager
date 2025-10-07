@@ -30,7 +30,6 @@ in
         exec-once = [
           "waybar"
           "hypridle"
-          "dunst"
         ];
 
         env = [

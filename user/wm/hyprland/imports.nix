@@ -27,7 +27,7 @@
       };
 
       notifications = {
-        dunst.enable = true;
+        dunst.enable = false;
       };
 
       waybar.enable = false;
