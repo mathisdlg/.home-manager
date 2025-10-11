@@ -40,25 +40,40 @@ in
           };
         };
 
-        bar.launcher.autoDetectIcon = true;
-        bar.workspaces.show_icons = false;
-
-        menus.clock = {
-          time = {
-            military = true;
-            hideSeconds = false;
+        bar = {
+          launcher = {
+            autoDetectIcon = true;
           };
-          weather.unit = "metric";
+          workspaces.show_icons = false;
         };
 
-        menus.dashboard.directories.enabled = false;
-        menus.dashboard.stats.enable_gpu = false;
+        menus = {
+          clock = {
+            time = {
+              military = true;
+              hideSeconds = false;
+            };
 
-        theme.bar.transparent = true;
+            weather = {
+              unit = "metric";
+            };
+          };
 
-        theme.font = {
-          name = "CaskaydiaCove NF";
-          size = "16px";
+          dashboard = {
+            directories.enabled = false;
+            stats.enable_gpu = false;
+          };
+        };
+
+        theme = {
+          font = {
+            name = "CaskaydiaCove NF";
+            size = "16px";
+          };
+          bar = {
+            transparent = true;
+            buttons.dashboard.icon = "#aae5a4";
+          };
         };
       };
     };
