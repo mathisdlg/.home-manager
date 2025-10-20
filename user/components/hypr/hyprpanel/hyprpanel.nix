@@ -30,13 +30,16 @@ in
       systemd.enable = true;
 
       settings = {
-        layout = {
-          bar.layouts = {
-            "0" = {
-              left = [ "dashboard" "workspaces" ];
-              middle = [ "media" ];
-              right = [ "volume" "notifications" ];
-            };
+        bar.layouts = {
+          "0" = {
+            left = [ "dashboard" "workspaces" "windowtitle" ];
+            middle = [ "media" ];
+            right = [ "volume" "network" "bluetooth" "hypridle" "clock" "notifications" ];
+          };
+          "1" = {
+            left = [ "dashboard" "workspaces" "windowtitle" ];
+            middle = [ "media" ];
+            right = [ "clock" "notifications" ];
           };
         };
 
@@ -60,7 +63,9 @@ in
           };
 
           dashboard = {
-            directories.enabled = false;
+            directories = {
+              enable = true;
+            };
             stats.enable_gpu = false;
           };
         };
