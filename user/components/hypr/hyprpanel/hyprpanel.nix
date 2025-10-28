@@ -47,7 +47,10 @@ in
           launcher = {
             autoDetectIcon = true;
           };
-          workspaces.show_icons = false;
+          workspaces = {
+            show_icons = false;
+            show_numbered = true;
+          };
         };
 
         menus = {
@@ -77,7 +80,9 @@ in
           };
           bar = {
             transparent = true;
-            buttons.dashboard.icon = "#aae5a4";
+            buttons.dashboard = {
+              icon = "#aae5a4";
+            };
           };
         };
       };
