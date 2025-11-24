@@ -70,5 +70,6 @@
       rocmPackages.clr.icd
       amdvlk
     ];
+    new-lg4ff.enable = true;
   };
 }
