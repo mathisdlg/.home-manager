@@ -262,6 +262,8 @@
     };
   };
 
+  systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
