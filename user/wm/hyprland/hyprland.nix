@@ -50,12 +50,12 @@ in
           new_on_top = true;
         };
 
-        gestures = {
-          workspace_swipe = true;
-        };
-
         misc = {
           force_default_wallpaper = -1;
+        };
+
+        ecosystem = {
+          no_update_news = true;
         };
 
         windowrulev2 = "suppressevent maximize, class:.*";

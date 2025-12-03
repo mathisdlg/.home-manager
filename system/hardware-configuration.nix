@@ -68,7 +68,6 @@
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     graphics.extraPackages = with pkgs; [
       rocmPackages.clr.icd
-      amdvlk
     ];
     new-lg4ff.enable = true;
   };

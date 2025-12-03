@@ -44,12 +44,13 @@
   };
 
   services = {
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
     xserver = {
       enable = true;
 
       # Enable the GNOME Desktop Environment.
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
 
       # Configure keymap in X11
       xkb = {
@@ -146,7 +147,7 @@
       home-manager
 
       # Config
-      qt6ct
+      qt6Packages.qt6ct
 
       # Virtualisation
       spice
@@ -233,10 +234,6 @@
       enable = true;
       qemu = {
         swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [ pkgs.OVMF.fd ]; # pkgs.OVMFFull.fd
-        };
       };
     };
 
