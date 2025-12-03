@@ -52,11 +52,15 @@ in
         };
 
         gestures = {
-          workspace_swipe = true;
+          gesture = "3, horizontal, workspace";
         };
 
         misc = {
           force_default_wallpaper = -1;
+        };
+
+        ecosystem = {
+          no_update_news = true;
         };
 
         windowrulev2 = "suppressevent maximize, class:.*";
