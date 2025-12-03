@@ -23,9 +23,11 @@
   programs = {
     git = {
       enable = true;
-      userName = "mathisdlg";
-      userEmail = "delage.mathis.1@gmail.com";
-      extraConfig = {
+      settings = {
+        user = {
+          name = "mathisdlg";
+          email = "delage.mathis.1@gmail.com";
+        };
         safe.directory = "*";
         init.defaultBranch = "main";
       };
