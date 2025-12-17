@@ -17,6 +17,7 @@
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
 
+    ../games/beammp/beammp.nix
     ../games/epic-games/epic-games.nix
     ../games/puzzles/puzzles.nix
     ../games/mines/mines.nix
@@ -77,6 +78,7 @@
     };
 
     games = {
+      beammp.enable = true;
       epic-games.enable = false;
       puzzles.enable = true;
       mines.enable = true;
