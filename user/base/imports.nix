@@ -2,6 +2,7 @@
 {
   imports = [
     ../art/blender/blender.nix
+    ../art/darktable/darktable.nix
     ../art/krita/krita.nix
     ../art/gimp/gimp.nix
 
@@ -49,6 +50,7 @@
   services = {
     art = {
       blender.enable = true;
+      darktable.enable = true;
       krita.enable = true;
       gimp.enable = true;
     };
