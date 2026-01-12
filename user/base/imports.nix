@@ -21,6 +21,7 @@
     ../games/beammp/beammp.nix
     ../games/epic-games/epic-games.nix
     ../games/puzzles/puzzles.nix
+    ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
     ../games/osu/osu.nix
     ../games/steam/steam.nix
@@ -83,6 +84,7 @@
       beammp.enable = true;
       epic-games.enable = false;
       puzzles.enable = true;
+      minecraft.enable = true;
       mines.enable = true;
       osu.enable = true;
       steam.enable = false;
