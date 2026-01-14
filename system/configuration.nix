@@ -46,6 +46,7 @@
   services = {
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
+
     xserver = {
       enable = true;
 
@@ -206,6 +207,16 @@
     # Virtualisation
     virt-manager.enable = true;
   };
+
+
+  # Enable OpenTabletDriver
+  hardware = {
+    opentabletdriver.enable = true;
+    uinput.enable = true;
+  };
+
+  # Required by OpenTabletDriver
+  boot.kernelModules = [ "uinput" ];
 
   # Hardware graphics librairies
   # hardware.graphics.enable = true; # problems with flake downgrade to stable version

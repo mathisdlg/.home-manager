@@ -2,6 +2,7 @@
 {
   imports = [
     ../art/blender/blender.nix
+    ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
     ../art/krita/krita.nix
@@ -18,8 +19,10 @@
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
 
+    ../games/beammp/beammp.nix
     ../games/epic-games/epic-games.nix
     ../games/puzzles/puzzles.nix
+    ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
     ../games/osu/osu.nix
     ../games/steam/steam.nix
@@ -49,6 +52,7 @@
   services = {
     art = {
       blender.enable = true;
+      darktable.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
       krita.enable = true;
@@ -79,8 +83,10 @@
     };
 
     games = {
+      beammp.enable = false;
       epic-games.enable = false;
       puzzles.enable = true;
+      minecraft.enable = false;
       mines.enable = true;
       osu.enable = true;
       steam.enable = false;

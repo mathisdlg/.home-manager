@@ -23,11 +23,13 @@
   programs = {
     git = {
       enable = true;
+
       settings = {
         user = {
           name = "mathisdlg";
           email = "delage.mathis.1@gmail.com";
         };
+
         safe.directory = "*";
         init.defaultBranch = "main";
       };
