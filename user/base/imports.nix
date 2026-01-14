@@ -36,8 +36,6 @@
     ../programming/python/python.nix
     ../programming/swift/swift.nix
 
-    ../rustdesk/rustdesk.nix
-
     ../screenshare/screenshare.nix
 
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
@@ -106,8 +104,6 @@
       python.enable = true;
       swift.enable = false;
     };
-
-    rustdesk.enable = true;
 
     screenshare.screenshare.enable = true;
 
