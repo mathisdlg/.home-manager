@@ -49,6 +49,7 @@
 
     xserver = {
       enable = true;
+      displayManager.startx.enable = true;
 
       # Configure keymap in X11
       xkb = {

@@ -6,16 +6,16 @@
 }:
 with lib;
 let
-  cfg = config.services.anydesk;
+  cfg = config.services.rustdesk;
 in
 {
-  options.services.anydesk.enable =
-    mkEnableOption "Enable AnyDesk remote desktop client";
+  options.services.rustdesk.enable =
+    mkEnableOption "Enable rustdesk remote desktop client";
 
   config = mkIf cfg.enable {
     home = {
       packages = with pkgs; [
-        anydesk
+        rustdesk
       ];
     };
   };

@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 {
   imports = [
-    ../anydesk/anydesk.nix
-
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
@@ -38,6 +36,8 @@
     ../programming/python/python.nix
     ../programming/swift/swift.nix
 
+    ../rustdesk/rustdesk.nix
+
     ../screenshare/screenshare.nix
 
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
@@ -52,8 +52,6 @@
   ];
 
   services = {
-    anydesk.enable = true;
-
     art = {
       blender.enable = true;
       darktable.enable = true;
@@ -108,6 +106,8 @@
       python.enable = true;
       swift.enable = false;
     };
+
+    rustdesk.enable = true;
 
     screenshare.screenshare.enable = true;
 
