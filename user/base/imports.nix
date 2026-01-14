@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ../anydesk/anydesk.nix
+
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
@@ -50,6 +52,8 @@
   ];
 
   services = {
+    anydesk.enable = true;
+
     art = {
       blender.enable = true;
       darktable.enable = true;
