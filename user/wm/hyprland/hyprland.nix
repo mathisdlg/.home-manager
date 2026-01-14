@@ -28,7 +28,6 @@ in
 
       settings = {
         exec-once = [
-          "waybar"
           "hypridle"
         ];
 
