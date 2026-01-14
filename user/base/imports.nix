@@ -3,8 +3,9 @@
   imports = [
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
-    ../art/krita/krita.nix
     ../art/gimp/gimp.nix
+    ../art/gphoto2/gphoto2.nix
+    ../art/krita/krita.nix
 
     ../baobab/baobab.nix
 
@@ -52,8 +53,9 @@
     art = {
       blender.enable = true;
       darktable.enable = true;
-      krita.enable = true;
       gimp.enable = true;
+      gphoto2.enable = true;
+      krita.enable = true;
     };
 
     baobab.enable = true;
@@ -82,7 +84,7 @@
 
     games = {
       beammp.enable = true;
-      epic-games.enable = false;
+      epic-games.enable = true;
       puzzles.enable = true;
       minecraft.enable = true;
       mines.enable = true;

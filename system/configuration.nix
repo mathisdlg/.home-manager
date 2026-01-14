@@ -50,8 +50,6 @@
     xserver = {
       enable = true;
 
-      # Enable the GNOME Desktop Environment.
-
       # Configure keymap in X11
       xkb = {
         layout = "fr";
@@ -268,6 +266,8 @@
       ];
     };
   };
+
+  systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;

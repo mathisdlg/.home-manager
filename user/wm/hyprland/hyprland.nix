@@ -28,7 +28,6 @@ in
 
       settings = {
         exec-once = [
-          "waybar"
           "hypridle"
         ];
 
@@ -48,6 +47,10 @@ in
 
         master = {
           new_on_top = true;
+        };
+
+        gestures = {
+          gesture = "3, horizontal, workspace";
         };
 
         misc = {
