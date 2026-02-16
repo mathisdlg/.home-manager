@@ -179,8 +179,8 @@
         gnome-logs
         gnome-maps
         gnome-system-monitor
-        gnome-keyring # password manager
-        seahorse # password manager
+        # gnome-keyring # password manager
+        # seahorse # password manager
         gedit # text editor
         cheese # webcam tool
         snapshot # Camera tool
