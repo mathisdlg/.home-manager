@@ -179,6 +179,7 @@
         gnome-logs
         gnome-maps
         gnome-system-monitor
+        gnome-keyring # password manager
         seahorse # password manager
         gedit # text editor
         cheese # webcam tool
@@ -187,7 +188,7 @@
         geary # email reader
         evince # document viewer
         totem # video player
-          # loupe # image viewer
+        # loupe # image viewer
         baobab # disk usage analyzer
       ];
     };
