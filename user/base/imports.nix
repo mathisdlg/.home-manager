@@ -15,6 +15,7 @@
 
     ../communication/thunderbird/thunderbird.nix
 
+    ../editor/kicad/kicad.nix
     ../editor/libreoffice/libreoffice.nix
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
@@ -74,6 +75,7 @@
     };
 
     editor = {
+      kicad.enable = true;
       libreoffice.enable = true;
       vscodium = {
         enable = true;
