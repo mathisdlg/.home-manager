@@ -15,6 +15,7 @@
 
     ../communication/thunderbird/thunderbird.nix
 
+    ../editor/kicad/kicad.nix
     ../editor/libreoffice/libreoffice.nix
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
@@ -74,6 +75,7 @@
     };
 
     editor = {
+      kicad.enable = true;
       libreoffice.enable = true;
       vscodium = {
         enable = true;
@@ -83,10 +85,10 @@
     };
 
     games = {
-      beammp.enable = false;
-      epic-games.enable = false;
+      beammp.enable = true;
+      epic-games.enable = true;
       puzzles.enable = true;
-      minecraft.enable = false;
+      minecraft.enable = true;
       mines.enable = true;
       osu.enable = true;
       steam.enable = false;
