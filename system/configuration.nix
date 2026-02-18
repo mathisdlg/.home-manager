@@ -96,6 +96,11 @@
     bootloader-mod.enable = true;
 
     pulseaudio.enable = false;
+
+    # Allow the kernel to manage power on/off of drives for suspend, shutdown, hibernate
+    udev.extraRules = ''
+      ACTION=="add|change", DRIVERS=="usb-storage|uas", SUBSYSTEM=="scsi_disk", ATTR{manage_system_start_stop}="1", ATTR{manage_runtime_start_stop}="1", ATTR{manage_shutdown}="1"
+    '';
   };
 
   # Configure console keymap
