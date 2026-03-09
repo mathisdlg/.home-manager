@@ -240,10 +240,10 @@
 
   # Docker rootless
   virtualisation = {
-    docker.rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
+    # docker.rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    # };
 
     libvirtd = {
       enable = true;
