@@ -15,7 +15,6 @@ in
     home = {
       packages = with pkgs; [
         hyprpanel
-        nerd-fonts.inconsolata
       ];
 
       file = {

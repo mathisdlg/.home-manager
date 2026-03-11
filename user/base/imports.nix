@@ -46,7 +46,10 @@
     ../terminal/shell/shell.nix
     ../terminal/kitty/kitty.nix
 
-    ../themes/themes.nix
+    ../themes/fonts/jetbrains/jetbrains.nix
+    ../themes/fonts/nerd/nerd.nix
+    ../themes/fonts/noto/noto.nix
+    ../themes/themes/themes.nix
 
     ../wm/hyprland/hyprland.nix
   ];
@@ -123,7 +126,14 @@
       kitty.enable = true;
     };
 
-    themes.enable = true;
+    themes = {
+      fonts = {
+        jetbrains.enable = true;
+        nerd.enable = true;
+        noto.enable = true;
+      };
+      themes.enable = true;
+    };
 
     hyprland.enable = true;
   };
