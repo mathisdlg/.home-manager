@@ -12,7 +12,7 @@ in
   options.services.themes.themes.enable = mkEnableOption "Enable themes.";
 
   imports = [
-    ./background/background.nix
+    ../background/background.nix
   ];
 
   config = mkIf cfg.enable {
