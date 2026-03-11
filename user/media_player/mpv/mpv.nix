@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.mpv;
+  cfg = config.services.media_player.mpv;
 in
 {
-  options.services.mpv.enable = mkEnableOption "Enable mpv (hackable media player)";
+  options.services.media_player.mpv.enable = mkEnableOption "Enable mpv (hackable media player)";
 
   config = mkIf cfg.enable {
     programs.mpv = {

@@ -33,6 +33,7 @@
     ../keepass/keepass.nix
 
     ../media_player/mpv/mpv.nix
+    ../media_player/playerctl/playerctl.nix
 
     ../programming/python/python.nix
     ../programming/swift/swift.nix
@@ -100,7 +101,10 @@
 
     keepassxc.enable = true;
 
-    mpv.enable = true;
+    media_player = {
+      mpv.enable = true;
+      playerctl.enable = true;
+    };
 
     programming = {
       python.enable = true;

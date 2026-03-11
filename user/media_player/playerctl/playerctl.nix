@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.playerctl;
+  cfg = config.services.media_player.playerctl;
 in
 {
-  options.services.playerctl.enable = mkEnableOption "Enable playerctl (command-line utility to control media players)";
+  options.services.media_player.playerctl.enable = mkEnableOption "Enable playerctl (command-line utility to control media players)";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
