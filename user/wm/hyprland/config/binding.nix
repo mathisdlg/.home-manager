@@ -27,7 +27,6 @@
           "$mainMod, ESCAPE, exit,"
           "$mainMod, E, exec, $fileManager"
           "$mainMod, V, togglefloating,"
-          "$mainMod, SPACE, exec, $menu"
           "bindr=SUPER, SUPER_L, exec, $menu"
           "$mainMod, J, togglesplit,"
           "CTRL SHIFT, Escape, exec, missioncenter"

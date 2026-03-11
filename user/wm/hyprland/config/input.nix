@@ -10,10 +10,10 @@
         input = {
           numlock_by_default=true;
 
-          kb_layout="fr";
+          kb_layout="us, fr";
           # kb_variant=;
           # kb_model=;
-          # kb_options=;
+          kb_options=grp:win_space_toggle;
           # kb_rules=;
 
           follow_mouse=1;
