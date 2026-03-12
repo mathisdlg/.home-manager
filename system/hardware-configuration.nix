@@ -23,14 +23,18 @@
         "usb_storage"
         "sd_mod"
       ];
-      luks.devices."luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device =
-        "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
+
+      luks.devices = {
+        "luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
+        "luks-d181ba8f-ec6c-42fb-82e8-1eecc70dd61d".device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+      };
+
       kernelModules = [ ];
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [
-      "video=DP-3:1920x1080@60"
-      "video=HDMI-A-1:1024x600@60"
+      "video=DP-3:2560x1440@179"
+      "video=HDMI-A-1:1920x1080@60"
     ];
     extraModulePackages = [ ];
   };
@@ -51,8 +55,8 @@
     };
 
     "/disks/data" = {
-      device = "/dev/disk/by-uuid/06A0F33EA0F332B3";
-      fsType = "ntfs";
+      device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+      fsType = "ext4";
     };
   };
 
