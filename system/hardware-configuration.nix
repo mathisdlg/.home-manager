@@ -25,8 +25,8 @@
       ];
 
       luks.devices = {
-        "luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
-        "luks-d181ba8f-ec6c-42fb-82e8-1eecc70dd61d".device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+        "cryptRoot".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
+        "cryptData".device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
       };
 
       kernelModules = [ ];
@@ -55,7 +55,7 @@
     };
 
     "/disks/data" = {
-      device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+      device = "/dev/disk/by-uuid/1b938e4a-865c-4a83-85f5-4b9a93fe130b";
       fsType = "ext4";
       options = [
         "nofail"
