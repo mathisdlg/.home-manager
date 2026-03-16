@@ -15,7 +15,7 @@
         "$fileManager" = "nautilus";
         "$menu" = "wofi --show drun";
         "$browser" = "brave";
-        "$musicPlayer" = "mpv --shuffle --loop-playlist --no-video --input-ipc-server=/tmp/mpvsocket /disks/data/Music/Musique";
+        "$musicPlayer" = "mpv --shuffle --loop-playlist --no-video /disks/data/Music/Musique";
         "$lock" = "wlogout";
         "$colorPicker" = "hyprpicker -a -r -n";
         "$codeEditor" = "code";
