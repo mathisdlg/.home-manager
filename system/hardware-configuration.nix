@@ -57,6 +57,9 @@
     "/disks/data" = {
       device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
       fsType = "ext4";
+      options = [
+        "nofail"
+      ];
     };
   };
 
