@@ -27,6 +27,7 @@
       luks.devices = {
         "cryptRoot".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
         "cryptData".device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+        "cryptSave".device = "/dev/disk/by-uuid/62609c74-639a-4941-950d-3b456301a08d";
       };
 
       kernelModules = [ ];
@@ -55,7 +56,15 @@
     };
 
     "/disks/data" = {
-      device = "/dev/disk/by-uuid/1b938e4a-865c-4a83-85f5-4b9a93fe130b";
+      device = "/dev/mapper/cryptData";
+      fsType = "ext4";
+      options = [
+        "nofail"
+      ];
+    };
+
+    "/disks/save" = {
+      device = "/dev/mapper/cryptSave";
       fsType = "ext4";
       options = [
         "nofail"
