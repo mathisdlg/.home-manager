@@ -65,12 +65,12 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [
-      pkgs.rsnapshot
-      pkgs.rsync
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.smartmontools
+    environment.systemPackages = with pkgs; [
+      rsnapshot
+      rsync
+      coreutils
+      findutils
+      smartmontools
     ];
 
     # --- RSNAPSHOT CONFIG ---
