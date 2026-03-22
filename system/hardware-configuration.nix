@@ -42,7 +42,7 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/8516ef91-5030-4fd2-ac32-4cb809c9dbb8";
+      device = "/dev/mapper/cryptRoot";
       fsType = "ext4";
     };
 
