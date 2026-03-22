@@ -8,9 +8,8 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../patches/nvidia.nix
-    ./modules/zram/zram.nix
-    ./modules/openrgb/openrgb.nix
-    ./modules/bootloader/bootloader.nix
+
+    ./import.nix
   ];
 
   networking = {
@@ -64,16 +63,6 @@
     # Enable nvidia driver patch
     nvidia.enable = false; # I have an AMD GPU now! :happy:
 
-    # Activate zram
-    zram = {
-      enable = true;
-      size = 100;
-    };
-
-    rgb.openrgb = {
-      enable = false;
-    };
-
     fstrim.enable = true;
 
     pipewire = {
@@ -92,8 +81,6 @@
     };
 
     spice-vdagentd.enable = true;
-
-    bootloader-mod.enable = true;
 
     pulseaudio.enable = false;
 
