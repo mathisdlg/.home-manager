@@ -5,6 +5,7 @@
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
+    ../art/imagemacick/imagemagick.nix
     ../art/krita/krita.nix
 
     ../baobab/baobab.nix
@@ -60,6 +61,7 @@
       darktable.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
+      imagemagick.enable = true;
       krita.enable = true;
     };
 
