@@ -3,6 +3,7 @@
   imports = [
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
+    ../art/freecad/freecad.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
     ../art/imagemacick/imagemagick.nix
@@ -59,6 +60,7 @@
     art = {
       blender.enable = true;
       darktable.enable = true;
+      freecad.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
       imagemagick.enable = true;
