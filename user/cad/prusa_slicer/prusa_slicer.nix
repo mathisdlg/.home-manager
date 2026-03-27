@@ -13,7 +13,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      prusa_slicer
+      prusa-slicer
     ];
   };
 }
