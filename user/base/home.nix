@@ -15,6 +15,7 @@
 
     file = {
       ".update.sh".source = ../scripts/update.sh;
+      ".ig-resize.sh".source = ../scripts/ig-resize.sh;
 
       "Data".source = config.lib.file.mkOutOfStoreSymlink "/disks/data";
       "Save".source = config.lib.file.mkOutOfStoreSymlink "/disks/save";
