@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.art.freecad;
+  cfg = config.services.cad.freecad;
 in
 {
-  options.services.art.freecad.enable = mkEnableOption "Enable freecad.";
+  options.services.cad.freecad.enable = mkEnableOption "Enable freecad.";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
