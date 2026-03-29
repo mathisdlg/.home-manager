@@ -15,11 +15,11 @@
     ../browser/firefox/firefox-dev.nix
 
     ../cad/freecad/freecad.nix
+    ../cad/kicad/kicad.nix
     ../cad/prusa_slicer/prusa_slicer.nix
 
     ../communication/thunderbird/thunderbird.nix
 
-    ../editor/kicad/kicad.nix
     ../editor/libreoffice/libreoffice.nix
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
@@ -78,6 +78,7 @@
 
     cad = {
       freecad.enable = true;
+      kicad.enable = true;
       prusa_slicer.enable = true;
     };
 
@@ -89,7 +90,6 @@
     };
 
     editor = {
-      kicad.enable = true;
       libreoffice.enable = true;
       vscodium = {
         enable = true;
