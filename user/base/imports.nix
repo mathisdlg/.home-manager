@@ -38,6 +38,7 @@
 
     ../media_player/mpv/mpv.nix
     ../media_player/playerctl/playerctl.nix
+    ../media_player/yt-dlp/yt-dlp.nix
 
     ../programming/python/python.nix
     ../programming/swift/swift.nix
@@ -117,6 +118,7 @@
     media_player = {
       mpv.enable = true;
       playerctl.enable = true;
+      yt-dlp.enable = true;
     };
 
     programming = {
