@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  unstablePkgs,
   lib,
   ...
 }:
@@ -12,7 +13,7 @@ in
   options.services.cad.freecad.enable = mkEnableOption "Enable freecad.";
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
+    home.packages = with unstablePkgs; [
       freecad
     ];
   };

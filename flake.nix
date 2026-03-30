@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,6 +14,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       ...
     }:
@@ -21,7 +23,7 @@
       homeCfg = home-manager.lib.homeManagerConfiguration;
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-
+      unstablePkgs = nixpkgs-unstable.legacyPackages.${system};
     in
     {
       nixosConfigurations = {
@@ -32,10 +34,16 @@
           ];
         };
       };
+
       homeConfigurations = {
         mathisdlg = homeCfg {
           inherit pkgs;
-          modules = [ ./user/base/home.nix ];
+          modules = [ 
+            ./user/base/home.nix 
+          ];
+          extraSpecialArgs = {
+            unstablePkgs = unstablePkgs;
+          };
         };
       };
     };

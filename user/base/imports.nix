@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{ 
+  config, 
+  pkgs, 
+  unstablePkgs, 
+  ... 
+}:
 {
   imports = [
     ../art/blender/blender.nix
