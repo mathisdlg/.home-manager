@@ -57,7 +57,7 @@
 
     "/disks/data" = {
       device = "/dev/mapper/cryptData";
-      fsType = "ext4";
+      fsType = "btrfs";
       options = [
         "nofail"
       ];
@@ -65,7 +65,7 @@
 
     "/disks/save" = {
       device = "/dev/mapper/cryptSave";
-      fsType = "ext4";
+      fsType = "btrfs";
       options = [
         "nofail"
       ];
