@@ -3,12 +3,12 @@
 with lib;
 let
   cfg = config.services.module.backup.btrbk;
+  host = config.networking.hostName;
 in
 {
   options.services.module.backup.btrbk = {
-    enable = mkEnableOption {
-      description = "Enable btrbk backups";
-    };
+
+    enable = mkEnableOption "Enable btrbk backups";
 
     performance = {
       niceness = mkOption {
@@ -28,13 +28,13 @@ in
       data = mkOption {
         type = types.path;
         default = "/disks/data";
-        description = "Path to source data directory (must be a btrfs volume)";
+        description = "Source data directory (btrfs)";
       };
 
       target = mkOption {
         type = types.path;
         default = "/disks/save";
-        description = "Path to local backup target directory (must be a btrfs volume)";
+        description = "Local backup target (btrfs)";
       };
 
       sshTarget = mkOption {
@@ -46,8 +46,8 @@ in
 
     interval = mkOption {
       type = types.str;
-      default = "*-*-* 00/3:00:00"; # Every 3 hours
-      description = "Backup schedule (systemd timer format or daily/hourly/etc.)";
+      default = "daily";
+      description = "Backup schedule (systemd timer format)";
     };
   };
 
@@ -56,32 +56,41 @@ in
     # Ensure directories exist
     systemd.tmpfiles.rules = [
       "d ${cfg.path.data}/.snapshots 0755 root root -"
-      "d ${cfg.path.target}/data 0755 root root -"
+      "d ${cfg.path.target}/${host}/data 0755 root root -"
     ];
 
-    # btrbk service
     services.btrbk = {
       niceness = cfg.performance.niceness;
       ioSchedulingClass = cfg.performance.ioSchedulingClass;
 
-      instances."main" = {
+      instances.main = {
         onCalendar = cfg.interval;
 
         settings = {
           timestamp_format = "long";
+
           snapshot_preserve = "24h 7d 4w 12m";
           snapshot_preserve_min = "2d";
           target_preserve = "7d 4w 12m";
 
+          stream_compress = "zstd";
+          stream_compress_threads = "4";
+          stream_compress_adapt = "yes";
+
           volume."${cfg.path.data}" = {
-            subvolume."." = { snapshot_dir = ".snapshots"; };
+            subvolume."." = {
+              snapshot_dir = ".snapshots";
+            };
           };
 
-          # merge optional SSH target using // syntax
           target = {
-            "${cfg.path.target}" = { subvolume = "data"; };
+            "${cfg.path.target}" = {
+              subvolume = "/${host}/data";
+            };
           } // optionalAttrs (cfg.path.sshTarget != null) {
-            "${cfg.path.sshTarget}" = { subvolume = "data"; };
+            "${cfg.path.sshTarget}" = {
+              subvolume = "/${host}/data"; # This path is bound to change based on the remote setup, adjust as needed
+            };
           };
         };
       };
