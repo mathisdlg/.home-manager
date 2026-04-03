@@ -60,6 +60,7 @@
       fsType = "btrfs";
       options = [
         "nofail"
+        "compress=zstd"
       ];
     };
 
@@ -68,6 +69,7 @@
       fsType = "btrfs";
       options = [
         "nofail"
+        "compress=zstd"
       ];
     };
   };
