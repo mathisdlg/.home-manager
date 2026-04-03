@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./modules/backup/btrbk/btrbk.nix
+
     ./modules/bootloader/bootloader.nix
     
     ./modules/openrgb/openrgb.nix
@@ -9,6 +11,18 @@
   ];
 
   services = {
+    module = {
+      backup = {
+        btrbk = {
+          enable = true;
+          performance = {
+            niceness = 19;
+            ioSchedulingClass = "idle";
+          };
+        };
+      };
+    };
+
     bootloader-mod.enable = true;
 
     rgb.openrgb = {
