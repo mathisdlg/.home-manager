@@ -14,7 +14,7 @@
     module = {
       backup = {
         btrbk = {
-          enable = true;
+          enable = false;
           performance = {
             niceness = 19;
             ioSchedulingClass = "idle";
