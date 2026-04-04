@@ -53,12 +53,48 @@ in
 
   config = mkIf cfg.enable {
 
-    # Ensure directories exist
-    systemd.tmpfiles.rules = [
-      "d ${cfg.path.data}/.snapshots 0755 root root -"
-      "d ${cfg.path.target}/${host}/data 0755 root root -"
-    ];
+    ########################################
+    # Init service
+    ########################################
+    systemd.services.btrbk-init = {
+      description = "Initialize btrbk subvolumes";
 
+      after = [ "disks-data.mount" "disks-save.mount" ];
+      requires = [ "disks-data.mount" "disks-save.mount" ];
+
+      wantedBy = [ "multi-user.target" ];
+
+      path = [ pkgs.btrfs-progs ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      script = ''
+        set -e
+
+        echo "Initializing btrbk layout..."
+
+        # Source snapshot dir (must be subvolume)
+        if ! btrfs subvolume show ${cfg.path.data}/.snapshots >/dev/null 2>&1; then
+          echo "Creating snapshot subvolume..."
+          btrfs subvolume create ${cfg.path.data}/.snapshots
+        fi
+
+        # Target structure
+        mkdir -p ${cfg.path.target}/${host}
+
+        if ! btrfs subvolume show ${cfg.path.target}/${host}/data >/dev/null 2>&1; then
+          echo "Creating target subvolume..."
+          btrfs subvolume create ${cfg.path.target}/${host}/data
+        fi
+      '';
+    };
+
+    ########################################
+    # btrbk config
+    ########################################
     services.btrbk = {
       niceness = cfg.performance.niceness;
       ioSchedulingClass = cfg.performance.ioSchedulingClass;
@@ -84,16 +120,41 @@ in
           };
 
           target = {
-            "${cfg.path.target}" = {
-              subvolume = "/${host}/data";
+            "${cfg.path.target}/${host}" = {
+              subvolume = "/data";
             };
           } // optionalAttrs (cfg.path.sshTarget != null) {
-            "${cfg.path.sshTarget}" = {
-              subvolume = "/${host}/data"; # This path is bound to change based on the remote setup, adjust as needed
+            "${cfg.path.sshTarget}/${host}" = {
+              subvolume = "/data";
             };
           };
         };
       };
+    };
+
+    ########################################
+    # Ordering
+    ########################################
+    systemd.services.btrbk-main = {
+      after = [
+        "btrbk-init.service"
+        "disks-data.mount"
+        "disks-save.mount"
+        "local-fs.target"
+      ];
+      requires = [
+        "btrbk-init.service"
+        "disks-data.mount"
+        "disks-save.mount"
+      ];
+    };
+
+    ########################################
+    # Timer
+    ########################################
+    systemd.timers.btrbk-main.timerConfig = {
+      Persistent = true;
+      OnBootSec = "3min";
     };
   };
 }
