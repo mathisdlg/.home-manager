@@ -1,160 +1,375 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.module.backup.btrbk;
-  host = config.networking.hostName;
-in
-{
-  options.services.module.backup.btrbk = {
 
-    enable = mkEnableOption "Enable btrbk backups";
+  # ============================================================
+  #  Source submodule
+  # ============================================================
+  #
+  #  Two modes, controlled by `subvolumes`:
+  #
+  #  • subvolumes = []   → whole-disk mode
+  #    btrbk snapshots every top-level subvolume on the filesystem.
+  #    snapshot_dir / retention are set on the `volume` line itself.
+  #
+  #  • subvolumes = ["home" "var/lib"]  → selective mode
+  #    Only the listed paths (relative to mountPoint) are snapshotted.
+  #    snapshot_dir / retention are set on each `subvolume` line.
+  #
+  sourceType = types.submodule {
+    options = {
 
-    performance = {
-      niceness = mkOption {
-        type = types.ints.between (-20) 19;
-        default = 19;
-        description = "CPU niceness for btrbk service (-20 is highest priority, 19 is lowest)";
+      mountPoint = mkOption {
+        type    = types.str;
+        example = "/disks/data";
+        description = ''
+          Mount-point of the btrfs filesystem to back up.
+          Becomes the `volume` entry in btrbk.conf.
+        '';
       };
 
-      ioSchedulingClass = mkOption {
-        type = types.enum [ "idle" "best-effort" "realtime" ];
-        default = "idle";
-        description = "I/O scheduling class for btrbk service";
-      };
-    };
-
-    path = {
-      data = mkOption {
-        type = types.path;
-        default = "/disks/data";
-        description = "Source data directory (btrfs)";
+      subvolumes = mkOption {
+        type    = types.listOf types.str;
+        default = [];
+        example = [ "home" "var/lib" ];
+        description = ''
+          Subvolume paths relative to `mountPoint` to back up.
+          Set to [] (the default) to back up the whole btrfs filesystem —
+          btrbk will discover and snapshot every top-level subvolume.
+        '';
       };
 
-      target = mkOption {
-        type = types.path;
-        default = "/disks/save";
-        description = "Local backup target (btrfs)";
+      snapshotDir = mkOption {
+        type    = types.str;
+        default = ".snapshots";
+        description = ''
+          Directory relative to `mountPoint` where btrbk stores local
+          read-only snapshots. Must be on the same btrfs filesystem.
+        '';
       };
 
-      sshTarget = mkOption {
-        type = types.nullOr types.str;
+      # Per-source retention overrides (fall back to global retention if unset)
+      preserveMin = mkOption {
+        type    = types.nullOr types.str;
         default = null;
-        description = "Optional SSH target (e.g. ssh://nas:/backup)";
+        example = "2d";
+        description = ''
+          Minimum retention for local snapshots on this source.
+          Overrides `retention.preserveMin` when set.
+          Uses btrbk syntax: Nd / Nw / Nm (days / weeks / months).
+        '';
       };
-    };
 
-    interval = mkOption {
-      type = types.str;
-      default = "daily";
-      description = "Backup schedule (systemd timer format)";
+      preserve = mkOption {
+        type    = types.nullOr types.str;
+        default = null;
+        example = "7d 4w 6m";
+        description = ''
+          Retention policy for local snapshots on this source.
+          Overrides `retention.preserve` when set.
+          Uses btrbk syntax, e.g. "14d 4w 6m".
+        '';
+      };
     };
   };
 
-  config = mkIf cfg.enable {
+  # ============================================================
+  #  btrbk.conf generator
+  # ============================================================
+  mkVolumeBlock = src:
+    let
+      # Resolve per-source overrides, falling back to global defaults
+      resolvedPreserveMin = if src.preserveMin != null
+                            then src.preserveMin
+                            else cfg.retention.preserveMin;
+      resolvedPreserve    = if src.preserve != null
+                            then src.preserve
+                            else cfg.retention.preserve;
 
-    ########################################
-    # Init service
-    ########################################
-    systemd.services.btrbk-init = {
-      description = "Initialize btrbk subvolumes";
+      indent = "  "; # two-space indent for children of `volume`
 
-      after = [ "disks-data.mount" "disks-save.mount" ];
-      requires = [ "disks-data.mount" "disks-save.mount" ];
+      # Whole-disk: retention attrs sit directly under the volume block
+      volumeAttrs = optionalString (src.subvolumes == []) (
+        "${indent}snapshot_dir          ${src.snapshotDir}\n" +
+        "${indent}snapshot_preserve_min ${resolvedPreserveMin}\n" +
+        "${indent}snapshot_preserve     ${resolvedPreserve}\n"
+      );
 
-      wantedBy = [ "multi-user.target" ];
+      # Selective: one `subvolume` block per path, indented under volume
+      subvolumeBlocks = optionalString (src.subvolumes != [])
+        (concatMapStringsSep "\n" (sv:
+          "${indent}subvolume ${sv}\n" +
+          "${indent}${indent}snapshot_dir          ${src.snapshotDir}\n" +
+          "${indent}${indent}snapshot_preserve_min ${resolvedPreserveMin}\n" +
+          "${indent}${indent}snapshot_preserve     ${resolvedPreserve}\n"
+        ) src.subvolumes);
 
-      path = [ pkgs.btrfs-progs ];
+    in
+      "volume ${src.mountPoint}\n" +
+      volumeAttrs +        # snapshot_dir / retention BEFORE target
+      subvolumeBlocks +    # subvolume blocks BEFORE target
+      "${indent}target ${cfg.target.path}\n" +
+      "\n";
 
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
+  # ionice class number
+  ioniceClassNum = {
+    "idle"        = "3";
+    "best-effort" = "2";
+    "realtime"    = "1";
+  }.${cfg.performance.ioClass};
 
-      script = ''
-        set -e
+in {
 
-        echo "Initializing btrbk layout..."
+  # ============================================================
+  #  Options
+  # ============================================================
+  options.services.module.backup.btrbk = {
 
-        # Source snapshot dir (must be subvolume)
-        if ! btrfs subvolume show ${cfg.path.data}/.snapshots >/dev/null 2>&1; then
-          echo "Creating snapshot subvolume..."
-          btrfs subvolume create ${cfg.path.data}/.snapshots
-        fi
+    enable = mkEnableOption "btrbk btrfs backup service";
 
-        # Target structure
-        mkdir -p ${cfg.path.target}/${host}
+    # ── Sources ───────────────────────────────────────────────
+    sources = mkOption {
+      type    = types.listOf sourceType;
+      default = [];
+      example = literalExpression ''
+        [
+          # Back up an entire btrfs disk
+          { mountPoint = "/disks/data"; subvolumes = []; }
 
-        if ! btrfs subvolume show ${cfg.path.target}/${host}/data >/dev/null 2>&1; then
-          echo "Creating target subvolume..."
-          btrfs subvolume create ${cfg.path.target}/${host}/data
-        fi
+          # Back up only specific subvolumes on root
+          { mountPoint = "/"; subvolumes = [ "home" "var/lib" ]; }
+        ]
+      '';
+      description = ''
+        List of btrfs filesystems (and optionally subvolumes) to back up.
+        Each entry maps to a `volume` block in btrbk.conf.
       '';
     };
 
-    ########################################
-    # btrbk config
-    ########################################
-    services.btrbk = {
-      niceness = cfg.performance.niceness;
-      ioSchedulingClass = cfg.performance.ioSchedulingClass;
+    # ── Target ────────────────────────────────────────────────
+    target = {
+      path = mkOption {
+        type    = types.str;
+        example = "/mnt/backup/btrbk";
+        description = ''
+          Destination directory for backup snapshots.
+          Must reside on a btrfs filesystem.
+        '';
+      };
 
-      instances.main = {
-        onCalendar = cfg.interval;
+      preserveMin = mkOption {
+        type    = types.str;
+        default = "no";
+        example = "2d";
+        description = ''
+          Minimum age of target backups to preserve before pruning.
+          "no" means btrbk will prune freely according to `preserve`.
+        '';
+      };
 
-        settings = {
-          snapshot_create = "onchange";
-          snapshot_dir = ".snapshots";
-
-          timestamp_format = "long";
-
-          snapshot_preserve = "24h 7d 1w 0m 0y";
-          snapshot_preserve_min = "latest";
-
-          target_preserve = "0h 14d 5w 1m 1y";
-          target_preserve_min = "latest";
-
-          archive_preserve = "0h 1d 1w 1m 1y";
-          archive_preserve_min = "latest";
-
-          stream_compress = "zstd";
-          stream_compress_threads = "4";
-          stream_compress_adapt = "yes";
-
-          volume."${cfg.path.data}" = {
-            target = "${cfg.path.target}/${host}/data";
-          };
-        };
+      preserve = mkOption {
+        type    = types.str;
+        default = "30d 10w 6m";
+        example = "30d 10w 12m";
+        description = ''
+          Retention policy for backups at the target.
+          Uses btrbk syntax: "30d 10w 6m" = 30 daily, 10 weekly, 6 monthly.
+        '';
       };
     };
 
-    ########################################
-    # Ordering
-    ########################################
-    systemd.services = {
-      btrbk-main = {
-        after = [
-          "btrbk-init.service"
-          "disks-data.mount"
-          "disks-save.mount"
-          "local-fs.target"
-        ];
-        requires = [
-          "btrbk-init.service"
-          "disks-data.mount"
-          "disks-save.mount"
-        ];
+    # ── Retention (local snapshot defaults) ───────────────────
+    retention = {
+      preserveMin = mkOption {
+        type    = types.str;
+        default = "2d";
+        example = "1d";
+        description = ''
+          Global default for the minimum age of local snapshots to keep.
+          Can be overridden per source with `sources[].preserveMin`.
+        '';
+      };
+
+      preserve = mkOption {
+        type    = types.str;
+        default = "14d";
+        example = "7d 4w 3m";
+        description = ''
+          Global default retention policy for local snapshots.
+          Can be overridden per source with `sources[].preserve`.
+          Uses btrbk syntax, e.g. "14d 4w" = 14 daily, 4 weekly.
+        '';
       };
     };
 
+    # ── Scheduling ────────────────────────────────────────────
+    scheduling = {
+      calendar = mkOption {
+        type    = types.str;
+        default = "daily";
+        example = "*-*-* 02:30:00";
+        description = ''
+          Systemd OnCalendar expression controlling when backups run.
+          Shorthands: "hourly", "daily", "weekly".
+          Custom: "*-*-* 02:30:00" (every day at 02:30).
+        '';
+      };
 
+      persistent = mkOption {
+        type    = types.bool;
+        default = true;
+        description = ''
+          When true, systemd will run the backup immediately on next boot
+          if a scheduled run was missed (e.g. the machine was off).
+        '';
+      };
+    };
 
-    ########################################
-    # Timer
-    ########################################
-    systemd.timers.btrbk-main.timerConfig = {
-      Persistent = true;
-      OnBootSec = "3min";
+    # ── Performance ───────────────────────────────────────────
+    performance = {
+      niceness = mkOption {
+        type    = types.ints.between (-20) 19;
+        default = 19;
+        example = 10;
+        description = ''
+          CPU scheduling priority (passed to `nice -n`).
+           19 = lowest priority — recommended for background backups.
+          -20 = highest priority.
+        '';
+      };
+
+      ioClass = mkOption {
+        type    = types.enum [ "idle" "best-effort" "realtime" ];
+        default = "idle";
+        example = "best-effort";
+        description = ''
+          I/O scheduling class (passed to `ionice -c`):
+            idle        — only use disk I/O when nothing else needs it.
+            best-effort — normal scheduling, priority set by `ioLevel`.
+            realtime    — highest I/O priority (use with care).
+        '';
+      };
+
+      ioLevel = mkOption {
+        type    = types.ints.between 0 7;
+        default = 7;
+        example = 4;
+        description = ''
+          I/O priority level within the chosen class (0 = highest, 7 = lowest).
+          Only meaningful for `best-effort` and `realtime`.
+        '';
+      };
+    };
+
+    # ── Escape hatch ──────────────────────────────────────────
+    extraConfig = mkOption {
+      type    = types.lines;
+      default = "";
+      example = "stream_compress zstd";
+      description = ''
+        Raw lines appended verbatim to the global section of btrbk.conf.
+        Useful for directives not exposed as module options.
+      '';
+    };
+  };
+
+  # ============================================================
+  #  Implementation
+  # ============================================================
+  config = mkIf cfg.enable {
+
+    environment.systemPackages = [ pkgs.btrbk ];
+
+    # ── /etc/btrbk/btrbk.conf ─────────────────────────────────
+    environment.etc."btrbk/btrbk.conf".text = ''
+      # ------------------------------------------------------------
+      # btrbk.conf — generated by services.module.backup.btrbk
+      # ------------------------------------------------------------
+
+      timestamp_format    long
+      target_preserve_min ${cfg.target.preserveMin}
+      target_preserve     ${cfg.target.preserve}
+
+      ${cfg.extraConfig}
+
+      ${concatMapStringsSep "\n" mkVolumeBlock cfg.sources}
+    '';
+
+    # ── Auto-create snapshot and target subvolumes ───────────
+    # btrbk requires both snapshotDir (on each source) and the target
+    # directory to exist as btrfs subvolumes before running.
+    # This script is idempotent — it checks before creating.
+    system.activationScripts.btrbk-snapshot-dirs = {
+      text =
+        # One snapshot subvolume per source — paths are Nix values, interpolated at build time
+        concatMapStringsSep "\n" (s:
+          let
+            snapDir   = s.mountPoint + "/" + s.snapshotDir;
+            btrfs     = "${pkgs.btrfs-progs}/bin/btrfs";
+          in
+          ''
+            if ! ${btrfs} subvolume show "${snapDir}" &>/dev/null; then
+              echo "btrbk: creating snapshot subvolume ${snapDir}"
+              ${btrfs} subvolume create "${snapDir}"
+            fi
+          ''
+        ) cfg.sources
+        +
+        # Target subvolume
+        (
+          let
+            btrfs      = "${pkgs.btrfs-progs}/bin/btrfs";
+            targetPath = cfg.target.path;
+            parentDir  = builtins.dirOf targetPath;
+          in
+          ''
+            if ! ${btrfs} subvolume show "${targetPath}" &>/dev/null; then
+              echo "btrbk: creating target subvolume ${targetPath}"
+              mkdir -p "${parentDir}"
+              ${btrfs} subvolume create "${targetPath}"
+            fi
+          ''
+        );
+      deps = [ "specialfs" ];
+    };
+
+    # ── systemd service ───────────────────────────────────────
+    systemd.services.btrbk-backup = {
+      description = "btrbk btrfs backup";
+      wants       = [ "local-fs.target" ];
+      after       = [ "local-fs.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+
+        ExecStart =
+          "${pkgs.util-linux}/bin/ionice"
+          + " -c ${ioniceClassNum}"
+          + " -n ${toString cfg.performance.ioLevel}"
+          + " ${pkgs.coreutils}/bin/nice -n ${toString cfg.performance.niceness}"
+          + " ${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf run";
+
+        ProtectSystem  = "strict";
+        ReadWritePaths = [ cfg.target.path ] ++ map (s: s.mountPoint) cfg.sources;
+        PrivateTmp      = true;
+        NoNewPrivileges = true;
+      };
+    };
+
+    # ── systemd timer ─────────────────────────────────────────
+    systemd.timers.btrbk-backup = {
+      description = "btrbk backup timer";
+      wantedBy    = [ "timers.target" ];
+
+      timerConfig = {
+        OnCalendar         = cfg.scheduling.calendar;
+        Persistent         = cfg.scheduling.persistent;
+        RandomizedDelaySec = "5min";
+      };
     };
   };
 }
