@@ -13,7 +13,7 @@
   ];
 
   networking = {
-    hostName = "nixosMathis"; # Define your hostname.
+    hostName = "NixosMathisWorkstation"; # Define your hostname.
     networkmanager.enable = true;
     wireless.iwd.enable = true;
     networkmanager.wifi.backend = "iwd";
