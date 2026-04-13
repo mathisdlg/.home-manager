@@ -103,30 +103,26 @@ in
         onCalendar = cfg.interval;
 
         settings = {
+          snapshot_create = "onchange";
+          snapshot_dir = ".snapshots";
+
           timestamp_format = "long";
 
-          snapshot_preserve = "24h 7d 4w 12m";
-          snapshot_preserve_min = "2d";
-          target_preserve = "7d 4w 12m";
+          snapshot_preserve = "24h 7d 1w 0m 0y";
+          snapshot_preserve_min = "latest";
+
+          target_preserve = "0h 14d 5w 1m 1y";
+          target_preserve_min = "latest";
+
+          archive_preserve = "0h 1d 1w 1m 1y";
+          archive_preserve_min = "latest";
 
           stream_compress = "zstd";
           stream_compress_threads = "4";
           stream_compress_adapt = "yes";
 
           volume."${cfg.path.data}" = {
-            subvolume."." = {
-              snapshot_dir = ".snapshots";
-            };
-          };
-
-          target = {
-            "${cfg.path.target}/${host}" = {
-              subvolume = "/data";
-            };
-          } // optionalAttrs (cfg.path.sshTarget != null) {
-            "${cfg.path.sshTarget}/${host}" = {
-              subvolume = "/data";
-            };
+            target = "${cfg.path.target}/${host}/data";
           };
         };
       };
@@ -135,19 +131,23 @@ in
     ########################################
     # Ordering
     ########################################
-    systemd.services.btrbk-main = {
-      after = [
-        "btrbk-init.service"
-        "disks-data.mount"
-        "disks-save.mount"
-        "local-fs.target"
-      ];
-      requires = [
-        "btrbk-init.service"
-        "disks-data.mount"
-        "disks-save.mount"
-      ];
+    systemd.services = {
+      btrbk-main = {
+        after = [
+          "btrbk-init.service"
+          "disks-data.mount"
+          "disks-save.mount"
+          "local-fs.target"
+        ];
+        requires = [
+          "btrbk-init.service"
+          "disks-data.mount"
+          "disks-save.mount"
+        ];
+      };
     };
+
+
 
     ########################################
     # Timer
