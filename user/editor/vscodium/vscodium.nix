@@ -55,8 +55,8 @@ in
           sonarsource.sonarlint-vscode
 
           # PHP
-          devsense.phptools-vscode
-          devsense.composer-php-vscode
+          # devsense.phptools-vscode
+          # devsense.composer-php-vscode
 
           # Web dev
           formulahendry.auto-close-tag

@@ -10,17 +10,13 @@ let
 in
 {
   options.services.games.osu.enable =
-    mkEnableOption "Enable my own osu downloader and updater for nixos.";
+    mkEnableOption "Enable osu! game client";
 
   config = mkIf cfg.enable {
     home = {
       packages = with pkgs; [
-        appimage-run
+        osu-lazer-bin
       ];
-
-      file = {
-        "Games/osu".source = ./osu.d;
-      };
     };
   };
 }

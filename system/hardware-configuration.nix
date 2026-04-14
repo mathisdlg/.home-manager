@@ -23,21 +23,26 @@
         "usb_storage"
         "sd_mod"
       ];
-      luks.devices."luks-514e7067-2889-4c19-b5b3-ef89259cdd3b".device =
-        "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
+
+      luks.devices = {
+        "cryptRoot".device = "/dev/disk/by-uuid/514e7067-2889-4c19-b5b3-ef89259cdd3b";
+        "cryptData".device = "/dev/disk/by-uuid/d181ba8f-ec6c-42fb-82e8-1eecc70dd61d";
+        "cryptSave".device = "/dev/disk/by-uuid/62609c74-639a-4941-950d-3b456301a08d";
+      };
+
       kernelModules = [ ];
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [
-      "video=DP-3:1920x1080@60"
-      "video=HDMI-A-1:1024x600@60"
+      "video=DP-3:2560x1440@179"
+      "video=HDMI-A-1:1920x1080@60"
     ];
     extraModulePackages = [ ];
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/8516ef91-5030-4fd2-ac32-4cb809c9dbb8";
+      device = "/dev/mapper/cryptRoot";
       fsType = "ext4";
     };
 
@@ -51,8 +56,21 @@
     };
 
     "/disks/data" = {
-      device = "/dev/disk/by-uuid/06A0F33EA0F332B3";
-      fsType = "ntfs";
+      device = "/dev/mapper/cryptData";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+        "compress=zstd"
+      ];
+    };
+
+    "/disks/save" = {
+      device = "/dev/mapper/cryptSave";
+      fsType = "btrfs";
+      options = [
+        "nofail"
+        "compress=zstd"
+      ];
     };
   };
 
@@ -68,7 +86,7 @@
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     graphics.extraPackages = with pkgs; [
       rocmPackages.clr.icd
-      amdvlk
     ];
+    new-lg4ff.enable = true;
   };
 }
