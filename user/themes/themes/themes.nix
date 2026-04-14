@@ -11,10 +11,6 @@ in
 {
   options.services.themes.themes.enable = mkEnableOption "Enable themes.";
 
-  imports = [
-    ../background/background.nix
-  ];
-
   config = mkIf cfg.enable {
     home = {
       packages = with pkgs; [
