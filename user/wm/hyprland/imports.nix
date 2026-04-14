@@ -32,7 +32,12 @@
         hyprlock.enable = true;
         hyprpanel.enable = true;
         hyprpicker.enable = true;
-        hyprpaper.enable = true;
+        hyprpaper = {
+          enable = true;
+          latitude = 45.78;
+          longitude = 3.1;
+          wallpapersDir = "${config.home.homeDirectory}/.wallpapers";
+        }
       };
 
       notifications = {
