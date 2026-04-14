@@ -10,21 +10,33 @@ in {
     enable = mkEnableOption "Automatic hyprpaper wallpaper switching";
 
     latitude = mkOption {
-      type = types.float;
-      example = 45.75;
+      type = types.str;
+      example = "60.379N";
       description = "Latitude for sun detection";
     };
 
     longitude = mkOption {
-      type = types.float;
-      example = 4.85;
+      type = types.str;
+      example = "102.252W";
       description = "Longitude for sun detection";
     };
 
-    wallpapersDir = mkOption {
-      type = types.str;
-      example = "${config.home.homeDirectory}/.wallpapers";
-      description = "Base wallpapers directory";
+    wallpapersDir = {
+      day = mkOption {
+        type = types.str;
+        example = "/home/user/.wallpapers/day";
+        description = "Directory containing day wallpapers";
+      };
+      night = mkOption {
+        type = types.str;
+        example = "/home/user/.wallpapers/night";
+        description = "Directory containing night wallpapers";
+      };
+      both = mkOption {
+        type = types.str;
+        example = "/home/user/.wallpapers/both";
+        description = "Directory containing wallpapers for both day and night";
+      };
     };
   };
 
@@ -35,8 +47,8 @@ in {
     ];
 
     home.file.".config/hypr/hyprpaper.conf".text = ''
-      preload = ${cfg.wallpapersDir}/both/*
-      wallpaper = ,${cfg.wallpapersDir}/both/*
+      preload = ${cfg.wallpapersDir.both}/*
+      wallpaper = ,${cfg.wallpapersDir.both}/*
     '';
 
     home.file.".config/hypr/scripts/wallpaper.sh" = {
@@ -46,7 +58,9 @@ in {
 
         LAT=${toString cfg.latitude}
         LON=${toString cfg.longitude}
-        WALL_DIR="${cfg.wallpapersDir}"
+        WALL_DIR_BOTH="${cfg.wallpapersDir.both}"
+        WALL_DIR_DAY="${cfg.wallpapersDir.day}"
+        WALL_DIR_NIGHT="${cfg.wallpapersDir.night}"
 
         sleep 3
 
@@ -54,9 +68,9 @@ in {
             MODE=$1
 
             if [ "$MODE" = "day" ]; then
-                WALLPAPER=$(find "$WALL_DIR/day" "$WALL_DIR/both" -type f | shuf -n 1)
+                WALLPAPER=$(find "$WALL_DIR_DAY" "$WALL_DIR_BOTH" -type f | shuf -n 1)
             else
-                WALLPAPER=$(find "$WALL_DIR/night" "$WALL_DIR/both" -type f | shuf -n 1)
+                WALLPAPER=$(find "$WALL_DIR_NIGHT" "$WALL_DIR_BOTH" -type f | shuf -n 1)
             fi
 
             hyprctl hyprpaper unload all
@@ -64,8 +78,8 @@ in {
             hyprctl hyprpaper wallpaper ",$WALLPAPER"
         }
 
-        day_night=sunwait poll civil $LAT $LON
-        if [ "$day_night" -eq 2 ]; then
+        day_night=$(sunwait poll civil $LAT $LON)
+        if [ "$day_night" = "DAY" ]; then
             set_wallpaper "day"
         else
             set_wallpaper "night"

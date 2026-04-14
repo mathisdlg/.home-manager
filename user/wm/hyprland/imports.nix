@@ -34,10 +34,14 @@
         hyprpicker.enable = true;
         hyprpaper = {
           enable = true;
-          latitude = 45.78;
-          longitude = 3.1;
-          wallpapersDir = "${config.home.homeDirectory}/.wallpapers";
-        }
+          latitude = "45.78N";
+          longitude = "3.1E";
+          wallpapersDir = {
+            day = "/home/mathisdlg/.wallpapers/day";
+            night = "/home/mathisdlg/.wallpapers/night";
+            both = "/home/mathisdlg/.wallpapers/both";
+          };
+        };
       };
 
       notifications = {
