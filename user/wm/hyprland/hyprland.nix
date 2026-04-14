@@ -13,7 +13,6 @@ in
 
   imports = [
     ./imports.nix
-    ./config.nix
   ];
 
   config = mkIf cfg.enable {
@@ -28,9 +27,7 @@ in
 
       settings = {
         exec-once = [
-          "waybar"
           "hypridle"
-          "dunst"
         ];
 
         env = [
@@ -52,11 +49,15 @@ in
         };
 
         gestures = {
-          workspace_swipe = true;
+          gesture = "3, horizontal, workspace";
         };
 
         misc = {
           force_default_wallpaper = -1;
+        };
+
+        ecosystem = {
+          no_update_news = true;
         };
 
         windowrulev2 = "suppressevent maximize, class:.*";

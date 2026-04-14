@@ -6,14 +6,14 @@
 }:
 with lib;
 let
-  cfg = config.services.art.gimp;
+  cfg = config.services.art.gphoto2;
 in
 {
-  options.services.art.gimp.enable = mkEnableOption "Enable gimp.";
+  options.services.art.gphoto2.enable = mkEnableOption "Enable gphoto2.";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      gimp-with-plugins
+      gphoto2
     ];
   };
 }

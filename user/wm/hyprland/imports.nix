@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./config/animation.nix
+    ./config/binding.nix
+    ./config/decoration.nix
+    ./config/general.nix
+    ./config/input.nix
+    ./config/monitor.nix
+
+    ./devices/logitech_g502.nix
+
     ../../components/hypr/hypridle/hypridle.nix
     ../../components/hypr/hyprlock/hyprlock.nix
     ../../components/hypr/hyprpanel/hyprpanel.nix
@@ -27,10 +36,10 @@
       };
 
       notifications = {
-        dunst.enable = true;
+        dunst.enable = false;
       };
 
-      waybar.enable = true;
+      waybar.enable = false;
 
       wlogout.enable = true;
 

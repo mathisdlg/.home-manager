@@ -8,13 +8,12 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../patches/nvidia.nix
-    ./modules/zram/zram.nix
-    ./modules/openrgb/openrgb.nix
-    ./modules/bootloader/bootloader.nix
+
+    ./import.nix
   ];
 
   networking = {
-    hostName = "nixosMathis"; # Define your hostname.
+    hostName = "NixosMathisWorkstation"; # Define your hostname.
     networkmanager.enable = true;
     wireless.iwd.enable = true;
     networkmanager.wifi.backend = "iwd";
@@ -44,12 +43,12 @@
   };
 
   services = {
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
     xserver = {
       enable = true;
-
-      # Enable the GNOME Desktop Environment.
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
+      displayManager.startx.enable = true;
 
       # Configure keymap in X11
       xkb = {
@@ -63,16 +62,6 @@
 
     # Enable nvidia driver patch
     nvidia.enable = false; # I have an AMD GPU now! :happy:
-
-    # Activate zram
-    zram = {
-      enable = true;
-      size = 100;
-    };
-
-    rgb.openrgb = {
-      enable = false;
-    };
 
     fstrim.enable = true;
 
@@ -93,9 +82,12 @@
 
     spice-vdagentd.enable = true;
 
-    bootloader-mod.enable = true;
-
     pulseaudio.enable = false;
+
+    # Allow the kernel to manage power on/off of drives for suspend, shutdown, hibernate
+    udev.extraRules = ''
+      ACTION=="add|change", DRIVERS=="usb-storage|uas", SUBSYSTEM=="scsi_disk", ATTR{manage_system_start_stop}="1", ATTR{manage_runtime_start_stop}="1", ATTR{manage_shutdown}="1"
+    '';
   };
 
   # Configure console keymap
@@ -146,7 +138,7 @@
       home-manager
 
       # Config
-      qt6ct
+      qt6Packages.qt6ct
 
       # Virtualisation
       spice
@@ -179,7 +171,8 @@
         gnome-logs
         gnome-maps
         gnome-system-monitor
-        seahorse # password manager
+        # gnome-keyring # password manager
+        # seahorse # password manager
         gedit # text editor
         cheese # webcam tool
         snapshot # Camera tool
@@ -187,7 +180,7 @@
         geary # email reader
         evince # document viewer
         totem # video player
-          # loupe # image viewer
+        # loupe # image viewer
         baobab # disk usage analyzer
       ];
     };
@@ -209,6 +202,16 @@
     virt-manager.enable = true;
   };
 
+
+  # Enable OpenTabletDriver
+  hardware = {
+    opentabletdriver.enable = true;
+    uinput.enable = true;
+  };
+
+  # Required by OpenTabletDriver
+  boot.kernelModules = [ "uinput" ];
+
   # Hardware graphics librairies
   # hardware.graphics.enable = true; # problems with flake downgrade to stable version
 
@@ -224,19 +227,15 @@
 
   # Docker rootless
   virtualisation = {
-    docker.rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
+    # docker.rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    # };
 
     libvirtd = {
       enable = true;
       qemu = {
         swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [ pkgs.OVMF.fd ]; # pkgs.OVMFFull.fd
-        };
       };
     };
 
@@ -261,6 +260,8 @@
       ];
     };
   };
+
+  systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;

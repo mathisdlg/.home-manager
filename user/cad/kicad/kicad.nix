@@ -6,14 +6,14 @@
 }:
 with lib;
 let
-  cfg = config.services.art.gimp;
+  cfg = config.services.cad.kicad;
 in
 {
-  options.services.art.gimp.enable = mkEnableOption "Enable gimp.";
+  options.services.cad.kicad.enable = mkEnableOption "Enable kicad.";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      gimp-with-plugins
+      kicad
     ];
   };
 }
