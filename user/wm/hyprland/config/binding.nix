@@ -15,7 +15,7 @@
         "$fileManager" = "nautilus";
         "$menu" = "wofi --show drun";
         "$browser" = "brave";
-        "$musicPlayer" = "mpv --shuffle --loop-playlist --no-video --input-ipc-server=/tmp/mpvsocket /disks/data/Music/Musique";
+        "$musicPlayer" = "mpv --shuffle --loop-playlist --no-video /disks/data/Music/Musique";
         "$lock" = "wlogout";
         "$colorPicker" = "hyprpicker -a -r -n";
         "$codeEditor" = "code";
@@ -27,7 +27,6 @@
           "$mainMod, ESCAPE, exit,"
           "$mainMod, E, exec, $fileManager"
           "$mainMod, V, togglefloating,"
-          "$mainMod, SPACE, exec, $menu"
           "bindr=SUPER, SUPER_L, exec, $menu"
           "$mainMod, J, togglesplit,"
           "CTRL SHIFT, Escape, exec, missioncenter"
@@ -111,10 +110,10 @@
           "$mainMod, D, exec, $discord"
 
           # Music controller for mpv
-          ", XF86AudioNext, exec, echo 'playlist-next' | socat - /tmp/mpvsocket"
-          ", XF86AudioPrev, exec, echo 'playlist-prev' | socat - /tmp/mpvsocket"
-          ", XF86AudioPlay, exec, echo 'cycle pause' | socat - /tmp/mpvsocket"
-          ", XF86AudioStop, exec, echo 'stop' | socat - /tmp/mpvsocket"
+          ", XF86AudioNext, exec, playerctl next"
+          ", XF86AudioPrev, exec, playerctl previous"
+          ", XF86AudioPlay, exec, playerctl play-pause"
+          ", XF86AudioStop, exec, playerctl stop"
 
           # Screenshot
           ", Print, exec, grimblast copysave active"
