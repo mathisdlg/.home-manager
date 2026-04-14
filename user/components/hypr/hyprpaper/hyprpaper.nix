@@ -56,8 +56,8 @@ in {
     # hyprpaper needs a config file to start, but globs don't work here.
     home.file.".config/hypr/hyprpaper.conf".text = ''
       splash = true
-      splash_offset = 50
-      splash_opacity = 0.8
+      splash_offset = 0
+      splash_opacity = 0.5
       
       ipc = on
     '';
