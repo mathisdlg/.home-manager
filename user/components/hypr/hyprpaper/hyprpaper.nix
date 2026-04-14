@@ -5,12 +5,11 @@ with lib;
 let
   cfg = config.services.component.hypr.hyprpaper;
 
-  # Full paths to binaries used in the script
-  bash      = "${pkgs.bash}/bin/bash";
-  hyprctl   = "${pkgs.hyprland}/bin/hyprctl";
-  sunwait   = "${pkgs.sunwait}/bin/sunwait";
-  find      = "${pkgs.findutils}/bin/find";
-  shuf      = "${pkgs.coreutils}/bin/shuf";
+  bash_bin     = "${pkgs.bash}/bin/bash";
+  hyprctl_bin  = "${pkgs.hyprland}/bin/hyprctl";
+  sunwait_bin  = "${pkgs.sunwait}/bin/sunwait";
+  find_bin     = "${pkgs.findutils}/bin/find";
+  shuf_bin     = "${pkgs.coreutils}/bin/shuf";
 
 in {
   options.services.component.hypr.hyprpaper = {
@@ -63,7 +62,7 @@ in {
     home.file.".config/hypr/scripts/wallpaper.sh" = {
       executable = true;
       text = ''
-        #!${bash}
+        #!${bash_bin}
 
         LAT="${cfg.latitude}"
         LON="${cfg.longitude}"
@@ -76,9 +75,9 @@ in {
             local wallpaper
 
             if [ "$mode" = "DAY" ]; then
-                wallpaper=$(${find} "$WALL_DIR_DAY" "$WALL_DIR_BOTH" -type f | ${shuf} -n 1)
+                wallpaper=$(${find_bin} "$WALL_DIR_DAY" "$WALL_DIR_BOTH" -type f | ${shuf_bin} -n 1)
             else
-                wallpaper=$(${find} "$WALL_DIR_NIGHT" "$WALL_DIR_BOTH" -type f | ${shuf} -n 1)
+                wallpaper=$(${find_bin} "$WALL_DIR_NIGHT" "$WALL_DIR_BOTH" -type f | ${shuf_bin} -n 1)
             fi
 
             if [ -z "$wallpaper" ]; then
@@ -86,18 +85,18 @@ in {
                 return 1
             fi
 
-            ${hyprctl} hyprpaper unload all 2>/dev/null || true
-            ${hyprctl} hyprpaper preload "$wallpaper"
-            ${hyprctl} hyprpaper wallpaper ",$wallpaper"
+            ${hyprctl_bin} hyprpaper unload all 2>/dev/null || true
+            ${hyprctl_bin} hyprpaper preload "$wallpaper"
+            ${hyprctl_bin} hyprpaper wallpaper ",$wallpaper"
         }
 
         # Wait for hyprpaper's IPC socket to be ready
         for i in $(seq 1 20); do
-            ${hyprctl} hyprpaper listloaded >/dev/null 2>&1 && break
+            ${hyprctl_bin} hyprpaper listloaded >/dev/null 2>&1 && break
             sleep 0.5
         done
 
-        day_night=$(${sunwait} poll civil "$LAT" "$LON")
+        day_night=$(${sunwait_bin} poll civil "$LAT" "$LON")
 
         if [ "$day_night" = "DAY" ]; then
             next="set"
@@ -108,7 +107,7 @@ in {
         fi
 
         while true; do
-            ${sunwait} wait civil "$next" "$LAT" "$LON"
+            ${sunwait_bin} wait civil "$next" "$LAT" "$LON"
             if [ "$next" = "rise" ]; then
                 set_wallpaper "DAY"
                 next="set"
@@ -129,7 +128,7 @@ in {
       };
 
       Service = {
-        ExecStart = "${bash} ${config.home.homeDirectory}/.config/hypr/scripts/wallpaper.sh";
+        ExecStart = "${bash_bin} ${config.home.homeDirectory}/.config/hypr/scripts/wallpaper.sh";
         Restart = "on-failure";
         RestartSec = 5;
       };
