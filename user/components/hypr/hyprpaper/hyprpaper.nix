@@ -64,19 +64,20 @@ in {
             hyprctl hyprpaper wallpaper ",$WALLPAPER"
         }
 
-        if sunwait poll civil rise $LAT $LON; then
-            set_wallpaper "night"
-            sunwait poll civil rise $LAT $LON
+        day_night=sunwait poll civil $LAT $LON
+        if [ "$day_night" -eq 2 ]; then
             set_wallpaper "day"
         else
+            set_wallpaper "night"
+            sunwait wait civil rise $LAT $LON
             set_wallpaper "day"
         fi
 
         while true; do
-            sunwait poll civil set $LAT $LON
+            sunwait wait civil set $LAT $LON
             set_wallpaper "night"
 
-            sunwait poll civil rise $LAT $LON
+            sunwait wait civil rise $LAT $LON
             set_wallpaper "day"
         done
       '';
