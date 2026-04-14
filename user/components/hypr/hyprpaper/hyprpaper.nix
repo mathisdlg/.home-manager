@@ -55,7 +55,10 @@ in {
     # Minimal stub config — the script manages preloading/setting at runtime.
     # hyprpaper needs a config file to start, but globs don't work here.
     home.file.".config/hypr/hyprpaper.conf".text = ''
-      splash = false
+      splash = true
+      splash_offset = 50
+      splash_opacity = 0.8
+      
       ipc = on
     '';
 
