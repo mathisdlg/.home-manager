@@ -24,7 +24,6 @@
         bind = [
           "$mainMod, RETURN, exec, $terminal"
           "ALT, F4, killactive,"
-          "$mainMod, ESCAPE, exit,"
           "$mainMod, E, exec, $fileManager"
           "$mainMod, V, togglefloating,"
           "bindr=SUPER, SUPER_L, exec, $menu"
