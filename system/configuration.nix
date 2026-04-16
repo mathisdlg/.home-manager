@@ -215,15 +215,12 @@
       options = "--delete-older-than 10d";
     };
 
-    optimise = {
-      automatic = true;
-    };
-
     settings = {
       experimental-features = [
         "nix-command"
         "flakes"
       ];
+      auto-optimise-store = true;
     };
   };
 
