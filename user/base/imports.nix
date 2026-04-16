@@ -35,7 +35,6 @@
     ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
     ../games/osu/osu.nix
-    ../games/steam/steam.nix
 
     ../ia/tabby/tabby.nix
 
@@ -111,7 +110,6 @@
       minecraft.enable = true;
       mines.enable = true;
       osu.enable = true;
-      steam.enable = false;
     };
 
     ia = {
