@@ -75,13 +75,6 @@
       jack.enable = true;
     };
 
-    mysql = {
-      enable = true;
-      package = pkgs.mariadb;
-    };
-
-    spice-vdagentd.enable = true;
-
     pulseaudio.enable = false;
 
     # Allow the kernel to manage power on/off of drives for suspend, shutdown, hibernate
@@ -105,8 +98,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      "libvirtd"
-      "kvm"
       "dialout"
     ];
     packages = with pkgs; [ ];
@@ -139,10 +130,6 @@
 
       # Config
       qt6Packages.qt6ct
-
-      # Virtualisation
-      spice
-      spice-protocol
     ];
 
     # Environment Variables
@@ -197,9 +184,6 @@
     steam = {
       enable = true;
     };
-
-    # Virtualisation
-    virt-manager.enable = true;
   };
 
 
@@ -224,24 +208,6 @@
   # };
 
   # List services that you want to enable:
-
-  # Docker rootless
-  virtualisation = {
-    # docker.rootless = {
-    #   enable = true;
-    #   setSocketVariable = true;
-    # };
-
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-      };
-    };
-
-    spiceUSBRedirection.enable = true;
-  };
-
   nix = {
     gc = {
       automatic = true;
