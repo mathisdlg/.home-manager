@@ -75,13 +75,6 @@
       jack.enable = true;
     };
 
-    mysql = {
-      enable = true;
-      package = pkgs.mariadb;
-    };
-
-    spice-vdagentd.enable = true;
-
     pulseaudio.enable = false;
 
     # Allow the kernel to manage power on/off of drives for suspend, shutdown, hibernate
@@ -105,8 +98,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      "libvirtd"
-      "kvm"
       "dialout"
     ];
     packages = with pkgs; [ ];
@@ -114,13 +105,12 @@
 
   # Allow unfree packages
   nixpkgs.config = {
-    allowUnfree = true;
-    # permittedInsecurePackages = [
-    # 	"dotnet-runtime-wrapped-6.0.36"
-    # 	"dotnet-runtime-6.0.36"
-    # 	"dotnet-sdk-wrapped-6.0.428"
-    # 	"dotnet-sdk-6.0.428"
-    # ];
+    allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "steam"
+      "steam-unwrapped"
+      "steam-run"
+      "steamcmd"
+    ];
   };
 
   environment = {
@@ -139,10 +129,6 @@
 
       # Config
       qt6Packages.qt6ct
-
-      # Virtualisation
-      spice
-      spice-protocol
     ];
 
     # Environment Variables
@@ -197,9 +183,6 @@
     steam = {
       enable = true;
     };
-
-    # Virtualisation
-    virt-manager.enable = true;
   };
 
 
@@ -224,24 +207,6 @@
   # };
 
   # List services that you want to enable:
-
-  # Docker rootless
-  virtualisation = {
-    # docker.rootless = {
-    #   enable = true;
-    #   setSocketVariable = true;
-    # };
-
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-      };
-    };
-
-    spiceUSBRedirection.enable = true;
-  };
-
   nix = {
     gc = {
       automatic = true;
@@ -249,15 +214,12 @@
       options = "--delete-older-than 10d";
     };
 
-    optimise = {
-      automatic = true;
-    };
-
     settings = {
       experimental-features = [
         "nix-command"
         "flakes"
       ];
+      auto-optimise-store = true;
     };
   };
 
