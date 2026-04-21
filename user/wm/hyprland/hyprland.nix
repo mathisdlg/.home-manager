@@ -13,7 +13,6 @@ in
 
   imports = [
     ./imports.nix
-    ./config.nix
   ];
 
   config = mkIf cfg.enable {

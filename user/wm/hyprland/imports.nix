@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./config/animation.nix
+    ./config/binding.nix
+    ./config/decoration.nix
+    ./config/general.nix
+    ./config/input.nix
+    ./config/monitor.nix
+
+    ./devices/logitech_g502.nix
+
     ../../components/hypr/hypridle/hypridle.nix
     ../../components/hypr/hyprlock/hyprlock.nix
     ../../components/hypr/hyprpanel/hyprpanel.nix
@@ -23,7 +32,16 @@
         hyprlock.enable = true;
         hyprpanel.enable = true;
         hyprpicker.enable = true;
-        hyprpaper.enable = true;
+        hyprpaper = {
+          enable = true;
+          latitude = "45.78N";
+          longitude = "3.1E";
+          wallpapersDir = {
+            day = "/home/mathisdlg/.wallpapers/day";
+            night = "/home/mathisdlg/.wallpapers/night";
+            both = "/home/mathisdlg/.wallpapers/both";
+          };
+        };
       };
 
       notifications = {
