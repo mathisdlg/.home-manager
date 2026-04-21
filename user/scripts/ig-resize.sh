@@ -8,7 +8,7 @@ if ! command -v magick >/dev/null 2>&1; then
     exit 1
 fi
 
-files=$(find . -type f -name "*.JPG")
+files=$(find . -type f -iname "*.JPG")
 
 for file in $files; do
     echo "Resizing $file to $SIZE..."
