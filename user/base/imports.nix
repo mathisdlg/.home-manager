@@ -49,6 +49,8 @@
 
     ../screenshare/screenshare.nix
 
+    ../scripting/script.nix
+
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
     ../system-monitor/mission-center/mission-center.nix
 
@@ -130,6 +132,8 @@
     };
 
     screenshare.screenshare.enable = true;
+
+    scipts.enable = true;
 
     system-monitor = {
       gnome-system-monitor.enable = false;
