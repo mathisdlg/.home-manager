@@ -19,10 +19,6 @@
     sessionVariables = { };
 
     file = {
-      "scripts/update.sh".source = ../scripts/update.sh;
-      "scripts/ig-resize.sh".source = ../scripts/ig-resize.sh;
-      "scripts/ydl.sh".source = ../scripts/ydl.sh;
-
       "Data".source = config.lib.file.mkOutOfStoreSymlink "/disks/data";
       "Save".source = config.lib.file.mkOutOfStoreSymlink "/disks/save";
     };
