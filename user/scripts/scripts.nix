@@ -13,10 +13,10 @@ in
 
   config = mkIf cfg.enable {
     home.file = {
-        "files/ig_resize.sh".source = ../scripts/ig_resize.sh;
-        "files/split_raw.sh".source = ../scripts/split_raw.sh;
-        "files/update.sh".source = ../scripts/update.sh;
-        "files/ydl.sh".source = ../scripts/ydl.sh;
+        "scripts/ig_resize.sh".source = files/ig_resize.sh;
+        "scripts/split_raw.sh".source = files/split_raw.sh;
+        "scripts/update.sh".source = files/update.sh;
+        "scripts/ydl.sh".source = files/ydl.sh;
     };
   };
 }

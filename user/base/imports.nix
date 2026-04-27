@@ -49,7 +49,7 @@
 
     ../screenshare/screenshare.nix
 
-    ../scripting/script.nix
+    ../scripts/scripts.nix
 
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
     ../system-monitor/mission-center/mission-center.nix
