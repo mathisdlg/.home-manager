@@ -81,6 +81,9 @@
     udev.extraRules = ''
       ACTION=="add|change", DRIVERS=="usb-storage|uas", SUBSYSTEM=="scsi_disk", ATTR{manage_system_start_stop}="1", ATTR{manage_runtime_start_stop}="1", ATTR{manage_shutdown}="1"
     '';
+
+    udisks2.enable = true;
+    gvfs.enable = true; # Optional but recommended for file manager compatibility
   };
 
   # Configure console keymap

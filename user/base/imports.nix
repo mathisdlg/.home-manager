@@ -62,6 +62,8 @@
     ../themes/fonts/noto/noto.nix
     ../themes/themes/themes.nix
 
+    ../usb/usb.nix
+
     ../wm/hyprland/hyprland.nix
   ];
 
@@ -153,6 +155,8 @@
       };
       themes.enable = true;
     };
+
+    usb.enable = true;
 
     hyprland.enable = true;
   };
