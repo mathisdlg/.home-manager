@@ -12,15 +12,13 @@ in
   options.services.usb.enable = mkEnableOption "Enable USB auto mount support with udiskie";
 
   config = mkIf cfg.enable {
-    home = {
-      services.udiskie = {
-        enable = true;
-        automount = true;
-        notify = true;
+    services.udiskie = {
+      enable = true;
+      automount = true;
+      notify = true;
 
-        # optional but nice for Hyprpanel / tray support
-        tray = "auto";
-      };
+      # optional but nice for Hyprpanel / tray support
+      tray = "auto";
     };
   };
 }
