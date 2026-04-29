@@ -1,10 +1,16 @@
-{ config, pkgs, ... }:
+{ 
+  config, 
+  pkgs, 
+  unstablePkgs, 
+  ... 
+}:
 {
   imports = [
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
+    ../art/imagemacick/imagemagick.nix
     ../art/krita/krita.nix
 
     ../baobab/baobab.nix
@@ -13,9 +19,12 @@
     ../browser/firefox/firefox.nix
     ../browser/firefox/firefox-dev.nix
 
+    ../cad/freecad/freecad.nix
+    ../cad/kicad/kicad.nix
+    ../cad/prusa_slicer/prusa_slicer.nix
+
     ../communication/thunderbird/thunderbird.nix
 
-    ../editor/kicad/kicad.nix
     ../editor/libreoffice/libreoffice.nix
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
@@ -26,18 +35,21 @@
     ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
     ../games/osu/osu.nix
-    ../games/steam/steam.nix
 
     ../ia/tabby/tabby.nix
 
     ../keepass/keepass.nix
 
     ../media_player/mpv/mpv.nix
+    ../media_player/playerctl/playerctl.nix
+    ../media_player/yt-dlp/yt-dlp.nix
 
     ../programming/python/python.nix
     ../programming/swift/swift.nix
 
     ../screenshare/screenshare.nix
+
+    ../scripts/scripts.nix
 
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
     ../system-monitor/mission-center/mission-center.nix
@@ -45,7 +57,12 @@
     ../terminal/shell/shell.nix
     ../terminal/kitty/kitty.nix
 
-    ../themes/themes.nix
+    ../themes/fonts/jetbrains/jetbrains.nix
+    ../themes/fonts/nerd/nerd.nix
+    ../themes/fonts/noto/noto.nix
+    ../themes/themes/themes.nix
+
+    ../usb/usb.nix
 
     ../wm/hyprland/hyprland.nix
   ];
@@ -56,6 +73,7 @@
       darktable.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
+      imagemagick.enable = true;
       krita.enable = true;
     };
 
@@ -67,6 +85,12 @@
       firefox-dev.enable = true;
     };
 
+    cad = {
+      freecad.enable = true;
+      kicad.enable = true;
+      prusa_slicer.enable = true;
+    };
+
     communication = {
       thunderbird.enable = true;
     };
@@ -75,7 +99,6 @@
     };
 
     editor = {
-      kicad.enable = true;
       libreoffice.enable = true;
       vscodium = {
         enable = true;
@@ -91,7 +114,6 @@
       minecraft.enable = true;
       mines.enable = true;
       osu.enable = true;
-      steam.enable = false;
     };
 
     ia = {
@@ -100,7 +122,11 @@
 
     keepassxc.enable = true;
 
-    mpv.enable = true;
+    media_player = {
+      mpv.enable = true;
+      playerctl.enable = true;
+      yt-dlp.enable = true;
+    };
 
     programming = {
       python.enable = true;
@@ -108,6 +134,8 @@
     };
 
     screenshare.screenshare.enable = true;
+
+    scipts.enable = true;
 
     system-monitor = {
       gnome-system-monitor.enable = false;
@@ -119,7 +147,16 @@
       kitty.enable = true;
     };
 
-    themes.enable = true;
+    themes = {
+      fonts = {
+        jetbrains.enable = true;
+        nerd.enable = true;
+        noto.enable = true;
+      };
+      themes.enable = true;
+    };
+
+    usb.enable = true;
 
     hyprland.enable = true;
   };

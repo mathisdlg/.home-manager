@@ -7,9 +7,15 @@
 with lib;
 let
   myAliases = {
-    update = "bash /home/mathisdlg/.update.sh";
+    update = "bash /home/mathisdlg/scripts/update.sh";
     fupdate = "nix flake update";
     tupdate = "nvim ~/.config/nix/nix.conf";
+
+    igresize = "bash /home/mathisdlg/scripts/ig_resize.sh";
+
+    ydl = "bash /home/mathisdlg/scripts/ydl.sh";
+
+    splitraw = "bash /home/mathisdlg/scripts/split_raw.sh";
   };
   cfg = config.services.terminal.bash;
 in

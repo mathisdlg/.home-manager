@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{ 
+  config, 
+  pkgs, 
+  unstablePkgs, 
+  ... 
+}:
 {
   imports = [
     ./imports.nix
@@ -12,10 +17,6 @@
     packages = with pkgs; [ ];
 
     sessionVariables = { };
-
-    file = {
-      ".update.sh".source = ../scripts/update.sh;
-    };
   };
 
   nixpkgs.config.allowUnfree = true;
