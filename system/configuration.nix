@@ -14,9 +14,11 @@
 
   networking = {
     hostName = "NixosMathisWorkstation"; # Define your hostname.
-    networkmanager.enable = true;
     wireless.iwd.enable = true;
-    networkmanager.wifi.backend = "iwd";
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
   };
 
   # Configure network proxy if necessary
