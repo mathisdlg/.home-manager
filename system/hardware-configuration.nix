@@ -32,7 +32,8 @@
 
       kernelModules = [ ];
     };
-    kernelModules = [ "kvm-amd" ];
+    # Required by OpenTabletDriver
+    kernelModules = [ "uinput" ];
     kernelParams = [
       "video=DP-3:2560x1440@179"
       "video=HDMI-A-1:1920x1080@60"
@@ -82,11 +83,16 @@
   # networking.interfaces.enp9s0f4u1u4.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     graphics.extraPackages = with pkgs; [
       rocmPackages.clr.icd
     ];
     new-lg4ff.enable = true;
+
+    # Enable OpenTabletDriver
+    opentabletdriver.enable = true;
+    uinput.enable = true;
   };
 }
