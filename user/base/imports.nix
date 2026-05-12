@@ -30,7 +30,7 @@
     ../editor/neovim/neovim.nix
 
     ../games/beammp/beammp.nix
-    ../games/epic-games/epic-games.nix
+    ../games/heroic/heroic.nix
     ../games/puzzles/puzzles.nix
     ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
@@ -109,7 +109,7 @@
 
     games = {
       beammp.enable = true;
-      epic-games.enable = true;
+      heroic.enable = true;
       puzzles.enable = true;
       minecraft.enable = true;
       mines.enable = true;
