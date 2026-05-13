@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.scipts;
+  cfg = config.services.scripts;
 in
 {
-  options.services.scipts.enable = mkEnableOption "Enable custom scripts.";
+  options.services.scripts.enable = mkEnableOption "Enable custom scripts.";
 
   config = mkIf cfg.enable {
     home.file = {
