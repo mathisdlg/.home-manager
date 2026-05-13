@@ -41,9 +41,7 @@
           modules = [ 
             ./user/base/home.nix 
           ];
-          extraSpecialArgs = {
-            unstablePkgs = unstablePkgs;
-          };
+          extraSpecialArgs = { inherit unstablePkgs; };
         };
       };
     };
