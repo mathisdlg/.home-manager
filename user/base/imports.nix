@@ -10,7 +10,7 @@
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
-    ../art/imagemacick/imagemagick.nix
+    ../art/imagemagick/imagemagick.nix
     ../art/krita/krita.nix
 
     ../baobab/baobab.nix
@@ -135,7 +135,7 @@
 
     screenshare.screenshare.enable = true;
 
-    scipts.enable = true;
+    scripts.enable = true;
 
     system-monitor = {
       gnome-system-monitor.enable = false;
