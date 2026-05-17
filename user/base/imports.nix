@@ -85,8 +85,8 @@
     };
 
     games = {
-      beammp.enable = true;
-      epic-games.enable = true;
+      beammp.enable = false;
+      epic-games.enable = false;
       puzzles.enable = true;
       minecraft.enable = true;
       mines.enable = true;
