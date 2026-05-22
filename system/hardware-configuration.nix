@@ -86,9 +86,16 @@
 
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    graphics.extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-    ];
+    
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+
+      extraPackages = with pkgs; [
+        rocmPackages.clr.icd
+      ];
+    };
+
     new-lg4ff.enable = true;
 
     # Enable OpenTabletDriver
