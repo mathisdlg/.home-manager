@@ -23,6 +23,7 @@
     ../cad/kicad/kicad.nix
     ../cad/prusa_slicer/prusa_slicer.nix
 
+    ../communication/discord/discord.nix
     ../communication/thunderbird/thunderbird.nix
 
     ../editor/libreoffice/libreoffice.nix
@@ -92,6 +93,7 @@
     };
 
     communication = {
+      discord.enable = true;
       thunderbird.enable = true;
     };
 
