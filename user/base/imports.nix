@@ -69,7 +69,7 @@
 
   services = {
     art = {
-      blender.enable = true;
+      blender.enable = false;
       darktable.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
