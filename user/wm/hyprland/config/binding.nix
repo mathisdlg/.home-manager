@@ -19,7 +19,7 @@
         "$lock" = "wlogout";
         "$colorPicker" = "hyprpicker -a -r -n";
         "$codeEditor" = "code";
-        "$discord" = "$browser --new-window https://discord.com/channels/@me & disown";
+        "$discord" = "discord & disown";
 
         bind = [
           "$mainMod, RETURN, exec, $terminal"
