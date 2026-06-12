@@ -30,6 +30,8 @@
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
 
+    ../files/nautilus/nautilus.nix
+
     ../games/beammp/beammp.nix
     ../games/heroic/heroic.nix
     ../games/puzzles/puzzles.nix
@@ -107,6 +109,10 @@
         package = pkgs.vscode;
       };
       neovim.enable = true;
+    };
+
+    files = {
+      nautilus.enable = true;
     };
 
     games = {
