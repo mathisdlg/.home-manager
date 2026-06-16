@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.games.epic-games;
+  cfg = config.services.games.heroic;
 in
 {
-  options.services.games.epic-games.enable = mkEnableOption "Enable epic games store.";
+  options.services.games.heroic.enable = mkEnableOption "Enable heroic games (epic games).";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

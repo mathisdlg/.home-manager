@@ -13,7 +13,6 @@ in
 
   imports = [
     ./imports.nix
-    ./config.nix
   ];
 
   config = mkIf cfg.enable {
@@ -25,6 +24,8 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+
+      configType = "hyprlang";
 
       settings = {
         exec-once = [
@@ -41,7 +42,7 @@ in
         ];
 
         dwindle = {
-          pseudotile = true;
+          # pseudotile = true;
           preserve_split = true;
         };
 
@@ -61,7 +62,7 @@ in
           no_update_news = true;
         };
 
-        windowrulev2 = "suppressevent maximize, class:.*";
+        # windowrulev2 = "suppressevent maximize, class:.*";
       };
     };
   };

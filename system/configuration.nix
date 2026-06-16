@@ -2,22 +2,24 @@
 # your system. Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../patches/nvidia.nix
-    ./modules/zram/zram.nix
-    ./modules/openrgb/openrgb.nix
-    ./modules/bootloader/bootloader.nix
+
+    ./import.nix
   ];
 
   networking = {
-    hostName = "nixosMathis"; # Define your hostname.
+    hostName = "NixosMathis"; # Define your hostname.
     networkmanager.enable = true;
     wireless.iwd.enable = true;
-    networkmanager.wifi.backend = "iwd";
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
   };
 
   # Configure network proxy if necessary
@@ -63,16 +65,6 @@
     # Enable nvidia driver patch
     nvidia.enable = false; # I have an AMD GPU now! :happy:
 
-    # Activate zram
-    zram = {
-      enable = true;
-      size = 100;
-    };
-
-    rgb.openrgb = {
-      enable = false;
-    };
-
     fstrim.enable = true;
 
     pipewire = {
@@ -85,16 +77,15 @@
       jack.enable = true;
     };
 
-    mysql = {
-      enable = true;
-      package = pkgs.mariadb;
-    };
-
-    spice-vdagentd.enable = true;
-
-    bootloader-mod.enable = true;
-
     pulseaudio.enable = false;
+
+    # Allow the kernel to manage power on/off of drives for suspend, shutdown, hibernate
+    udev.extraRules = ''
+      ACTION=="add|change", DRIVERS=="usb-storage|uas", SUBSYSTEM=="scsi_disk", ATTR{manage_system_start_stop}="1", ATTR{manage_runtime_start_stop}="1", ATTR{manage_shutdown}="1"
+    '';
+
+    udisks2.enable = true;
+    gvfs.enable = true; # Optional but recommended for file manager compatibility
   };
 
   # Configure console keymap
@@ -112,8 +103,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      "libvirtd"
-      "kvm"
       "dialout"
     ];
     packages = with pkgs; [ ];
@@ -121,13 +110,12 @@
 
   # Allow unfree packages
   nixpkgs.config = {
-    allowUnfree = true;
-    # permittedInsecurePackages = [
-    # 	"dotnet-runtime-wrapped-6.0.36"
-    # 	"dotnet-runtime-6.0.36"
-    # 	"dotnet-sdk-wrapped-6.0.428"
-    # 	"dotnet-sdk-6.0.428"
-    # ];
+    allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "steam"
+      "steam-unwrapped"
+      "steam-run"
+      "steamcmd"
+    ];
   };
 
   environment = {
@@ -146,10 +134,6 @@
 
       # Config
       qt6Packages.qt6ct
-
-      # Virtualisation
-      spice
-      spice-protocol
     ];
 
     # Environment Variables
@@ -203,23 +187,7 @@
     steam = {
       enable = true;
     };
-
-    # Virtualisation
-    virt-manager.enable = true;
   };
-
-
-  # Enable OpenTabletDriver
-  hardware = {
-    opentabletdriver.enable = true;
-    uinput.enable = true;
-  };
-
-  # Required by OpenTabletDriver
-  boot.kernelModules = [ "uinput" ];
-
-  # Hardware graphics librairies
-  # hardware.graphics.enable = true; # problems with flake downgrade to stable version
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -255,15 +223,12 @@
       options = "--delete-older-than 10d";
     };
 
-    optimise = {
-      automatic = true;
-    };
-
     settings = {
       experimental-features = [
         "nix-command"
         "flakes"
       ];
+      auto-optimise-store = true;
     };
   };
 

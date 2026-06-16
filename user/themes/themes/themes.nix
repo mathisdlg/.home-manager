@@ -6,14 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.themes;
+  cfg = config.services.themes.themes;
 in
 {
-  options.services.themes.enable = mkEnableOption "Enable themes.";
-
-  imports = [
-    ./background/background.nix
-  ];
+  options.services.themes.themes.enable = mkEnableOption "Enable themes.";
 
   config = mkIf cfg.enable {
     home = {

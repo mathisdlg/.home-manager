@@ -6,10 +6,10 @@
 }:
 with lib;
 let
-  cfg = config.services.editor.kicad;
+  cfg = config.services.cad.kicad;
 in
 {
-  options.services.editor.kicad.enable = mkEnableOption "Enable kicad.";
+  options.services.cad.kicad.enable = mkEnableOption "Enable kicad.";
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
