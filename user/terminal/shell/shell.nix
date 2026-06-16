@@ -9,7 +9,7 @@ let
   myAliases = {
     update = "bash ${config.home.homeDirectory}/scripts/update.sh";
     fupdate = "nix flake update";
-    tupdate = "nvim ~/.config/nix/nix.conf";
+    tupdate = "nvim ${config.home.homeDirectory}/.config/nix/nix.conf";
 
     igresize = "bash ${config.home.homeDirectory}/scripts/ig_resize.sh";
 
