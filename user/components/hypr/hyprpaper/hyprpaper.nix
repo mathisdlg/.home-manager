@@ -88,16 +88,11 @@ in {
                 return 1
             fi
 
-            ${hyprctl_bin} hyprpaper unload all 2>/dev/null || true
-            ${hyprctl_bin} hyprpaper preload "$wallpaper"
-            ${hyprctl_bin} hyprpaper wallpaper ",$wallpaper"
+            if ! ${hyprctl_bin} hyprpaper wallpaper ",$wallpaper"; then
+                echo "wallpaper.sh: failed to set wallpaper $wallpaper" >&2
+                exit 1
+            fi
         }
-
-        # Wait for hyprpaper's IPC socket to be ready
-        for i in $(seq 1 20); do
-            ${hyprctl_bin} hyprpaper listloaded >/dev/null 2>&1 && break
-            sleep 0.5
-        done
 
         day_night=$(${sunwait_bin} poll civil "$LAT" "$LON")
 
@@ -125,8 +120,9 @@ in {
     systemd.user.services.hyprpaper-day-night-wallpaper = {
       Unit = {
         Description = "Auto wallpaper switcher (sun-based)";
-        After = [ "graphical-session.target" "hyprland-session.target" ];
-        Wants = [ "hyprland-session.target" ];
+        After = [ "graphical-session.target" "hyprland-session.target" "hyprpaper.service" ];
+        Wants = [ "hyprland-session.target"];
+        Requires = [ "hyprpaper.service" ];
         PartOf = [ "graphical-session.target" ];
       };
 

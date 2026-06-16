@@ -17,7 +17,9 @@ in
     ];
 
     home.file.".config/darktable/darktablerc".text = ''
-      ui_last/theme=darktable-icons-highcontrast
+      ui_last/theme=darktable-icons-grey
+
+      ui_last/import_custom_places=/home/mathisdlg/Data/Photo,/home/mathisdlg/Data/Photo/Conv
 
       context_help/url=https://docs.darktable.org/usermanual/
       context_help/use_default_url=true

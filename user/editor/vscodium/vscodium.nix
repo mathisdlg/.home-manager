@@ -19,7 +19,6 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       jetbrains-mono
-      jre
     ];
 
     programs.vscode = {
@@ -29,17 +28,11 @@ in
 
       profiles.default = {
         extensions = with pkgs.vscode-extensions; [
-          # AI assistant
-          github.copilot
-
           # Theme
           # One dark pro
           zhuangtongfa.material-theme
           # Material icon
           pkief.material-icon-theme
-
-          # Bookmark
-          alefragnani.bookmarks
 
           # Code Snap
           adpyke.codesnap
@@ -50,13 +43,6 @@ in
           # Python pack
           ms-python.python
           ms-python.debugpy
-
-          # Sonar Linter
-          sonarsource.sonarlint-vscode
-
-          # PHP
-          # devsense.phptools-vscode
-          # devsense.composer-php-vscode
 
           # Web dev
           formulahendry.auto-close-tag

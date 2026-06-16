@@ -19,7 +19,7 @@
         "$lock" = "wlogout";
         "$colorPicker" = "hyprpicker -a -r -n";
         "$codeEditor" = "code";
-        "$discord" = "$browser --new-window https://discord.com/channels/@me & disown";
+        "$discord" = "discord & disown";
 
         bind = [
           "$mainMod, RETURN, exec, $terminal"
@@ -27,7 +27,7 @@
           "$mainMod, E, exec, $fileManager"
           "$mainMod, V, togglefloating,"
           "bindr=SUPER, SUPER_L, exec, $menu"
-          "$mainMod, J, togglesplit,"
+          "$mainMod, J, layoutmsg, togglesplit"
           "CTRL SHIFT, Escape, exec, missioncenter"
           "$mainMod, L, exec, $lock"
           "$mainMod, T, togglegroup"

@@ -10,7 +10,7 @@
     ../art/darktable/darktable.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
-    ../art/imagemacick/imagemagick.nix
+    ../art/imagemagick/imagemagick.nix
     ../art/krita/krita.nix
 
     ../baobab/baobab.nix
@@ -23,14 +23,17 @@
     ../cad/kicad/kicad.nix
     ../cad/prusa_slicer/prusa_slicer.nix
 
+    ../communication/discord/discord.nix
     ../communication/thunderbird/thunderbird.nix
 
     ../editor/libreoffice/libreoffice.nix
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
 
+    ../files/nautilus/nautilus.nix
+
     ../games/beammp/beammp.nix
-    ../games/epic-games/epic-games.nix
+    ../games/heroic/heroic.nix
     ../games/puzzles/puzzles.nix
     ../games/minecraft/minecraft.nix
     ../games/mines/mines.nix
@@ -69,7 +72,7 @@
 
   services = {
     art = {
-      blender.enable = true;
+      blender.enable = false;
       darktable.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
@@ -92,6 +95,7 @@
     };
 
     communication = {
+      discord.enable = true;
       thunderbird.enable = true;
     };
 
@@ -107,9 +111,13 @@
       neovim.enable = true;
     };
 
+    files = {
+      nautilus.enable = true;
+    };
+
     games = {
       beammp.enable = true;
-      epic-games.enable = true;
+      heroic.enable = true;
       puzzles.enable = true;
       minecraft.enable = true;
       mines.enable = true;
@@ -135,7 +143,7 @@
 
     screenshare.screenshare.enable = true;
 
-    scipts.enable = true;
+    scripts.enable = true;
 
     system-monitor = {
       gnome-system-monitor.enable = false;
