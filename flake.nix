@@ -27,7 +27,7 @@
     in
     {
       nixosConfigurations = {
-        NixosMathis = nixLib.nixosSystem {
+        NixosMathisLaptop = nixLib.nixosSystem {
           inherit system;
           modules = [
             ./system/configuration.nix

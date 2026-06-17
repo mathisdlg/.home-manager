@@ -117,7 +117,7 @@
 
     games = {
       beammp.enable = false;
-      epic-games.enable = false;
+      heroic.enable = false;
       puzzles.enable = false;
       minecraft.enable = true;
       mines.enable = true;

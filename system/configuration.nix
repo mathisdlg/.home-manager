@@ -13,8 +13,7 @@
   ];
 
   networking = {
-    hostName = "NixosMathis"; # Define your hostname.
-    networkmanager.enable = true;
+    hostName = "NixosMathisLaptop"; # Define your hostname.
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
