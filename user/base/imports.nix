@@ -118,7 +118,7 @@
     games = {
       beammp.enable = true;
       heroic.enable = true;
-      puzzles.enable = true;
+      puzzles.enable = false;
       minecraft.enable = true;
       mines.enable = true;
       osu.enable = true;
