@@ -71,7 +71,7 @@
       enable = true;
       alsa = {
         enable = true;
-        support32Bit = true;
+        support32Bit = lib.mkForce false; # fix openblas build issue
       };
       pulse.enable = true;
       jack.enable = true;
