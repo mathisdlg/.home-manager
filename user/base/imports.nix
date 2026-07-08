@@ -6,8 +6,10 @@
 }:
 {
   imports = [
+    ../art/audacity/audacity.nix
     ../art/blender/blender.nix
     ../art/darktable/darktable.nix
+    ../art/davinci-resolve/davinci-resolve.nix
     ../art/gimp/gimp.nix
     ../art/gphoto2/gphoto2.nix
     ../art/imagemagick/imagemagick.nix
@@ -72,8 +74,10 @@
 
   services = {
     art = {
+      audacity.enable = true;
       blender.enable = false;
       darktable.enable = true;
+      davinci-resolve.enable = true;
       gimp.enable = true;
       gphoto2.enable = true;
       imagemagick.enable = true;

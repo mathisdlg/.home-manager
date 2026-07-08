@@ -93,6 +93,7 @@
 
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
+        mesa.opencl # Enables Rusticl (OpenCL) support (for DaVinci Resolve)
       ];
     };
 
