@@ -77,6 +77,8 @@ nix flake update --flake .
 
 sudo nixos-rebuild switch --flake .
 
+reboot # Reboot your system to apply the new configuration completely
+
 home-manager switch --flake . 
 ```
 
