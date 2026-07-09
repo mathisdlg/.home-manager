@@ -78,3 +78,12 @@ sudo nixos-rebuild switch --flake .
 home-manager switch --flake . 
 ```
 
+### Updating your configuration
+
+To update your configuration, you can pull the latest changes from your branch and then rebuild your system:
+
+```bash
+git pull
+
+update # update command is a custom script that updates the flake and rebuilds the system
+```
