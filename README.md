@@ -14,14 +14,66 @@ You also need to activate experimentals features like this: `["nix-command" "fla
 I advise you to create a fork of this repository and then clone it to your machine. This way you can easily update your configuration by pulling changes from the original repository.
 
 ```bash
+nix-shell -p git
+
 # Clone the repository
 git clone https://github.com/<username>/.home-manager.git
 cd .home-manager
 
 # Activate submodules
 git submodule update --init --recursive
+```
 
-NIXPKGS_ALLOW_UNFREE=1 sudo nixos-rebuild switch --extra-experimental-features nix-command --extra-experimental-features flakes --flake .
+Add experimental features in your `/etc/nixos/configuration.nix`:
+
+```nix
+{
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
+  };
+}
+```
+
+Verify your allow unfree packages setting and your hostname in your `/etc/nixos/configuration.nix`:
+
+```nix
+{
+  nixpkgs.config.allowUnfree = true;
+  networking.hostName = "your-hostname"; # Be careful the hostname is used in flake.nix to
+}
+```
+
+In `flake.nix`, you need to change in `NixosConfigurations` the `hostname` to your hostname and in `homeConfigurations` the `username` to your username:
+
+```nix
+nixosConfigurations = {
+    your-hostname = nixpkgs.lib.nixosSystem { # Here you need to change the hostname to your hostname
+    ...
+    };
+};
+
+homeConfigurations = {
+    your-username = home-manager.lib.homeManagerConfiguration { # Here you need to change the username to your username
+    ...
+    };
+};
+```
+
+After that don't forget to copy your `hardware-configuration.nix` into `system/hardware-configuration.nix`. (Check if nix don't put in  `configuration.nix` some useful options for the system, if so copy them too.)
+
+Then, you can build and switch to the new configuration with the following commands:
+
+```bash
+sudo nixos-rebuild switch
+
+nix flake update --flake .
+
+sudo nixos-rebuild switch --flake .
 
 home-manager switch --flake . 
 ```
