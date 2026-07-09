@@ -71,6 +71,8 @@ Then, you can build and switch to the new configuration with the following comma
 ```bash
 sudo nixos-rebuild switch
 
+hostnamectl set-hostname your-hostname # Change the hostname to your hostname
+
 nix flake update --flake .
 
 sudo nixos-rebuild switch --flake .
