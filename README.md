@@ -70,20 +70,6 @@ You also need to change the `boot.loader` section in your `/etc/nixos/configurat
 fileSystems."/boot/efi" = ... # ← mount your ESP here instead of at /boot/.
 ```
 
-```nix
-boot.loader = {
-  efi = {
-    canTouchEfiVariables = true;
-    efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
-  };
-  grub = {
-     efiSupport = true;
-     #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
-     device = "nodev";
-  };
-};
-```
-
 After that don't forget to copy your `hardware-configuration.nix` into `system/hardware-configuration.nix`. (Check if nix don't put in  `configuration.nix` some useful options for the system, if so copy them too.)
 
 Then, you can build and switch to the new configuration with the following commands:
