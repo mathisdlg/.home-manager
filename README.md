@@ -1,99 +1,130 @@
 # NixConfig
 
-## Purpose
+Configuration NixOS + Home Manager (flake) pour la machine `NixosMathis` et l'utilisateur `mathisdlg`.
 
-This repository contains my personal NixOS configuration. It is meant to be used as a reference for others who want to set up their own NixOS system.
+## Installation rapide (nouvelle machine)
 
-## Usage
-
-Just clone it and replace my `hardware-config.nix` with yours.  
-You also need to activate experimentals features like this: `["nix-command" "flakes"]`
-
-### First time installation
-
-I advise you to create a fork of this repository and then clone it to your machine. This way you can easily update your configuration by pulling changes from the original repository.
+Depuis l'ISO d'installation NixOS (minimal ou graphique), en root :
 
 ```bash
-nix-shell -p git
-
-# Clone the repository
-git clone https://github.com/<username>/.home-manager.git
-cd .home-manager
-
-# Activate submodules
-git submodule update --init --recursive
+curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/main/install.sh | bash
 ```
 
-Add experimental features in your `/etc/nixos/configuration.nix`:
+Le script :
 
-```nix
-{
-  nix = {
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-  };
-}
-```
+1. détecte si la machine boote en UEFI ou en BIOS (legacy),
+2. te demande le disque cible (ex: `/dev/sda`, `/dev/nvme0n1`) et le nom d'hôte,
+3. partitionne et monte le disque (sauf si `--skip-partition` est passé, voir plus bas),
+4. clone ce dépôt dans `/mnt/etc/nixos`,
+5. génère `system/hardware-configuration.nix` avec `nixos-generate-config`,
+6. écrit un `system/boot.nix` adapté à ton mode de boot (UEFI → systemd-boot **ou** GRUB EFI ; BIOS → GRUB legacy) et l'importe depuis `configuration.nix`,
+7. lance `nixos-install --flake .#NixosMathis`.
 
-Verify your allow unfree packages setting and your hostname in your `/etc/nixos/configuration.nix`:
+À la fin, retire l'ISO et redémarre : `reboot`.
 
-```nix
-{
-  nixpkgs.config.allowUnfree = true;
-  networking.hostName = "your-hostname"; # Be careful the hostname is used in flake.nix to
-}
-```
+## Installation manuelle (étape par étape)
 
-In `flake.nix`, you need to change in `NixosConfigurations` the `hostname` to your hostname and in `homeConfigurations` the `username` to your username:
+Si tu préfères tout faire à la main, ou si le script échoue :
 
-```nix
-nixosConfigurations = {
-    your-hostname = nixpkgs.lib.nixosSystem { # Here you need to change the hostname to your hostname
-    ...
-    };
-};
-
-homeConfigurations = {
-    your-username = home-manager.lib.homeManagerConfiguration { # Here you need to change the username to your username
-    ...
-    };
-};
-```
-
-You also need to change the `boot.loader` section in your `/etc/nixos/configuration.nix` to match the following:
-
-```nix
-fileSystems."/boot/efi" = ... # ← mount your ESP here instead of at /boot/.
-```
-
-After that don't forget to copy your `hardware-configuration.nix` into `system/hardware-configuration.nix`. (Check if nix don't put in  `configuration.nix` some useful options for the system, if so copy them too.)
-
-Then, you can build and switch to the new configuration with the following commands:
+### 1. Active les flakes (si tu utilises l'ISO officielle)
 
 ```bash
-sudo nixos-rebuild switch
-
-hostnamectl set-hostname your-hostname # Change the hostname to your hostname
-
-nix flake update --flake .
-
-sudo nixos-rebuild switch --flake .
-
-reboot # Reboot your system to apply the new configuration completely
-
-home-manager switch --flake . 
+export NIX_CONFIG="experimental-features = nix-command flakes"
 ```
 
-### Updating your configuration
+### 2. Partitionne et monte ton disque
 
-To update your configuration, you can pull the latest changes from your branch and then rebuild your system:
+Exemple minimal pour un disque UEFI (`/dev/sda`, adapte selon ton cas) :
 
 ```bash
+parted /dev/sda -- mklabel gpt
+parted /dev/sda -- mkpart ESP fat32 1MiB 513MiB
+parted /dev/sda -- set 1 esp on
+parted /dev/sda -- mkpart primary 513MiB 100%
+
+mkfs.fat -F 32 -n boot /dev/sda1
+mkfs.ext4 -L nixos /dev/sda2
+
+mount /dev/disk/by-label/nixos /mnt
+mkdir -p /mnt/boot
+mount /dev/disk/by-label/boot /mnt/boot
+```
+
+Pour un disque BIOS/legacy, pas de partition ESP : une partition unique suffit, et GRUB s'installe directement sur le MBR du disque (pas sur une partition).
+
+### 3. Clone la config
+
+```bash
+mkdir -p /mnt/etc/nixos
+git clone https://github.com/mathisdlg/.home-manager /mnt/etc/nixos
+cd /mnt/etc/nixos
+```
+
+### 4. Génère le hardware-configuration.nix
+
+```bash
+nixos-generate-config --root /mnt --show-hardware-config > system/hardware-configuration.nix
+```
+
+⚠️ C'est l'étape que beaucoup oublient : si tu gardes l'ancien `hardware-configuration.nix` d'une autre machine, `boot.loader.*` et les UUID de partitions seront faux, et GRUB s'installera « silencieusement » sur le mauvais disque (ou pas du tout), tout en laissant l'ancien menu systemd-boot en place.
+
+### 5. Choisis ton bootloader dans `system/boot.nix`
+
+Le dépôt fournit deux presets prêts à l'emploi (voir plus bas). Assure-toi que `system/configuration.nix` importe **un seul** des deux, jamais les deux à la fois :
+
+```nix
+imports = [
+  ./hardware-configuration.nix
+  ./boot.nix   # <- généré à l'étape précédente par install.sh, ou copié depuis boot-uefi-grub.nix / boot-bios-grub.nix
+];
+```
+
+### 6. Installe
+
+```bash
+nixos-install --flake .#NixosMathis
+```
+
+### 7. Redémarre
+
+```bash
+reboot
+```
+
+Après le premier boot, connecte-toi et lance :
+
+```bash
+home-manager switch --flake /etc/nixos#mathisdlg
+```
+
+(ou laisse-le se faire automatiquement si `home-manager` est intégré comme module NixOS dans `configuration.nix`).
+
+## Pourquoi GRUB "ne s'installe pas" et que le système reste sur systemd-boot
+
+C'est presque toujours l'une de ces trois causes :
+
+- **`hardware-configuration.nix` d'une ancienne machine** : les UUID/labels ne correspondent à rien sur le nouveau disque, donc `boot.loader.grub.device` pointe dans le vide.
+- **Les deux bootloaders sont activés en même temps** (`boot.loader.systemd-boot.enable = true` ET `boot.loader.grub.enable = true`). NixOS ne va pas trancher pour toi : il écrit les deux, et selon l'ordre du firmware/du menu EFI, c'est souvent l'entrée systemd-boot déjà présente sur l'ESP qui reste prioritaire.
+- **`boot.loader.grub.device` mal réglé en UEFI** : en UEFI, GRUB ne s'installe pas "sur un disque" mais dans l'ESP ; il faut `device = "nodev"` + `efiSupport = true` + `efiInstallAsRemovable = true` (utile en dual-boot ou VM) — pas le device du disque comme en legacy BIOS.
+
+Les presets `system/boot-uefi-grub.nix` et `system/boot-bios-grub.nix` du dépôt appliquent la bonne combinaison pour éviter ces trois pièges.
+
+## Mise à jour d'une machine existante
+
+```bash
+cd /etc/nixos
 git pull
-
-update # update command is a custom script that updates the flake and rebuilds the system
+sudo nixos-rebuild switch --flake .#NixosMathis
 ```
+
+## Structure du dépôt
+
+| Chemin | Rôle |
+| --- | --- |
+| `flake.nix` | Point d'entrée : définit `nixosConfigurations.NixosMathis` et `homeConfigurations.mathisdlg` |
+| `system/configuration.nix` | Config système NixOS |
+| `system/hardware-configuration.nix` | Généré par machine, **ne pas committer la version d'une autre machine** |
+| `system/boot-uefi-grub.nix` / `system/boot-bios-grub.nix` | Presets de bootloader prêts à l'emploi |
+| `user/base/home.nix` | Config Home Manager |
+| `patches/` | Patchs appliqués à certains paquets |
+| `install.sh` | Script d'installation automatisé |
