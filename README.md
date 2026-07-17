@@ -14,13 +14,19 @@ curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/setup/first-in
 
 The script will:
 
-1. detect whether the machine boots in UEFI or (legacy) BIOS mode,
-2. ask you for the target disk (e.g. `/dev/sda`, `/dev/nvme0n1`) and the hostname,
-3. partition and mount the disk (unless you pass `--skip-partition`, see below),
-4. clone this repo (on the `setup/first-install` branch) into `/mnt/etc/nixos`,
-5. generate `system/hardware-configuration.nix` with `nixos-generate-config`,
-6. write a `system/boot.nix` matching your boot mode (UEFI → GRUB-on-ESP; BIOS → legacy GRUB) and import it from `configuration.nix`,
-7. run `nixos-install --flake .#NixosMathis`.
+1. ask for the **hostname** and **username** you want to use,
+2. detect whether the machine boots in UEFI or (legacy) BIOS mode,
+3. ask you for the target disk (e.g. `/dev/sda`, `/dev/nvme0n1`),
+4. partition the disk and **encrypt the root partition with LUKS2** (unless you pass `--skip-partition`, see below) — you'll be prompted for a passphrase by `cryptsetup` directly,
+5. clone this repo (on the `setup/first-install` branch) into `/home/<username>/.home-manager`, and symlink `/etc/nixos` to it,
+6. **personalize the cloned config**: every reference to the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) across the repo gets replaced with what you typed, so `flake.nix` ends up with `nixosConfigurations.<hostname>` and `homeConfigurations.<username>` matching your input, without any manual editing (pass `--no-rename` to skip this and keep the repo's placeholders as-is),
+7. generate `system/hardware-configuration.nix` with `nixos-generate-config` (this also picks up the LUKS mapping automatically, since the encrypted partition is already open at this point),
+8. write a `system/boot.nix` matching your boot mode (UEFI → GRUB-on-ESP; BIOS → legacy GRUB) and import it from `configuration.nix`,
+9. run `nixos-install --flake /home/<username>/.home-manager#<hostname>`.
+
+All of the above can also be passed as flags to skip the prompts: `--hostname NAME`, `--user NAME`, `--disk /dev/xxx`.
+
+You'll be asked for the LUKS passphrase again on every subsequent boot, before GRUB hands off to the kernel/initrd.
 
 When it's done, remove the ISO and reboot: `reboot`.
 
@@ -34,9 +40,11 @@ If you'd rather do it by hand, or the script fails partway through:
 export NIX_CONFIG="experimental-features = nix-command flakes"
 ```
 
-### 2. Partition and mount your disk
+### 2. Partition, and encrypt the root partition with LUKS2
 
-Minimal example for a UEFI disk (`/dev/sda`, adjust to your case):
+Example for a UEFI disk (`/dev/sda`, adjust to your case). The root partition is
+always encrypted; only `/boot` (the ESP) stays in the clear, since GRUB needs to
+read the kernel/initrd from there before it can ask for your passphrase:
 
 ```bash
 parted /dev/sda -- mklabel gpt
@@ -45,32 +53,74 @@ parted /dev/sda -- set 1 esp on
 parted /dev/sda -- mkpart primary 513MiB 100%
 
 mkfs.fat -F 32 -n boot /dev/sda1
-mkfs.ext4 -L nixos /dev/sda2
 
-mount /dev/disk/by-label/nixos /mnt
+cryptsetup luksFormat --type luks2 /dev/sda2   # prompts for a passphrase
+cryptsetup open /dev/sda2 cryptroot            # prompts for that passphrase again
+
+mkfs.ext4 -L nixos /dev/mapper/cryptroot
+
+mount /dev/mapper/cryptroot /mnt
 mkdir -p /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot
 ```
 
-For a BIOS/legacy disk, there's no ESP: a single partition is enough, and GRUB installs directly onto the disk's MBR (not onto a partition).
+For a BIOS/legacy disk, there's no ESP, but you still want a small **unencrypted**
+`/boot` partition (GRUB itself can't unlock LUKS on its own), with the rest of
+the disk encrypted for root:
+
+```bash
+parted /dev/sda -- mklabel msdos
+parted /dev/sda -- mkpart primary ext4 1MiB 513MiB
+parted /dev/sda -- set 1 boot on
+parted /dev/sda -- mkpart primary 513MiB 100%
+
+mkfs.ext4 -L boot /dev/sda1
+
+cryptsetup luksFormat --type luks2 /dev/sda2
+cryptsetup open /dev/sda2 cryptroot
+
+mkfs.ext4 -L nixos /dev/mapper/cryptroot
+
+mount /dev/mapper/cryptroot /mnt
+mkdir -p /mnt/boot
+mount /dev/disk/by-label/boot /mnt/boot
+```
 
 ### 3. Clone the config
 
 ```bash
-mkdir -p /mnt/etc/nixos
-git clone --branch setup/first-install https://github.com/mathisdlg/.home-manager /mnt/etc/nixos
-cd /mnt/etc/nixos
+mkdir -p /mnt/home/<username>
+git clone --branch setup/first-install https://github.com/mathisdlg/.home-manager /mnt/home/<username>/.home-manager
+cd /mnt/home/<username>/.home-manager
+
+# so tools that expect the config at the usual location keep working
+ln -sfn /home/<username>/.home-manager /mnt/etc/nixos
 ```
 
-### 4. Generate hardware-configuration.nix
+### 4. Personalize the config for your hostname/username
+
+Replace every occurrence of the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) with your own, across the whole repo except `README.md`, `flake.lock` and `install.sh`:
+
+```bash
+grep -rlF --exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh -- NixosMathis . | xargs -r sed -i 's/NixosMathis/<hostname>/g'
+grep -rlF --exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh -- mathisdlg . | xargs -r sed -i 's/mathisdlg/<username>/g'
+```
+
+This is what turns `flake.nix`'s `nixosConfigurations.NixosMathis` / `homeConfigurations.mathisdlg` into entries matching your own hostname/username, and updates `configuration.nix` / `home.nix` to reference the right user throughout.
+
+### 5. Generate hardware-configuration.nix
+
+With the LUKS partition still open from step 2, run:
 
 ```bash
 nixos-generate-config --root /mnt --show-hardware-config > system/hardware-configuration.nix
 ```
 
-⚠️ This is the step a lot of people skip: if you keep the old `hardware-configuration.nix` from another machine, `boot.loader.*` settings and partition UUIDs will be wrong, and GRUB will "silently" install to the wrong disk (or not at all) while the old systemd-boot menu stays in place.
+This automatically adds a `boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/...";` entry, since the mapper is open and mounted at generation time. If it's missing, add it by hand, pointing at the UUID of the **LUKS partition** (e.g. `/dev/sda2`), not the `/dev/mapper/cryptroot` device.
 
-### 5. Pick your bootloader in `system/boot.nix`
+⚠️ This is the step a lot of people skip: if you keep the old `hardware-configuration.nix` from another machine, `boot.loader.*` settings and partition/LUKS UUIDs will be wrong, and GRUB will "silently" install to the wrong disk (or not at all) while the old systemd-boot menu stays in place.
+
+### 6. Pick your bootloader in `system/boot.nix`
 
 The repo ships two ready-to-use presets (see below). Make sure `system/configuration.nix` imports **only one** of the two, never both at once:
 
@@ -81,22 +131,24 @@ imports = [
 ];
 ```
 
-### 6. Install
+### 7. Install
 
 ```bash
-nixos-install --flake .#NixosMathis
+nixos-install --flake /mnt/home/<username>/.home-manager#<hostname>
 ```
 
-### 7. Reboot
+### 8. Reboot
 
 ```bash
 reboot
 ```
 
+You'll be asked for the LUKS passphrase before the system boots — this happens on every boot from now on, not just this first one.
+
 After the first boot, log in and run:
 
 ```bash
-home-manager switch --flake /etc/nixos#mathisdlg
+home-manager switch --flake /home/<username>/.home-manager#<username>
 ```
 
 (or let it happen automatically if `home-manager` is wired up as a NixOS module inside `configuration.nix`).
@@ -114,9 +166,9 @@ The `system/boot-uefi-grub.nix` and `system/boot-bios-grub.nix` presets in this 
 ## Updating an existing machine
 
 ```bash
-cd /etc/nixos
+cd ~/.home-manager   # or /etc/nixos, which is symlinked to it
 git pull
-sudo nixos-rebuild switch --flake .#NixosMathis
+sudo nixos-rebuild switch --flake .#<hostname>
 ```
 
 ## Repo layout
