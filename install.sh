@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
-# install.sh - Installation automatisée de la config NixOS mathisdlg/.home-manager
+# install.sh - Automated installer for the mathisdlg/.home-manager NixOS config
 #
-# À lancer depuis l'ISO d'installation NixOS (root), réseau branché.
+# Run this from the NixOS installer ISO (as root), network connected.
 #
-#   curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/main/install.sh | bash
+#   curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/setup/first-install/install.sh | bash
 #
-# Options :
-#   --skip-partition   Ne partitionne/monte rien : suppose que /mnt et /mnt/boot
-#                       sont déjà montés (utile si tu as déjà un disque prêt).
-#   --disk /dev/xxx     Passe le disque en argument au lieu de le demander.
-#   --hostname NAME     Passe le hostname (défaut: NixosMathis, doit matcher flake.nix).
+# Options:
+#   --skip-partition   Don't partition/mount anything: assumes /mnt (and
+#                       /mnt/boot on UEFI) are already mounted.
+#   --disk /dev/xxx     Pass the target disk instead of being prompted.
+#   --hostname NAME     Pass the hostname (default: NixosMathis, must match flake.nix).
+#   --branch NAME        Repo branch to clone (default: setup/first-install).
 
 set -euo pipefail
 
 REPO_URL="https://github.com/mathisdlg/.home-manager"
+BRANCH="setup/first-install"
 SKIP_PARTITION=0
 DISK=""
 HOSTNAME="NixosMathis"
@@ -28,34 +30,35 @@ while [[ $# -gt 0 ]]; do
     --skip-partition) SKIP_PARTITION=1; shift ;;
     --disk) DISK="$2"; shift 2 ;;
     --hostname) HOSTNAME="$2"; shift 2 ;;
-    *) die "Option inconnue: $1" ;;
+    --branch) BRANCH="$2"; shift 2 ;;
+    *) die "Unknown option: $1" ;;
   esac
 done
 
-[[ $EUID -eq 0 ]] || die "Ce script doit être lancé en root (tu es sur l'ISO d'install, donc normalement déjà root)."
+[[ $EUID -eq 0 ]] || die "This script must be run as root (you're on the install ISO, so you normally already are)."
 
-# --- 1. Détection UEFI / BIOS -------------------------------------------------
+# --- 1. UEFI / BIOS detection -------------------------------------------------
 if [[ -d /sys/firmware/efi/efivars ]]; then
   BOOT_MODE="uefi"
-  log "Firmware détecté : UEFI"
+  log "Firmware detected: UEFI"
 else
   BOOT_MODE="bios"
-  log "Firmware détecté : BIOS/legacy"
+  log "Firmware detected: BIOS/legacy"
 fi
 
-# --- 2. Partitionnement (sauf si --skip-partition) ----------------------------
+# --- 2. Partitioning (unless --skip-partition) --------------------------------
 if [[ $SKIP_PARTITION -eq 0 ]]; then
   if [[ -z "$DISK" ]]; then
     lsblk -d -o NAME,SIZE,MODEL
-    read -rp "Disque cible (ex: /dev/sda ou /dev/nvme0n1) : " DISK
+    read -rp "Target disk (e.g. /dev/sda or /dev/nvme0n1): " DISK
   fi
-  [[ -b "$DISK" ]] || die "Le disque $DISK n'existe pas."
+  [[ -b "$DISK" ]] || die "Disk $DISK does not exist."
 
-  warn "TOUTES les données de $DISK vont être effacées."
-  read -rp "Taper 'oui' pour confirmer : " CONFIRM
-  [[ "$CONFIRM" == "oui" ]] || die "Annulé."
+  warn "ALL data on $DISK will be erased."
+  read -rp "Type 'yes' to confirm: " CONFIRM
+  [[ "$CONFIRM" == "yes" ]] || die "Aborted."
 
-  # gère le suffixe 'p' des nvme (/dev/nvme0n1p1 vs /dev/sda1)
+  # handle the 'p' suffix for nvme (/dev/nvme0n1p1 vs /dev/sda1)
   if [[ "$DISK" == *nvme* ]]; then
     PART_SUFFIX="p"
   else
@@ -63,7 +66,7 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
   fi
 
   if [[ "$BOOT_MODE" == "uefi" ]]; then
-    log "Partitionnement GPT (ESP + racine)"
+    log "Partitioning GPT (ESP + root)"
     parted -s "$DISK" -- mklabel gpt
     parted -s "$DISK" -- mkpart ESP fat32 1MiB 513MiB
     parted -s "$DISK" -- set 1 esp on
@@ -79,7 +82,7 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
     mkdir -p /mnt/boot
     mount /dev/disk/by-label/boot /mnt/boot
   else
-    log "Partitionnement MBR (une seule partition, GRUB legacy sur le MBR)"
+    log "Partitioning MBR (single partition, legacy GRUB on the MBR)"
     parted -s "$DISK" -- mklabel msdos
     parted -s "$DISK" -- mkpart primary 1MiB 100%
     parted -s "$DISK" -- set 1 boot on
@@ -89,26 +92,26 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
     mount /dev/disk/by-label/nixos /mnt
   fi
 else
-  log "--skip-partition : on suppose /mnt (et /mnt/boot en UEFI) déjà montés."
-  mountpoint -q /mnt || die "/mnt n'est pas monté."
+  log "--skip-partition: assuming /mnt (and /mnt/boot on UEFI) are already mounted."
+  mountpoint -q /mnt || die "/mnt is not mounted."
 fi
 
-# --- 3. Clone du dépôt ---------------------------------------------------------
-log "Clone de $REPO_URL"
+# --- 3. Clone the repo ---------------------------------------------------------
+log "Cloning $REPO_URL (branch: $BRANCH)"
 mkdir -p /mnt/etc/nixos
 if [[ -d /mnt/etc/nixos/.git ]]; then
-  warn "/mnt/etc/nixos existe déjà et semble être un dépôt git, on le garde tel quel."
+  warn "/mnt/etc/nixos already exists and looks like a git repo, keeping it as is."
 else
-  git clone "$REPO_URL" /mnt/etc/nixos
+  git clone --branch "$BRANCH" "$REPO_URL" /mnt/etc/nixos
 fi
 cd /mnt/etc/nixos
 
 # --- 4. hardware-configuration.nix ---------------------------------------------
-log "Génération de system/hardware-configuration.nix"
+log "Generating system/hardware-configuration.nix"
 mkdir -p system
 nixos-generate-config --root /mnt --show-hardware-config > system/hardware-configuration.nix
 
-# --- 5. Sélection du preset de bootloader --------------------------------------
+# --- 5. Bootloader preset selection --------------------------------------------
 if [[ "$BOOT_MODE" == "uefi" ]]; then
   BOOT_PRESET="boot-uefi-grub.nix"
 else
@@ -116,30 +119,30 @@ else
 fi
 
 if [[ ! -f "system/$BOOT_PRESET" ]]; then
-  die "system/$BOOT_PRESET introuvable dans le dépôt. Assure-toi d'avoir bien la dernière version du repo (git pull)."
+  die "system/$BOOT_PRESET not found in the repo. Make sure you have the latest version (git pull) of the $BRANCH branch."
 fi
 
 cp "system/$BOOT_PRESET" system/boot.nix
 
 if [[ "$BOOT_MODE" == "bios" ]]; then
-  log "Réglage de boot.loader.grub.device sur $DISK dans system/boot.nix"
+  log "Setting boot.loader.grub.device to $DISK in system/boot.nix"
   sed -i "s#__GRUB_DEVICE__#${DISK}#" system/boot.nix
 fi
 
-# S'assure que configuration.nix importe bien boot.nix et hardware-configuration.nix,
-# sans dupliquer les imports s'ils y sont déjà.
+# Make sure configuration.nix actually imports boot.nix and hardware-configuration.nix,
+# without duplicating the imports if they're already there.
 CONFIG_FILE="system/configuration.nix"
 for imp in "./hardware-configuration.nix" "./boot.nix"; do
   if ! grep -q "$imp" "$CONFIG_FILE"; then
-    warn "system/configuration.nix n'importe pas encore $imp — ajoute-le manuellement à la liste 'imports' avant de continuer."
+    warn "system/configuration.nix doesn't import $imp yet — add it to the 'imports' list manually before continuing."
   fi
 done
 
-log "Hostname utilisé : $HOSTNAME (doit correspondre à nixosConfigurations.$HOSTNAME dans flake.nix)"
+log "Hostname used: $HOSTNAME (must match nixosConfigurations.$HOSTNAME in flake.nix)"
 
-# --- 6. Installation -------------------------------------------------------------
-log "Lancement de nixos-install --flake .#$HOSTNAME"
+# --- 6. Install -------------------------------------------------------------------
+log "Running nixos-install --flake .#$HOSTNAME"
 nixos-install --flake ".#${HOSTNAME}"
 
-log "Terminé. Retire le média d'installation puis fais 'reboot'."
-log "Après le premier boot : home-manager switch --flake /etc/nixos#${USERNAME}"
+log "Done. Remove the install media, then 'reboot'."
+log "After the first boot: home-manager switch --flake /etc/nixos#${USERNAME}"
