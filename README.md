@@ -82,9 +82,9 @@ read the kernel/initrd from there before it can ask for your passphrase:
 
 ```bash
 parted /dev/sda -- mklabel gpt
-parted /dev/sda -- mkpart ESP fat32 1MiB 513MiB
+parted /dev/sda -- mkpart ESP fat32 1MiB 1025MiB
 parted /dev/sda -- set 1 esp on
-parted /dev/sda -- mkpart primary 513MiB 100%
+parted /dev/sda -- mkpart primary 1025MiB 100%
 
 mkfs.fat -F 32 -n BOOT /dev/sda1
 
@@ -104,9 +104,9 @@ the disk encrypted for root:
 
 ```bash
 parted /dev/sda -- mklabel msdos
-parted /dev/sda -- mkpart primary ext4 1MiB 513MiB
+parted /dev/sda -- mkpart primary ext4 1MiB 1025MiB
 parted /dev/sda -- set 1 boot on
-parted /dev/sda -- mkpart primary 513MiB 100%
+parted /dev/sda -- mkpart primary 1025MiB 100%
 
 mkfs.ext4 -L boot /dev/sda1
 

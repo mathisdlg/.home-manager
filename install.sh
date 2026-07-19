@@ -182,9 +182,9 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
   if [[ "$BOOT_MODE" == "uefi" ]]; then
     log "Partitioning GPT (ESP + LUKS2 root)"
     parted -s "$DISK" -- mklabel gpt
-    parted -s "$DISK" -- mkpart ESP fat32 1MiB 513MiB
+    parted -s "$DISK" -- mkpart ESP fat32 1MiB 1025MiB
     parted -s "$DISK" -- set 1 esp on
-    parted -s "$DISK" -- mkpart primary 513MiB 100%
+    parted -s "$DISK" -- mkpart primary 1025MiB 100%
 
     BOOT_PART="${DISK}${PART_SUFFIX}1"
     ROOT_PART="${DISK}${PART_SUFFIX}2"
@@ -203,9 +203,9 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
   else
     log "Partitioning MBR (unencrypted /boot + LUKS2 root, legacy GRUB on the MBR)"
     parted -s "$DISK" -- mklabel msdos
-    parted -s "$DISK" -- mkpart primary ext4 1MiB 513MiB
+    parted -s "$DISK" -- mkpart primary ext4 1MiB 1025MiB
     parted -s "$DISK" -- set 1 boot on
-    parted -s "$DISK" -- mkpart primary 513MiB 100%
+    parted -s "$DISK" -- mkpart primary 1025MiB 100%
 
     BOOT_PART="${DISK}${PART_SUFFIX}1"
     ROOT_PART="${DISK}${PART_SUFFIX}2"
@@ -303,6 +303,23 @@ if [[ "$BOOT_MODE" == "bios" ]]; then
   log "Setting boot.loader.grub.device to $DISK in system/$BOOT_PRESET"
   sed -i "s#__GRUB_DEVICE__#${DISK}#" "system/$BOOT_PRESET"
 fi
+
+# Make sure configuration.nix actually imports boot.nix and hardware-configuration.nix
+# — added automatically here rather than just warned about.
+add_import_if_missing() {
+  local file="$1" importpath="$2"
+  if grep -qF "$importpath" "$file"; then
+    return 0
+  fi
+  if grep -q 'imports[[:space:]]*=[[:space:]]*\[' "$file"; then
+    sed -i "0,/imports[[:space:]]*=[[:space:]]*\[/s//&\n    ${importpath}/" "$file"
+    log "Added ${importpath} to imports in $file"
+  else
+    warn "$file has no 'imports = [ ... ];' block — add '${importpath}' to it manually."
+  fi
+}
+add_import_if_missing "$CONFIG_FILE" "./hardware-configuration.nix"
+add_import_if_missing "$CONFIG_FILE" "./boot.nix"
 
 log "Hostname: $HOSTNAME"
 log "Username: $USERNAME"
