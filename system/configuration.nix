@@ -49,7 +49,7 @@
 
   services = {
     displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+    desktopManager.gnome.enable = false;
 
     xserver = {
       enable = true;

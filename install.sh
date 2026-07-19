@@ -18,9 +18,14 @@
 #
 # The config is syntax-checked right after cloning, BEFORE any partitioning
 # happens, so a broken configuration.nix aborts the script without touching
-# your disk. It's checked again (a real build) right before nixos-install, so
-# if that fails you can fix the file and re-run with --skip-partition instead
-# of re-partitioning/re-encrypting from scratch.
+# your disk. It's evaluated again (cheaply — see step 7) right before
+# nixos-install, so if that fails you can fix the file and re-run with
+# --skip-partition instead of re-partitioning/re-encrypting from scratch.
+#
+# All `read` prompts explicitly read from /dev/tty rather than stdin: when
+# this script is run as `curl ... | sudo bash`, stdin IS the piped script
+# source, not your keyboard, so a plain `read` would silently get empty
+# input (or worse, consume the next line of the script itself).
 #
 # Options:
 #   --skip-partition    Don't partition/mount/encrypt anything: assumes /mnt
@@ -50,6 +55,9 @@ STAGING_DIR="/tmp/home-manager-staging"
 log()  { echo -e "\033[1;32m[install]\033[0m $*"; }
 warn() { echo -e "\033[1;33m[install]\033[0m $*"; }
 die()  { echo -e "\033[1;31m[install]\033[0m $*" >&2; exit 1; }
+# All interactive prompts go through this, reading from the controlling
+# terminal instead of stdin (see note above about `curl | sudo bash`).
+ask()  { local __var="$1" __prompt="$2"; read -rp "$__prompt" "$__var" < /dev/tty; }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -64,15 +72,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ $EUID -eq 0 ]] || die "This script must be run as root (use: curl ... | sudo bash)."
+[[ -e /dev/tty ]] || die "No controlling terminal (/dev/tty) found — this script needs an interactive session for its prompts."
 
 # --- 0. Hostname / username ----------------------------------------------------
 if [[ -z "$HOSTNAME" ]]; then
-  read -rp "Hostname to use: " HOSTNAME
+  ask HOSTNAME "Hostname to use: "
 fi
 [[ -n "$HOSTNAME" ]] || die "Hostname can't be empty."
 
 if [[ -z "$USERNAME" ]]; then
-  read -rp "Username to use: " USERNAME
+  ask USERNAME "Username to use: "
 fi
 [[ -n "$USERNAME" ]] || die "Username can't be empty."
 
@@ -153,12 +162,12 @@ fi
 if [[ $SKIP_PARTITION -eq 0 ]]; then
   if [[ -z "$DISK" ]]; then
     lsblk -d -o NAME,SIZE,MODEL
-    read -rp "Target disk (e.g. /dev/sda or /dev/nvme0n1): " DISK
+    ask DISK "Target disk (e.g. /dev/sda or /dev/nvme0n1): "
   fi
   [[ -b "$DISK" ]] || die "Disk $DISK does not exist."
 
   warn "ALL data on $DISK will be erased."
-  read -rp "Type 'yes' to confirm: " CONFIRM
+  ask CONFIRM "Type 'yes' to confirm: "
   [[ "$CONFIRM" == "yes" ]] || die "Aborted."
 
   command -v cryptsetup >/dev/null || die "cryptsetup not found (should be on the NixOS ISO by default)."
@@ -298,23 +307,31 @@ fi
 log "Hostname: $HOSTNAME"
 log "Username: $USERNAME"
 
-# --- 7. Validate the full configuration before installing ----------------------
-# Catches build-level errors (e.g. two modules setting the same option) that
-# the earlier syntax check couldn't see, while it's still cheap to fix and
-# re-run with --skip-partition (disk is already partitioned/encrypted by now).
+# --- 7. Validate the config before installing -----------------------------------
+# This is a `nix eval` of the derivation *path* only, not a `nix build`: it
+# forces Nix to fully evaluate configuration.nix (catching duplicate options,
+# typos, missing imports, etc.) without actually building/downloading a single
+# package. A full `nix build ...toplevel` here would try to realize the whole
+# system closure using the live ISO's own (RAM-backed, tmpfs) /nix/store —
+# which is exactly what runs a live session out of RAM/disk with a "No space
+# left on device" error. The real build happens safely afterwards, inside
+# nixos-install, straight onto the target disk at /mnt.
 if command -v nix >/dev/null; then
-  log "Building the system closure to validate the config (this can take a while)..."
+  log "Evaluating the configuration to validate it (fast — doesn't build or download anything)..."
 
-  git -C "$REPO_PATH" add "system/boot.nix"
+  # Flakes only see git-tracked/staged files, so make sure everything
+  # generated above (hardware-configuration.nix, boot.nix, the personalized
+  # flake.nix/configuration.nix) is visible to the evaluator.
+  git add -A
 
-  if ! nix --extra-experimental-features "nix-command flakes" build \
-        "${REPO_PATH}#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
-        --no-link --show-trace; then
-    die "Configuration failed to build. Fix system/configuration.nix (see the error above), then re-run with --skip-partition --hostname ${HOSTNAME} --user ${USERNAME} to retry without re-partitioning."
+  if ! nix --extra-experimental-features "nix-command flakes" eval --raw \
+        "${REPO_PATH}#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel.drvPath" \
+        >/dev/null; then
+    die "Configuration failed to evaluate. Fix system/configuration.nix (see the error above), then re-run with --skip-partition --hostname ${HOSTNAME} --user ${USERNAME} to retry without re-partitioning."
   fi
-  log "Build OK."
+  log "Evaluation OK."
 else
-  warn "nix command not found — skipping the pre-install build validation."
+  warn "nix command not found — skipping the pre-install evaluation check."
 fi
 
 # --- 8. Commit the personalization on the local branch --------------------------

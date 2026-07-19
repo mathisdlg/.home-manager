@@ -2,7 +2,7 @@
 
 NixOS + Home Manager (flake) configuration for the `NixosMathis` machine and the `mathisdlg` user.
 
-> Setup work for this migration lives on the `setup/first-install` branch. Merge it into `main` once you've confirmed a clean boot. Each machine install additionally gets its own local `install/<hostname>` branch (created automatically) so the personalization for that machine never lands on `setup/first-install` itself.
+> Setup work for this migration lives on the `setup/first-install` branch. Merge it into `main` once you've confirmed a clean boot. Each machine install additionally gets its own local `install/<hostname>` branch (created automatically) so the personalization for that machine never lands on `setup/first-install` itself. All prompts read from `/dev/tty` rather than stdin, so they work correctly even when the script is run as `curl ... | sudo bash` (stdin in that case is the piped script itself, not your keyboard).
 
 ## Quick install (new machine)
 
@@ -22,7 +22,7 @@ The script will:
 6. move the staged repo into `/home/<username>/.home-manager` and symlink `/etc/nixos` to it,
 7. generate `system/hardware-configuration.nix` **directly inside the repo** with `nixos-generate-config` (this also picks up the LUKS mapping automatically, since the encrypted partition is already open at this point) — and automatically comments out `networking.networkmanager.enable` in that generated file if `configuration.nix` already sets it, since `nixos-generate-config` adds it whenever the live ISO itself uses NetworkManager, which otherwise causes a duplicate-definition build failure,
 8. put `system/boot.nix` in place — a **symlink** to the matching preset (UEFI → GRUB-on-ESP; BIOS → legacy GRUB), falling back to a plain copy if the filesystem doesn't support symlinks — and **wire it into `configuration.nix`'s `imports` automatically**, along with `hardware-configuration.nix`,
-9. **build the full system closure** (`nix build ...#nixosConfigurations.<hostname>.config.system.build.toplevel`) as a final check before actually installing — if this fails, fix `configuration.nix` and re-run with `--skip-partition` instead of starting over,
+9. **evaluate the configuration** (`nix eval ...#nixosConfigurations.<hostname>.config.system.build.toplevel.drvPath`) as a final check before actually installing — this is evaluation only, not a build, so it doesn't try to compile/download packages into the live ISO's RAM-backed store (a full `nix build` here is what fills up RAM with "No space left on device"); the real build happens safely afterwards, inside `nixos-install`, straight onto your target disk — if evaluation fails, fix `configuration.nix` and re-run with `--skip-partition` instead of starting over,
 10. commit the personalization onto the local `install/<hostname>` branch,
 11. run `nixos-install --flake /home/<username>/.home-manager#<hostname>`.
 
@@ -169,13 +169,15 @@ imports = [
 ];
 ```
 
-### 8. Build the config as a final check
+### 8. Evaluate the config as a final check
+
+Evaluate, don't build: on a live ISO, `/nix/store` is RAM-backed (tmpfs), and a full `nix build` of a whole system closure can easily fill it up and die with "No space left on device". `nix eval` on the derivation path forces the same evaluation (catches duplicate options, typos, missing imports) without building or downloading a single package:
 
 ```bash
-nix build /mnt/home/<username>/.home-manager#nixosConfigurations.<hostname>.config.system.build.toplevel --no-link --show-trace
+nix eval /mnt/home/<username>/.home-manager#nixosConfigurations.<hostname>.config.system.build.toplevel.drvPath --raw
 ```
 
-If this fails, fix `configuration.nix` and re-run it — much cheaper than finding out during `nixos-install`.
+If this fails, fix `configuration.nix` and re-run it — much cheaper than finding out during `nixos-install`. The real build happens safely afterwards, inside `nixos-install` itself, straight onto your target disk.
 
 ### 9. Install
 
@@ -206,7 +208,7 @@ It's almost always one of these causes:
 - **`hardware-configuration.nix` from an old machine**: the UUIDs/labels don't match anything on the new disk, so `boot.loader.grub.device` points at nothing.
 - **Both bootloaders enabled at the same time** (`boot.loader.systemd-boot.enable = true` AND `boot.loader.grub.enable = true`). NixOS won't pick a winner for you: it writes both, and depending on firmware/EFI menu ordering, it's often the systemd-boot entry that's already on the ESP that stays as the priority boot target.
 - **`boot.loader.grub.device` set wrong on UEFI**: on UEFI, GRUB doesn't install "onto a disk", it installs into the ESP; you need `device = "nodev"` + `efiSupport = true` + `efiInstallAsRemovable = true` (handy for dual-boot or VMs) — not the disk device like on legacy BIOS.
-- **The build never actually reaches the bootloader install step**: if `configuration.nix` has a duplicate-definition error, `nixos-install` fails during evaluation/build, before GRUB is even touched — this looks the same from the outside ("nothing got installed") but the fix is in `configuration.nix`, not in the boot config. The most common case, `networking.networkmanager.enable` being set both by hand and by `nixos-generate-config`, is fixed automatically (see step 6/7 above); anything else is caught by the syntax-check and build-validation steps ahead of time instead of failing mid-`nixos-install`.
+- **The build never actually reaches the bootloader install step**: if `configuration.nix` has a duplicate-definition error, `nixos-install` fails during evaluation/build, before GRUB is even touched — this looks the same from the outside ("nothing got installed") but the fix is in `configuration.nix`, not in the boot config. The most common case, `networking.networkmanager.enable` being set both by hand and by `nixos-generate-config`, is fixed automatically (see step 7 above); anything else is caught by the syntax-check and evaluation-validation steps ahead of time instead of failing mid-`nixos-install`.
 
 The `system/boot-uefi-grub.nix` and `system/boot-bios-grub.nix` presets in this repo apply the correct combination to avoid the first three traps.
 
