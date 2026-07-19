@@ -355,6 +355,9 @@ fi
 
 # --- 8. Commit the personalization on the local branch --------------------------
 if [[ -n "$(git status --porcelain)" ]]; then
+  git config user.name "NixOS Installer"
+  git config user.email "nixos-installer@localhost"
+
   git add -A
   git commit -q -m "Personalize for host=${HOSTNAME} user=${USERNAME} (LUKS2, ${BOOT_MODE} boot)"
   log "Committed changes to local branch $(git rev-parse --abbrev-ref HEAD) (not pushed, and $BRANCH is untouched)."
