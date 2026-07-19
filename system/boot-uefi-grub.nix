@@ -9,7 +9,7 @@
 {
   boot.loader.systemd-boot.enable = false;
 
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.canTouchEfiVariables = false;
   # Change this path if your ESP isn't mounted at /boot (check with `lsblk`
   # and the fileSystems."/boot" line in hardware-configuration.nix).
   boot.loader.efi.efiSysMountPoint = "/boot";
