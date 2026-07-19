@@ -22,10 +22,12 @@
 # nixos-install, so if that fails you can fix the file and re-run with
 # --skip-partition instead of re-partitioning/re-encrypting from scratch.
 #
-# All `read` prompts explicitly read from /dev/tty rather than stdin: when
-# this script is run as `curl ... | sudo bash`, stdin IS the piped script
-# source, not your keyboard, so a plain `read` would silently get empty
-# input (or worse, consume the next line of the script itself).
+# All `read` prompts — and `cryptsetup`'s own passphrase prompts — explicitly
+# read from /dev/tty rather than stdin: when this script is run as
+# `curl ... | sudo bash`, stdin IS the piped script source, not your
+# keyboard, so a plain `read` (or cryptsetup left to its default stdin
+# prompt) would silently get empty/garbage input instead of actually asking
+# you anything, and the script would just stop.
 #
 # Options:
 #   --skip-partition    Don't partition/mount/encrypt anything: assumes /mnt
@@ -192,8 +194,8 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
     mkfs.fat -F 32 -n BOOT "$BOOT_PART"
 
     log "Setting up LUKS2 on $ROOT_PART — you'll be prompted for a passphrase now."
-    cryptsetup luksFormat --type luks2 "$ROOT_PART"
-    cryptsetup open "$ROOT_PART" "$LUKS_NAME"
+    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT_PART" < /dev/tty
+    cryptsetup open "$ROOT_PART" "$LUKS_NAME" < /dev/tty
 
     mkfs.ext4 -F -L nixos "/dev/mapper/${LUKS_NAME}"
 
@@ -213,8 +215,8 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
     mkfs.ext4 -F -L boot "$BOOT_PART"
 
     log "Setting up LUKS2 on $ROOT_PART — you'll be prompted for a passphrase now."
-    cryptsetup luksFormat --type luks2 "$ROOT_PART"
-    cryptsetup open "$ROOT_PART" "$LUKS_NAME"
+    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT_PART" < /dev/tty
+    cryptsetup open "$ROOT_PART" "$LUKS_NAME" < /dev/tty
 
     mkfs.ext4 -F -L nixos "/dev/mapper/${LUKS_NAME}"
 

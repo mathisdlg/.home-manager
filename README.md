@@ -2,7 +2,7 @@
 
 NixOS + Home Manager (flake) configuration for the `NixosMathis` machine and the `mathisdlg` user.
 
-> Setup work for this migration lives on the `setup/first-install` branch. Merge it into `main` once you've confirmed a clean boot. Each machine install additionally gets its own local `install/<hostname>` branch (created automatically) so the personalization for that machine never lands on `setup/first-install` itself. All prompts read from `/dev/tty` rather than stdin, so they work correctly even when the script is run as `curl ... | sudo bash` (stdin in that case is the piped script itself, not your keyboard).
+> Setup work for this migration lives on the `setup/first-install` branch. Merge it into `main` once you've confirmed a clean boot. Each machine install additionally gets its own local `install/<hostname>` branch (created automatically) so the personalization for that machine never lands on `setup/first-install` itself. All prompts — including `cryptsetup`'s own LUKS passphrase prompt — read from `/dev/tty` rather than stdin, so they work correctly even when the script is run as `curl ... | sudo bash` (stdin in that case is the piped script itself, not your keyboard).
 
 ## Quick install (new machine)
 
@@ -18,7 +18,7 @@ The script will:
 2. detect whether the machine boots in UEFI or (legacy) BIOS mode,
 3. clone this repo (branch `setup/first-install`) into a temporary staging dir, create a **local branch `install/<hostname>`** off it (so `setup/first-install` itself is never modified), and **personalize** the config there: every reference to the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) gets replaced with what you typed, so `flake.nix` ends up with `nixosConfigurations.<hostname>` / `homeConfigurations.<username>` matching your input (pass `--no-rename` to skip this),
 4. **syntax-check every `.nix` file** in that staged repo — this is what catches things like a duplicate option definition in `configuration.nix` *before* anything below touches your disk,
-5. ask you for the target disk (e.g. `/dev/sda`, `/dev/nvme0n1`) and **encrypt the root partition with LUKS2** (unless you pass `--skip-partition`) — you'll be prompted for a passphrase by `cryptsetup` directly,
+5. ask you for the target disk (e.g. `/dev/sda`, `/dev/nvme0n1`) and **encrypt the root partition with LUKS2** (unless you pass `--skip-partition`) — you'll be prompted for a passphrase by `cryptsetup` directly (twice: once to set it, once to unlock it), reading from `/dev/tty` and skipping cryptsetup's own "overwrite existing signature?" confirmation (`--batch-mode`) since you already confirmed the disk wipe just above,
 6. move the staged repo into `/home/<username>/.home-manager` and symlink `/etc/nixos` to it,
 7. generate `system/hardware-configuration.nix` **directly inside the repo** with `nixos-generate-config` (this also picks up the LUKS mapping automatically, since the encrypted partition is already open at this point) — and automatically comments out `networking.networkmanager.enable` in that generated file if `configuration.nix` already sets it, since `nixos-generate-config` adds it whenever the live ISO itself uses NetworkManager, which otherwise causes a duplicate-definition build failure,
 8. put `system/boot.nix` in place — a **symlink** to the matching preset (UEFI → GRUB-on-ESP; BIOS → legacy GRUB), falling back to a plain copy if the filesystem doesn't support symlinks — and **wire it into `configuration.nix`'s `imports` automatically**, along with `hardware-configuration.nix`,
