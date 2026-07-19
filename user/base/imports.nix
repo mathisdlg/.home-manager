@@ -89,11 +89,11 @@
     browser = {
       brave.enable = true;
       firefox.enable = false;
-      firefox-dev.enable = true;
+      firefox-dev.enable = false;
     };
 
     cad = {
-      freecad.enable = true;
+      freecad.enable = false;
       kicad.enable = true;
       prusa_slicer.enable = true;
     };
