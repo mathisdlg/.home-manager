@@ -14,7 +14,6 @@
 
   networking = {
     hostName = "NixosMathis"; # Define your hostname.
-    networkmanager.enable = true;
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
