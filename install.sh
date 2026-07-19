@@ -304,6 +304,9 @@ log "Username: $USERNAME"
 # re-run with --skip-partition (disk is already partitioned/encrypted by now).
 if command -v nix >/dev/null; then
   log "Building the system closure to validate the config (this can take a while)..."
+
+  git -C "$REPO_PATH" add "system/boot.nix
+
   if ! nix --extra-experimental-features "nix-command flakes" build \
         "${REPO_PATH}#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
         --no-link --show-trace; then
