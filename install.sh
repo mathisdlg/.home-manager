@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # install.sh - Automated installer for the mathisdlg/.home-manager NixOS config
 #
-# Run this from the NixOS installer ISO (as root), network connected.
+# Run this from the NixOS installer ISO, network connected:
 #
-#   curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/setup/first-install/install.sh | bash
+#   curl -L https://raw.githubusercontent.com/mathisdlg/.home-manager/setup/first-install/install.sh | sudo bash
 #
 # The root partition is always encrypted with LUKS2. You'll be prompted
 # interactively for the passphrase by `cryptsetup` (it's never passed as a
@@ -12,8 +12,15 @@
 # The hostname/username you enter also get baked into the cloned config:
 # every reference to the placeholder hostname (NixosMathis) and placeholder
 # username (mathisdlg) in the repo gets replaced, so flake.nix ends up with a
-# nixosConfigurations/homeConfigurations entry matching what you typed,
-# without you having to hand-edit anything first.
+# nixosConfigurations/homeConfigurations entry matching what you typed. This
+# happens on a fresh local branch (install/<hostname>) so setup/first-install
+# itself never gets modified.
+#
+# The config is syntax-checked right after cloning, BEFORE any partitioning
+# happens, so a broken configuration.nix aborts the script without touching
+# your disk. It's checked again (a real build) right before nixos-install, so
+# if that fails you can fix the file and re-run with --skip-partition instead
+# of re-partitioning/re-encrypting from scratch.
 #
 # Options:
 #   --skip-partition    Don't partition/mount/encrypt anything: assumes /mnt
@@ -22,11 +29,9 @@
 #   --disk /dev/xxx      Pass the target disk instead of being prompted.
 #   --hostname NAME       Pass the hostname instead of being prompted.
 #   --user NAME           Pass the username instead of being prompted.
-#   --branch NAME         Repo branch to clone (default: setup/first-install).
+#   --branch NAME         Repo branch to clone from (default: setup/first-install).
 #   --no-rename           Skip the flake.nix/config personalization step —
-#                        keeps the placeholder hostname/username as-is in the
-#                        cloned files (useful if you've already renamed things
-#                        yourself, or the repo has moved past this scheme).
+#                        keeps the placeholder hostname/username as-is.
 
 set -euo pipefail
 
@@ -40,6 +45,7 @@ USERNAME=""
 LUKS_NAME="cryptroot"
 PLACEHOLDER_HOSTNAME="NixosMathis"
 PLACEHOLDER_USERNAME="mathisdlg"
+STAGING_DIR="/tmp/home-manager-staging"
 
 log()  { echo -e "\033[1;32m[install]\033[0m $*"; }
 warn() { echo -e "\033[1;33m[install]\033[0m $*"; }
@@ -57,7 +63,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-[[ $EUID -eq 0 ]] || die "This script must be run as root (you're on the install ISO, so you normally already are)."
+[[ $EUID -eq 0 ]] || die "This script must be run as root (use: curl ... | sudo bash)."
 
 # --- 0. Hostname / username ----------------------------------------------------
 if [[ -z "$HOSTNAME" ]]; then
@@ -71,6 +77,8 @@ fi
 [[ -n "$USERNAME" ]] || die "Username can't be empty."
 
 REPO_PATH="/mnt/home/${USERNAME}/.home-manager"
+LOCAL_BRANCH="install/${HOSTNAME}"
+CONFIG_FILE="system/configuration.nix"
 
 # --- 1. UEFI / BIOS detection -------------------------------------------------
 if [[ -d /sys/firmware/efi/efivars ]]; then
@@ -81,7 +89,67 @@ else
   log "Firmware detected: BIOS/legacy"
 fi
 
-# --- 2. Partitioning + LUKS2 encryption (unless --skip-partition) --------------
+# --- 2. Clone to a staging dir, branch off, personalize, syntax-check ----------
+# Done BEFORE partitioning on purpose: this is where a broken configuration.nix
+# (duplicate attribute, typo, etc.) gets caught, so the disk is never touched
+# if the config doesn't even parse.
+log "Cloning $REPO_URL (branch: $BRANCH) into $STAGING_DIR"
+if [[ -d "$STAGING_DIR/.git" ]]; then
+  warn "$STAGING_DIR already exists and looks like a git repo, keeping it as is."
+else
+  rm -rf "$STAGING_DIR"
+  git clone --branch "$BRANCH" "$REPO_URL" "$STAGING_DIR"
+fi
+cd "$STAGING_DIR"
+
+log "Creating local branch $LOCAL_BRANCH (so $BRANCH itself stays untouched)"
+if git rev-parse --verify "$LOCAL_BRANCH" >/dev/null 2>&1; then
+  git checkout "$LOCAL_BRANCH"
+else
+  git checkout -b "$LOCAL_BRANCH"
+fi
+
+if [[ $NO_RENAME -eq 0 ]]; then
+  RENAME_EXCLUDES=(--exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh)
+
+  if [[ "$HOSTNAME" != "$PLACEHOLDER_HOSTNAME" ]]; then
+    HOSTNAME_FILES=$(grep -rlF "${RENAME_EXCLUDES[@]}" -- "$PLACEHOLDER_HOSTNAME" . 2>/dev/null || true)
+    if [[ -n "$HOSTNAME_FILES" ]]; then
+      echo "$HOSTNAME_FILES" | while IFS= read -r f; do
+        sed -i "s/${PLACEHOLDER_HOSTNAME}/${HOSTNAME}/g" "$f"
+      done
+      log "Renamed $PLACEHOLDER_HOSTNAME -> $HOSTNAME in: $(echo "$HOSTNAME_FILES" | tr '\n' ' ')"
+    else
+      warn "No reference to $PLACEHOLDER_HOSTNAME found in the repo — check flake.nix manually so it defines nixosConfigurations.$HOSTNAME."
+    fi
+  fi
+
+  if [[ "$USERNAME" != "$PLACEHOLDER_USERNAME" ]]; then
+    USERNAME_FILES=$(grep -rlF "${RENAME_EXCLUDES[@]}" -- "$PLACEHOLDER_USERNAME" . 2>/dev/null || true)
+    if [[ -n "$USERNAME_FILES" ]]; then
+      echo "$USERNAME_FILES" | while IFS= read -r f; do
+        sed -i "s/${PLACEHOLDER_USERNAME}/${USERNAME}/g" "$f"
+      done
+      log "Renamed $PLACEHOLDER_USERNAME -> $USERNAME in: $(echo "$USERNAME_FILES" | tr '\n' ' ')"
+    else
+      warn "No reference to $PLACEHOLDER_USERNAME found in the repo — check flake.nix/home.nix manually so they define homeConfigurations.$USERNAME and the matching user account."
+    fi
+  fi
+else
+  log "--no-rename passed: leaving hostname/username references untouched."
+fi
+
+log "Syntax-checking every .nix file before touching the disk"
+if command -v nix-instantiate >/dev/null; then
+  while IFS= read -r f; do
+    nix-instantiate --parse "$f" >/dev/null || die "Syntax error in $f (see above). Fix it in the repo, then re-run this script."
+  done < <(find . -name '*.nix' -not -path './.git/*')
+  log "All .nix files parse OK."
+else
+  warn "nix-instantiate not found — skipping the pre-partition syntax check (unusual on the NixOS ISO)."
+fi
+
+# --- 3. Partitioning + LUKS2 encryption (unless --skip-partition) --------------
 if [[ $SKIP_PARTITION -eq 0 ]]; then
   if [[ -z "$DISK" ]]; then
     lsblk -d -o NAME,SIZE,MODEL
@@ -112,7 +180,7 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
     BOOT_PART="${DISK}${PART_SUFFIX}1"
     ROOT_PART="${DISK}${PART_SUFFIX}2"
 
-    mkfs.fat -F 32 -n boot "$BOOT_PART"
+    mkfs.fat -F 32 -n BOOT "$BOOT_PART"
 
     log "Setting up LUKS2 on $ROOT_PART — you'll be prompted for a passphrase now."
     cryptsetup luksFormat --type luks2 "$ROOT_PART"
@@ -122,7 +190,7 @@ if [[ $SKIP_PARTITION -eq 0 ]]; then
 
     mount "/dev/mapper/${LUKS_NAME}" /mnt
     mkdir -p /mnt/boot
-    mount /dev/disk/by-label/boot /mnt/boot
+    mount /dev/disk/by-label/BOOT /mnt/boot
   else
     log "Partitioning MBR (unencrypted /boot + LUKS2 root, legacy GRUB on the MBR)"
     parted -s "$DISK" -- mklabel msdos
@@ -150,13 +218,15 @@ else
   mountpoint -q /mnt || die "/mnt is not mounted."
 fi
 
-# --- 3. Clone the repo into /home/$USERNAME/.home-manager ----------------------
-log "Cloning $REPO_URL (branch: $BRANCH) into $REPO_PATH"
+# --- 4. Move the staged (cloned + personalized) repo into place ----------------
+log "Moving the prepared repo into $REPO_PATH"
 mkdir -p "$(dirname "$REPO_PATH")"
 if [[ -d "$REPO_PATH/.git" ]]; then
-  warn "$REPO_PATH already exists and looks like a git repo, keeping it as is."
+  warn "$REPO_PATH already exists and looks like a git repo, keeping it as is (staged copy left at $STAGING_DIR)."
 else
-  git clone --branch "$BRANCH" "$REPO_URL" "$REPO_PATH"
+  mkdir -p "$REPO_PATH"
+  cp -a "$STAGING_DIR/." "$REPO_PATH/"
+  rm -rf "$STAGING_DIR"
 fi
 cd "$REPO_PATH"
 
@@ -169,48 +239,16 @@ else
   ln -sfn "/home/${USERNAME}/.home-manager" /mnt/etc/nixos
 fi
 
-# --- 4. Personalize flake.nix / configuration.nix / home.nix -------------------
-# Every occurrence of the placeholder hostname/username in the repo gets
-# swapped for what you entered, so flake.nix defines nixosConfigurations.<hostname>
-# and homeConfigurations.<username> instead of the originals, and configuration.nix
-# / home.nix reference the right user throughout.
-if [[ $NO_RENAME -eq 0 ]]; then
-  RENAME_EXCLUDES=(--exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh)
-
-  if [[ "$HOSTNAME" != "$PLACEHOLDER_HOSTNAME" ]]; then
-    HOSTNAME_FILES=$(grep -rlF "${RENAME_EXCLUDES[@]}" -- "$PLACEHOLDER_HOSTNAME" . 2>/dev/null || true)
-    if [[ -n "$HOSTNAME_FILES" ]]; then
-      echo "$HOSTNAME_FILES" | while IFS= read -r f; do
-        sed -i "s/${PLACEHOLDER_HOSTNAME}/${HOSTNAME}/g" "$f"
-      done
-      log "Renamed $PLACEHOLDER_HOSTNAME -> $HOSTNAME in: $(echo "$HOSTNAME_FILES" | tr '\n' ' ')"
-    else
-      warn "No reference to $PLACEHOLDER_HOSTNAME found in the repo — check flake.nix manually so it defines nixosConfigurations.$HOSTNAME."
-    fi
-  fi
-
-  if [[ "$USERNAME" != "$PLACEHOLDER_USERNAME" ]]; then
-    USERNAME_FILES=$(grep -rlF "${RENAME_EXCLUDES[@]}" -- "$PLACEHOLDER_USERNAME" . 2>/dev/null || true)
-    if [[ -n "$USERNAME_FILES" ]]; then
-      echo "$USERNAME_FILES" | while IFS= read -r f; do
-        sed -i "s/${PLACEHOLDER_USERNAME}/${USERNAME}/g" "$f"
-      done
-      log "Renamed $PLACEHOLDER_USERNAME -> $USERNAME in: $(echo "$USERNAME_FILES" | tr '\n' ' ')"
-    else
-      warn "No reference to $PLACEHOLDER_USERNAME found in the repo — check flake.nix/home.nix manually so they define homeConfigurations.$USERNAME and the matching user account."
-    fi
-  fi
-else
-  log "--no-rename passed: leaving hostname/username references untouched in the cloned repo."
-fi
-
 # --- 5. hardware-configuration.nix ---------------------------------------------
-# Run with the LUKS device already open (see step 2): nixos-generate-config
-# detects the mapper and automatically adds the matching
-# boot.initrd.luks.devices."cryptroot".device entry to this file.
+# Written straight into the repo (we're already cd'd into $REPO_PATH), so it's
+# tracked as part of the project, not left floating outside it. Run with the
+# LUKS device already open (step 3): nixos-generate-config detects the mapper
+# and automatically adds the matching boot.initrd.luks.devices."cryptroot"
+# entry here too.
 log "Generating system/hardware-configuration.nix"
 mkdir -p system
 nixos-generate-config --root /mnt --show-hardware-config > system/hardware-configuration.nix
+log "Written to ${REPO_PATH}/system/hardware-configuration.nix"
 
 if ! grep -q "boot.initrd.luks.devices" system/hardware-configuration.nix; then
   warn "hardware-configuration.nix doesn't mention boot.initrd.luks.devices."
@@ -218,7 +256,19 @@ if ! grep -q "boot.initrd.luks.devices" system/hardware-configuration.nix; then
   warn '  boot.initrd.luks.devices."'"${LUKS_NAME}"'".device = "/dev/disk/by-uuid/<UUID of the LUKS partition, not the mapper>";'
 fi
 
-# --- 6. Bootloader preset selection --------------------------------------------
+# nixos-generate-config adds networking.networkmanager.enable = true; to the
+# hardware config whenever the live ISO itself is using NetworkManager for its
+# own networking — if configuration.nix already sets that option (as this repo's
+# does), Nix fails to evaluate with a duplicate-definition error ("... is
+# already defined at system/configuration.nix:N"). Comment out the generated
+# copy rather than touching the one already maintained by hand.
+if grep -q "networking\.networkmanager\.enable" system/hardware-configuration.nix \
+   && grep -q "networking\.networkmanager\.enable" "$CONFIG_FILE"; then
+  warn "networking.networkmanager.enable is already set in $CONFIG_FILE — commenting out the duplicate nixos-generate-config added to hardware-configuration.nix."
+  sed -i -E 's/^([[:space:]]*)(networking\.networkmanager\.enable.*)$/\1# (duplicate, already set in configuration.nix) \2/' system/hardware-configuration.nix
+fi
+
+# --- 6. Bootloader preset: put system/boot.nix in place, wire up the imports --
 if [[ "$BOOT_MODE" == "uefi" ]]; then
   BOOT_PRESET="boot-uefi-grub.nix"
 else
@@ -229,26 +279,66 @@ if [[ ! -f "system/$BOOT_PRESET" ]]; then
   die "system/$BOOT_PRESET not found in the repo. Make sure you have the latest version (git pull) of the $BRANCH branch."
 fi
 
-cp "system/$BOOT_PRESET" system/boot.nix
+(
+  cd system
+  rm -f boot.nix
+  if ln -s "$BOOT_PRESET" boot.nix 2>/dev/null; then
+    log "Linked system/boot.nix -> system/$BOOT_PRESET"
+  else
+    warn "Symlinking failed (unsupported filesystem?) — falling back to a plain copy."
+    cp "$BOOT_PRESET" boot.nix
+  fi
+)
 
 if [[ "$BOOT_MODE" == "bios" ]]; then
-  log "Setting boot.loader.grub.device to $DISK in system/boot.nix"
-  sed -i "s#__GRUB_DEVICE__#${DISK}#" system/boot.nix
+  log "Setting boot.loader.grub.device to $DISK in system/$BOOT_PRESET"
+  sed -i "s#__GRUB_DEVICE__#${DISK}#" "system/$BOOT_PRESET"
 fi
 
-# Make sure configuration.nix actually imports boot.nix and hardware-configuration.nix,
-# without duplicating the imports if they're already there.
-CONFIG_FILE="system/configuration.nix"
-for imp in "./hardware-configuration.nix" "./boot.nix"; do
-  if ! grep -q "$imp" "$CONFIG_FILE"; then
-    warn "system/configuration.nix doesn't import $imp yet — add it to the 'imports' list manually before continuing."
+# Make sure configuration.nix actually imports boot.nix and hardware-configuration.nix
+# — added automatically here rather than just warned about.
+add_import_if_missing() {
+  local file="$1" importpath="$2"
+  if grep -qF "$importpath" "$file"; then
+    return 0
   fi
-done
+  if grep -q 'imports[[:space:]]*=[[:space:]]*\[' "$file"; then
+    sed -i "0,/imports[[:space:]]*=[[:space:]]*\[/s//&\n    ${importpath}/" "$file"
+    log "Added ${importpath} to imports in $file"
+  else
+    warn "$file has no 'imports = [ ... ];' block — add '${importpath}' to it manually."
+  fi
+}
+add_import_if_missing "$CONFIG_FILE" "./hardware-configuration.nix"
+add_import_if_missing "$CONFIG_FILE" "./boot.nix"
 
 log "Hostname: $HOSTNAME"
 log "Username: $USERNAME"
 
-# --- 7. Install -------------------------------------------------------------------
+# --- 7. Validate the full configuration before installing ----------------------
+# Catches build-level errors (e.g. two modules setting the same option) that
+# the earlier syntax check couldn't see, while it's still cheap to fix and
+# re-run with --skip-partition (disk is already partitioned/encrypted by now).
+if command -v nix >/dev/null; then
+  log "Building the system closure to validate the config (this can take a while)..."
+  if ! nix --extra-experimental-features "nix-command flakes" build \
+        "${REPO_PATH}#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
+        --no-link --show-trace; then
+    die "Configuration failed to build. Fix system/configuration.nix (see the error above), then re-run with --skip-partition --hostname ${HOSTNAME} --user ${USERNAME} to retry without re-partitioning."
+  fi
+  log "Build OK."
+else
+  warn "nix command not found — skipping the pre-install build validation."
+fi
+
+# --- 8. Commit the personalization on the local branch --------------------------
+if [[ -n "$(git status --porcelain)" ]]; then
+  git add -A
+  git commit -q -m "Personalize for host=${HOSTNAME} user=${USERNAME} (LUKS2, ${BOOT_MODE} boot)"
+  log "Committed changes to local branch $(git rev-parse --abbrev-ref HEAD) (not pushed, and $BRANCH is untouched)."
+fi
+
+# --- 9. Install -------------------------------------------------------------------
 log "Running nixos-install --flake $REPO_PATH#$HOSTNAME"
 nixos-install --flake "${REPO_PATH}#${HOSTNAME}"
 
