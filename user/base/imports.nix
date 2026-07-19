@@ -73,11 +73,11 @@
   services = {
     art = {
       blender.enable = false;
-      darktable.enable = true;
-      gimp.enable = true;
-      gphoto2.enable = true;
-      imagemagick.enable = true;
-      krita.enable = true;
+      darktable.enable = false;
+      gimp.enable = false;
+      gphoto2.enable = false;
+      imagemagick.enable = false;
+      krita.enable = false;
     };
 
     baobab.enable = true;
@@ -85,18 +85,18 @@
     browser = {
       brave.enable = true;
       firefox.enable = false;
-      firefox-dev.enable = true;
+      firefox-dev.enable = false;
     };
 
     cad = {
-      freecad.enable = true;
-      kicad.enable = true;
-      prusa_slicer.enable = true;
+      freecad.enable = false;
+      kicad.enable = false;
+      prusa_slicer.enable = false;
     };
 
     communication = {
-      discord.enable = true;
-      thunderbird.enable = true;
+      discord.enable = false;
+      thunderbird.enable = false;
     };
 
     component = {
@@ -105,7 +105,7 @@
     editor = {
       libreoffice.enable = true;
       vscodium = {
-        enable = true;
+        enable = false;
         package = pkgs.vscode;
       };
       neovim.enable = true;
@@ -116,12 +116,12 @@
     };
 
     games = {
-      beammp.enable = true;
-      heroic.enable = true;
-      puzzles.enable = true;
-      minecraft.enable = true;
+      beammp.enable = false;
+      heroic.enable = false;
+      puzzles.enable = false;
+      minecraft.enable = false;
       mines.enable = true;
-      osu.enable = true;
+      osu.enable = false;
     };
 
     ia = {
