@@ -10,8 +10,8 @@
   ];
 
   home = {
-    username = "mathisdlg";
-    homeDirectory = "/home/mathisdlg";
+    username = "mathis";
+    homeDirectory = "/home/mathis";
     stateVersion = "23.11"; # Please read the comment before changing.
 
     packages = with pkgs; [ ];
@@ -28,7 +28,7 @@
 
       settings = {
         user = {
-          name = "mathisdlg";
+          name = "mathis";
           email = "delage.mathis.1@gmail.com";
         };
 

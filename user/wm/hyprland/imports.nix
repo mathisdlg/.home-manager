@@ -37,9 +37,9 @@
           latitude = "45.78N";
           longitude = "3.1E";
           wallpapersDir = {
-            day = "/home/mathisdlg/.wallpapers/day";
-            night = "/home/mathisdlg/.wallpapers/night";
-            both = "/home/mathisdlg/.wallpapers/both";
+            day = "/home/mathis/.wallpapers/day";
+            night = "/home/mathis/.wallpapers/night";
+            both = "/home/mathis/.wallpapers/both";
           };
         };
       };

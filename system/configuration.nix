@@ -16,7 +16,7 @@
   ];
 
   networking = {
-    hostName = "NixosMathis"; # Define your hostname.
+    hostName = "NixosMathisLaptop"; # Define your hostname.
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
@@ -99,9 +99,9 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mathisdlg = {
+  users.users.mathis = {
     isNormalUser = true;
-    description = "mathisdlg";
+    description = "mathis";
     extraGroups = [
       "networkmanager"
       "wheel"
