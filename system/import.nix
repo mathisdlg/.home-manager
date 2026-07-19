@@ -75,7 +75,7 @@
     };
 
     zram = {
-        enable = true;
+        enable = false;
         size = 100;
     };
   };
