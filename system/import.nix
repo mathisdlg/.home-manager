@@ -38,14 +38,14 @@
         # ── Target ───────────────────────────────────────────────────
         target = {
           path        = "/disks/save/btrbk";  # must be on a btrfs filesystem
-          preserveMin = "no";
-          preserve    = "30d 10w 6m";
+          preserveMin = "1w";
+          preserve    = "30d";
         };
 
         # ── Retention (global defaults for local snapshots) ──────────
         retention = {
-          preserveMin = "2d";
-          preserve    = "14d 4w";
+          preserveMin = "3d";
+          preserve    = "7d";
         };
 
         # ── Scheduling ───────────────────────────────────────────────
