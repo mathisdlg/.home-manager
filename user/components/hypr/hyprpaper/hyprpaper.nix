@@ -120,9 +120,8 @@ in {
     systemd.user.services.hyprpaper-day-night-wallpaper = {
       Unit = {
         Description = "Auto wallpaper switcher (sun-based)";
-        After = [ "graphical-session.target" "hyprland-session.target" "hyprpaper.service" ];
+        After = [ "graphical-session.target" "hyprland-session.target" ];
         Wants = [ "hyprland-session.target"];
-        Requires = [ "hyprpaper.service" ];
         PartOf = [ "graphical-session.target" ];
       };
 
