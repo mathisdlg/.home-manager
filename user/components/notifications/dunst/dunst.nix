@@ -72,7 +72,7 @@ in
           show_indicators = "yes";
           shrink = "no";
           word_wrap = "yes";
-          browser = "/usr/bin/env firefox-devedition -new-tab";
+          browser = config.services.browser.notifyCommand;
         };
 
         fullscreen_delay_everything = {

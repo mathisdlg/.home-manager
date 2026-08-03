@@ -2,24 +2,36 @@
   config,
   pkgs,
   lib,
+  globals,
   ...
-}: {
+}:
+let
+  # Prefer a package's declared main program over its attribute name — e.g.
+  # vscodium's package exposes "codium", not "code". Metadata-only (no build
+  # triggered), so this doesn't force-install a package whose module is off.
+  binOf = pkg: pkg.meta.mainProgram or pkg.pname;
+in
+{
   config = {
     wayland.windowManager.hyprland = {
       settings = {
         "$mainMod" = "SUPER";
         "$shiftMod" = "SUPER_SHIFT";
 
-        # Applications
-        "$terminal" = "kitty";
-        "$fileManager" = "nautilus";
-        "$menu" = "wofi --show drun";
-        "$browser" = "firefox-devedition";
-        "$musicPlayer" = "mpv --shuffle --loop-playlist --no-video --input-ipc-server=/tmp/mpvsocket /disks/data/Music/Musique";
-        "$lock" = "wlogout";
-        "$colorPicker" = "hyprpicker -a -r -n";
-        "$codeEditor" = "code";
-        "$discord" = "discord & disown";
+        # Applications — commands are derived from each app's own module
+        # (package choice, or which of several alternatives is enabled)
+        # instead of being retyped here, so they can't silently drift out of
+        # sync with it (this file has had to be hand-fixed after browser and
+        # code-editor package changes before — see git history).
+        "$terminal" = binOf pkgs.kitty;
+        "$fileManager" = config.services.files.command;
+        "$menu" = "${binOf pkgs.wofi} --show drun";
+        "$browser" = config.services.browser.command;
+        "$musicPlayer" = "${binOf pkgs.mpv} --shuffle --loop-playlist --no-video --input-ipc-server=/tmp/mpvsocket ${globals.musicDir}";
+        "$lock" = binOf pkgs.wlogout;
+        "$colorPicker" = "${binOf pkgs.hyprpicker} -a -r -n";
+        "$codeEditor" = binOf config.services.editor.vscodium.package;
+        "$discord" = "${binOf pkgs.discord} & disown";
 
         bind = [
           "$mainMod, RETURN, exec, $terminal"
@@ -28,8 +40,9 @@
           "$mainMod, V, togglefloating,"
           "bindr=SUPER, SUPER_L, exec, $menu"
           "$mainMod, J, layoutmsg, togglesplit"
-          "CTRL SHIFT, Escape, exec, missioncenter"
+          "CTRL SHIFT, Escape, exec, ${config.services.system-monitor.command}"
           "$mainMod, L, exec, $lock"
+          "$mainMod SHIFT, N, exec, ${config.services.themes.dayNight.toggleCommand}"
           "$mainMod, T, togglegroup"
 
           # Move in groups with mainMod + SHIFT + [arrow keys]

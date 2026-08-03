@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, globals, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
@@ -16,7 +16,7 @@
   ];
 
   networking = {
-    hostName = "NixosMathisLaptop"; # Define your hostname.
+    hostName = globals.hostName;
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
@@ -29,28 +29,25 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Set your time zone.
-  time.timeZone = "Europe/Paris";
+  time.timeZone = globals.timeZone;
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "fr_FR.UTF-8";
+    defaultLocale = globals.locale;
     extraLocaleSettings = {
-      LC_ADDRESS = "fr_FR.UTF-8";
-      LC_IDENTIFICATION = "fr_FR.UTF-8";
-      LC_MEASUREMENT = "fr_FR.UTF-8";
-      LC_MONETARY = "fr_FR.UTF-8";
-      LC_NAME = "fr_FR.UTF-8";
-      LC_NUMERIC = "fr_FR.UTF-8";
-      LC_PAPER = "fr_FR.UTF-8";
-      LC_TELEPHONE = "fr_FR.UTF-8";
-      LC_TIME = "fr_FR.UTF-8";
+      LC_ADDRESS = globals.locale;
+      LC_IDENTIFICATION = globals.locale;
+      LC_MEASUREMENT = globals.locale;
+      LC_MONETARY = globals.locale;
+      LC_NAME = globals.locale;
+      LC_NUMERIC = globals.locale;
+      LC_PAPER = globals.locale;
+      LC_TELEPHONE = globals.locale;
+      LC_TIME = globals.locale;
     };
   };
 
   services = {
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = false;
-
     xserver = {
       enable = true;
 
@@ -77,6 +74,7 @@
       };
       pulse.enable = true;
       jack.enable = true;
+      wireplumber.enable = true; # explicit, though this is nixpkgs' own default when pipewire is on
     };
 
     pulseaudio.enable = false;
@@ -88,6 +86,11 @@
 
     udisks2.enable = true;
     gvfs.enable = true; # Optional but recommended for file manager compatibility
+
+    upower.enable = true;
+    power-profiles-daemon.enable = true;
+
+    blueman.enable = true;
   };
 
   # Configure console keymap
@@ -99,9 +102,9 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mathis = {
+  users.users.${globals.username} = {
     isNormalUser = true;
-    description = "mathis";
+    description = globals.fullName;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -145,37 +148,6 @@
       "QT_QPA_PLATFORM" = "wayland";
       "GDK_BACKEND" = "wayland";
     };
-
-    gnome = {
-      excludePackages = with pkgs; [
-        gnome-photos
-        gnome-tour
-        gnome-music
-        gnome-font-viewer
-        gnome-connections
-        gnome-terminal
-        gnome-console
-        gnome-weather
-        gnome-calendar
-        gnome-characters
-        gnome-clocks
-        gnome-contacts
-        gnome-color-manager
-        gnome-logs
-        gnome-maps
-        gnome-system-monitor
-        seahorse # password manager
-        gedit # text editor
-        cheese # webcam tool
-        snapshot # Camera tool
-        epiphany # web browser
-        geary # email reader
-        evince # document viewer
-        totem # video player
-          # loupe # image viewer
-        baobab # disk usage analyzer
-      ];
-    };
   };
 
   programs = {
@@ -188,6 +160,25 @@
     # Steam
     steam = {
       enable = false;
+    };
+  };
+
+  # GTK4/libadwaita apps (Nautilus) don't read dconf's color-scheme key
+  # directly on a non-GNOME session like Hyprland — they ask the XDG
+  # Desktop Portal's Settings interface instead. Without a portal backend
+  # that actually implements that interface, day/night's dconf write (see
+  # ../user/themes/day-night/day-night.nix) has nowhere to go: it updates
+  # dconf correctly, but nothing relays it to already-running or
+  # newly-launched apps, so they silently keep whatever they started with.
+  # xdg-desktop-portal-gtk is that backend (it watches GSettings/dconf
+  # itself and serves it over the portal) — hyprland's own portal handles
+  # screenshare/screenshot, not Settings, so both are needed together.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config = {
+      hyprland.default = [ "hyprland" "gtk" ];
+      common.default = [ "gtk" ];
     };
   };
 

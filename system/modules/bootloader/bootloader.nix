@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  globals,
   ...
 }:
 with lib;
@@ -25,7 +26,7 @@ in
           # useOSProber = true;
           # devices = [ "nodev" ];
           # efiInstallAsRemovable = false;
-          theme = "/home/mathis/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
+          theme = "${globals.repoPath}/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
         };
       };
 

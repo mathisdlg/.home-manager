@@ -22,6 +22,10 @@ in
         ".config/wlogout/layout".source = ./config/layout;
         ".config/wlogout/icons".source = ./config/icons;
         ".config/wlogout/style.css".source = ./config/style.css;
+
+        # Initial default; overwritten at runtime by
+        # ../../themes/day-night/day-night.nix's script.
+        ".config/wlogout/colors.css".source = ./config/colors-night.css;
       };
     };
   };

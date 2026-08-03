@@ -15,6 +15,9 @@ in
     home = {
       packages = with pkgs; [
         hyprpanel
+
+        wireplumber
+        libgtop
       ];
 
       file = {

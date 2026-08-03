@@ -16,7 +16,7 @@ The script will:
 
 1. ask for the **hostname** and **username** you want to use,
 2. detect whether the machine boots in UEFI or (legacy) BIOS mode,
-3. clone this repo (branch `setup/first-install`) into a temporary staging dir, create a **local branch `install/<hostname>`** off it (so `setup/first-install` itself is never modified), and **personalize** the config there: every reference to the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) gets replaced with what you typed, so `flake.nix` ends up with `nixosConfigurations.<hostname>` / `homeConfigurations.<username>` matching your input (pass `--no-rename` to skip this),
+3. clone this repo (branch `setup/first-install`) into a temporary staging dir, create a **local branch `install/<hostname>`** off it (so `setup/first-install` itself is never modified), and **personalize** the config there: every reference to the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) gets replaced with what you typed. In practice that means editing `globals.nix` — every module (system and home-manager alike) reads `hostName`/`username`/derived paths from there, so `flake.nix` ends up with `nixosConfigurations.<hostname>` / `homeConfigurations.<username>` matching your input just by evaluating that one file (pass `--no-rename` to skip this),
 4. **syntax-check every `.nix` file** in that staged repo — this is what catches things like a duplicate option definition in `configuration.nix` *before* anything below touches your disk,
 5. ask you for the target disk (e.g. `/dev/sda`, `/dev/nvme0n1`) and **encrypt the root partition with LUKS2** (unless you pass `--skip-partition`) — you'll be prompted for a passphrase by `cryptsetup` directly (twice: once to set it, once to unlock it), reading from `/dev/tty` and skipping cryptsetup's own "overwrite existing signature?" confirmation (`--batch-mode`) since you already confirmed the disk wipe just above,
 6. move the staged repo into `/home/<username>/.home-manager` and symlink `/etc/nixos` to it,
@@ -57,14 +57,15 @@ Create a local branch so `setup/first-install` itself never gets modified:
 git checkout -b install/<hostname>
 ```
 
-Replace every occurrence of the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) with your own, across the whole repo except `README.md`, `flake.lock` and `install.sh`:
+Replace every occurrence of the placeholder hostname (`NixosMathis`) and placeholder username (`mathisdlg`) with your own. Since every module reads these from `globals.nix` (via the `globals` special-arg — see that file's comments) instead of hardcoding them, this now only needs to touch that one file:
 
 ```bash
-grep -rlF --exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh -- NixosMathis . | xargs -r sed -i 's/NixosMathis/<hostname>/g'
-grep -rlF --exclude-dir=.git --exclude=README.md --exclude=flake.lock --exclude=install.sh -- mathisdlg . | xargs -r sed -i 's/mathisdlg/<username>/g'
+sed -i "s/NixosMathis/<hostname>/g; s/mathisdlg/<username>/g" globals.nix
 ```
 
-This is what turns `flake.nix`'s `nixosConfigurations.NixosMathis` / `homeConfigurations.mathisdlg` into entries matching your own hostname/username, and updates `configuration.nix` / `home.nix` to reference the right user throughout.
+(the wider `grep -rlF ... | xargs sed` sweep across the repo still works too, and is what `install.sh` uses, but with the values centralized it will now only ever find a match inside `globals.nix`)
+
+This is what turns `flake.nix`'s `nixosConfigurations.${globals.hostName}` / `homeConfigurations.${globals.username}` into entries matching your own hostname/username, and every other module (`configuration.nix`, `home.nix`, the bootloader theme path, wallpaper dirs, darktable's import paths, etc.) picks up the same values automatically.
 
 ### 3. Syntax-check before you touch the disk
 
@@ -228,7 +229,8 @@ sudo nixos-rebuild switch --flake .#<hostname>
 
 | Path | Role |
 | --- | --- |
-| `flake.nix` | Entry point: defines `nixosConfigurations.NixosMathis` and `homeConfigurations.mathisdlg` |
+| `globals.nix` | Single source of truth for `hostName`, `username` and values derived from them — edit this to personalize a clone (see the file's own comments) |
+| `flake.nix` | Entry point: defines `nixosConfigurations.${globals.hostName}` and `homeConfigurations.${globals.username}`, passing `globals` to every module via `specialArgs`/`extraSpecialArgs` |
 | `system/configuration.nix` | NixOS system config |
 | `system/hardware-configuration.nix` | Machine-specific, generated — **don't commit another machine's version** |
 | `system/boot-uefi-grub.nix` / `system/boot-bios-grub.nix` | Ready-to-use bootloader presets |

@@ -24,11 +24,13 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       unstablePkgs = nixpkgs-unstable.legacyPackages.${system};
+      globals = import ./globals.nix;
     in
     {
       nixosConfigurations = {
-        NixosMathisLaptop = nixLib.nixosSystem {
+        ${globals.hostName} = nixLib.nixosSystem {
           inherit system;
+          specialArgs = { inherit globals; };
           modules = [
             ./system/configuration.nix
           ];
@@ -36,12 +38,12 @@
       };
 
       homeConfigurations = {
-        mathis = homeCfg {
+        ${globals.username} = homeCfg {
           inherit pkgs;
           modules = [ 
             ./user/base/home.nix 
           ];
-          extraSpecialArgs = { inherit unstablePkgs; };
+          extraSpecialArgs = { inherit unstablePkgs globals; };
         };
       };
     };

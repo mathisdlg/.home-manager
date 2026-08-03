@@ -2,6 +2,7 @@
   config, 
   pkgs, 
   unstablePkgs, 
+  globals,
   ... 
 }:
 {
@@ -10,8 +11,8 @@
   ];
 
   home = {
-    username = "mathis";
-    homeDirectory = "/home/mathis";
+    username = globals.username;
+    homeDirectory = globals.homeDirectory;
     stateVersion = "23.11"; # Please read the comment before changing.
 
     packages = with pkgs; [ ];
@@ -28,8 +29,8 @@
 
       settings = {
         user = {
-          name = "mathis";
-          email = "delage.mathis.1@gmail.com";
+          name = globals.fullName;
+          email = globals.gitEmail;
         };
 
         safe.directory = "*";

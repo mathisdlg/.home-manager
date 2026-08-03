@@ -1,3 +1,5 @@
+@import "colors.css";
+
 * {
     border: none;
     border-radius: 10px;
@@ -8,7 +10,7 @@
 }
 
 window#waybar {
-    background-color: rgb(27, 27, 27);
+    background-color: @shell-bg;
     border-radius: 10px;
 }
 
@@ -17,8 +19,8 @@ window#waybar.hidden {
 }
 
 tooltip {
-    background: #205376;
-    color: white;
+    background: @tooltip-bg;
+    color: @tooltip-fg;
     border-radius: 10px;
     border-width: 0px;
 }
@@ -39,7 +41,7 @@ button:hover {
     padding: 0 5px;
     border-radius: 10px;
     background-color: transparent;
-    color: #ffffff;
+    color: @shell-fg;
 }
 
 #workspaces button:hover {
@@ -78,7 +80,7 @@ button:hover {
 #window,
 #custom-power {
     padding: 0 10px;
-    color: #ffffff;
+    color: @shell-fg;
 
 }
 

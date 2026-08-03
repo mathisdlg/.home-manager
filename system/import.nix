@@ -5,6 +5,8 @@
 
     ./modules/bootloader/bootloader.nix
     
+    ./modules/display-manager/display-manager.nix
+
     ./modules/openrgb/openrgb.nix
 
     ./modules/zram/zram.nix
@@ -69,6 +71,8 @@
     };
 
     bootloader-mod.enable = true;
+
+    displayManager.default = "gdm";
 
     rgb.openrgb = {
         enable = false;

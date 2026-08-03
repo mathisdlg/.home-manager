@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, globals, ... }:
 {
   imports = [
     ./config/animation.nix
@@ -37,9 +37,9 @@
           latitude = "45.78N";
           longitude = "3.1E";
           wallpapersDir = {
-            day = "/home/mathis/.wallpapers/day";
-            night = "/home/mathis/.wallpapers/night";
-            both = "/home/mathis/.wallpapers/both";
+            day = "${globals.wallpaperDir}/day";
+            night = "${globals.wallpaperDir}/night";
+            both = "${globals.wallpaperDir}/both";
           };
         };
       };

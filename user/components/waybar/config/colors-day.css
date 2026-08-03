@@ -1,0 +1,6 @@
+/* Day shell colours for waybar. See colors-night.css for what this does
+   and doesn't cover. */
+@define-color shell-bg #f0f0f0;
+@define-color shell-fg #1a1a1a;
+@define-color tooltip-bg #eaf4fb;
+@define-color tooltip-fg #10344a;

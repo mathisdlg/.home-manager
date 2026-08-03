@@ -15,6 +15,7 @@
 
     ../baobab/baobab.nix
 
+    ../browser/browser.nix
     ../browser/brave/brave.nix
     ../browser/firefox/firefox.nix
     ../browser/firefox/firefox-dev.nix
@@ -30,7 +31,10 @@
     ../editor/vscodium/vscodium.nix
     ../editor/neovim/neovim.nix
 
+    ../files/files.nix
+    ../files/dolphin/dolphin.nix
     ../files/nautilus/nautilus.nix
+    ../files/thunar/thunar.nix
 
     ../games/beammp/beammp.nix
     ../games/heroic/heroic.nix
@@ -54,6 +58,7 @@
 
     ../scripts/scripts.nix
 
+    ../system-monitor/system-monitor.nix
     ../system-monitor/gnome-system-monitor/gnome-system-monitor.nix
     ../system-monitor/mission-center/mission-center.nix
 
@@ -63,6 +68,7 @@
     ../themes/fonts/jetbrains/jetbrains.nix
     ../themes/fonts/nerd/nerd.nix
     ../themes/fonts/noto/noto.nix
+    ../themes/day-night/day-night.nix
     ../themes/themes/themes.nix
 
     ../usb/usb.nix
@@ -73,7 +79,7 @@
   services = {
     art = {
       blender.enable = false;
-      darktable.enable = false;
+      darktable.enable = true;
       gimp.enable = false;
       gphoto2.enable = false;
       imagemagick.enable = false;
@@ -83,6 +89,8 @@
     baobab.enable = true;
 
     browser = {
+      default = "brave";
+
       brave.enable = true;
       firefox.enable = false;
       firefox-dev.enable = false;
@@ -112,7 +120,11 @@
     };
 
     files = {
+      default = "nautilus";
+
+      dolphin.enable = false;
       nautilus.enable = true;
+      thunar.enable = false;
     };
 
     games = {
@@ -146,6 +158,8 @@
     scripts.enable = true;
 
     system-monitor = {
+      default = "mission-center";
+
       gnome-system-monitor.enable = false;
       mission-center.enable = true;
     };
@@ -161,6 +175,13 @@
         nerd.enable = true;
         noto.enable = true;
       };
+
+      dayNight = {
+        enable = true;
+        latitude = "45.78N";
+        longitude = "3.1E";
+      };
+
       themes.enable = true;
     };
 

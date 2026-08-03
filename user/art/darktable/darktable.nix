@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  globals,
   ...
 }:
 with lib;
@@ -19,7 +20,7 @@ in
     home.file.".config/darktable/darktablerc".text = ''
       ui_last/theme=darktable-icons-grey
 
-      ui_last/import_custom_places=/home/mathis/Data/Photo,/home/mathis/Data/Photo/Conv
+      ui_last/import_custom_places=${globals.homeDirectory}/Data/Photo,${globals.homeDirectory}/Data/Photo/Conv
 
       context_help/url=https://docs.darktable.org/usermanual/
       context_help/use_default_url=true
