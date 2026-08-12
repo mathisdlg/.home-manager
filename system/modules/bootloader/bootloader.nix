@@ -7,10 +7,10 @@
 }:
 with lib;
 let
-  cfg = config.services.bootloader-mod;
+  cfg = config.services.bootloader_mod;
 in
 {
-  options.services.bootloader-mod.enable = mkEnableOption "Enable grub bootloader with theme.";
+  options.services.bootloader_mod.enable = mkEnableOption "Enable grub bootloader with theme.";
 
   config = mkIf cfg.enable {
     boot = {

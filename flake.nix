@@ -19,18 +19,19 @@
       ...
     }:
     let
-      nixLib = nixpkgs.lib;
-      homeCfg = home-manager.lib.homeManagerConfiguration;
+      nix_lib = nixpkgs.lib;
+      home_cfg = home-manager.lib.homeManagerConfiguration;
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      unstablePkgs = nixpkgs-unstable.legacyPackages.${system};
+      unstable_pkgs = nixpkgs-unstable.legacyPackages.${system};
       globals = import ./globals.nix;
+      module_config = import ./modules.nix { inherit pkgs globals; };
     in
     {
       nixosConfigurations = {
-        ${globals.hostName} = nixLib.nixosSystem {
+        ${globals.hostName} = nix_lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit globals; };
+          specialArgs = { inherit globals module_config; };
           modules = [
             ./system/configuration.nix
           ];
@@ -38,12 +39,12 @@
       };
 
       homeConfigurations = {
-        ${globals.username} = homeCfg {
+        ${globals.username} = home_cfg {
           inherit pkgs;
           modules = [ 
             ./user/base/home.nix 
           ];
-          extraSpecialArgs = { inherit unstablePkgs globals; };
+          extraSpecialArgs = { inherit unstable_pkgs globals module_config; };
         };
       };
     };

@@ -167,7 +167,7 @@
   # directly on a non-GNOME session like Hyprland — they ask the XDG
   # Desktop Portal's Settings interface instead. Without a portal backend
   # that actually implements that interface, day/night's dconf write (see
-  # ../user/themes/day-night/day-night.nix) has nowhere to go: it updates
+  # ../user/desktop/themes/day_night/day_night.nix) has nowhere to go: it updates
   # dconf correctly, but nothing relays it to already-running or
   # newly-launched apps, so they silently keep whatever they started with.
   # xdg-desktop-portal-gtk is that backend (it watches GSettings/dconf

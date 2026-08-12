@@ -1,5 +1,5 @@
 # Lets you switch login/display manager with a one-line change, same idea
-# as browser.nix/system-monitor.nix/files.nix — except this one wraps
+# as browser.nix/system_monitor.nix/files.nix — except this one wraps
 # NixOS's own real services.displayManager.<name> options (gdm/sddm/
 # ly) rather than options this repo declares itself, since NixOS
 # only allows exactly one display manager enabled at a time.
@@ -26,7 +26,7 @@ in
       that option is set to elsewhere — switching is a one-line change.
 
       Only one can actually be enabled at a time (NixOS asserts this), so
-      unlike browser.nix/system-monitor.nix/files.nix this doesn't leave
+      unlike browser.nix/system_monitor.nix/files.nix this doesn't leave
       the others alone: picking a new default takes over from whichever
       was previously enabled.
     '';

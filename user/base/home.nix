@@ -1,7 +1,7 @@
 { 
   config, 
   pkgs, 
-  unstablePkgs, 
+  unstable_pkgs, 
   globals,
   ... 
 }:

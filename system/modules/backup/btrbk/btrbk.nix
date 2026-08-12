@@ -16,13 +16,13 @@ let
   #    snapshot_dir / retention are set on the `volume` line itself.
   #
   #  • subvolumes = ["home" "var/lib"]  → selective mode
-  #    Only the listed paths (relative to mountPoint) are snapshotted.
+  #    Only the listed paths (relative to mount_point) are snapshotted.
   #    snapshot_dir / retention are set on each `subvolume` line.
   #
-  sourceType = types.submodule {
+  source_type = types.submodule {
     options = {
 
-      mountPoint = mkOption {
+      mount_point = mkOption {
         type    = types.str;
         example = "/disks/data";
         description = ''
@@ -36,29 +36,29 @@ let
         default = [];
         example = [ "home" "var/lib" ];
         description = ''
-          Subvolume paths relative to `mountPoint` to back up.
+          Subvolume paths relative to `mount_point` to back up.
           Set to [] (the default) to back up the whole btrfs filesystem —
           btrbk will discover and snapshot every top-level subvolume.
         '';
       };
 
-      snapshotDir = mkOption {
+      snapshot_dir = mkOption {
         type    = types.str;
         default = ".snapshots";
         description = ''
-          Directory relative to `mountPoint` where btrbk stores local
+          Directory relative to `mount_point` where btrbk stores local
           read-only snapshots. Must be on the same btrfs filesystem.
         '';
       };
 
       # Per-source retention overrides (fall back to global retention if unset)
-      preserveMin = mkOption {
+      preserve_min = mkOption {
         type    = types.nullOr types.str;
         default = null;
         example = "2d";
         description = ''
           Minimum retention for local snapshots on this source.
-          Overrides `retention.preserveMin` when set.
+          Overrides `retention.preserve_min` when set.
           Uses btrbk syntax: Nd / Nw / Nm (days / weeks / months).
         '';
       };
@@ -79,47 +79,47 @@ let
   # ============================================================
   #  btrbk.conf generator
   # ============================================================
-  mkVolumeBlock = src:
+  mk_volume_block = src:
     let
       # Resolve per-source overrides, falling back to global defaults
-      resolvedPreserveMin = if src.preserveMin != null
-                            then src.preserveMin
-                            else cfg.retention.preserveMin;
-      resolvedPreserve    = if src.preserve != null
+      resolved_preserve_min = if src.preserve_min != null
+                            then src.preserve_min
+                            else cfg.retention.preserve_min;
+      resolved_preserve    = if src.preserve != null
                             then src.preserve
                             else cfg.retention.preserve;
 
       indent = "  "; # two-space indent for children of `volume`
 
       # Whole-disk: retention attrs sit directly under the volume block
-      volumeAttrs = optionalString (src.subvolumes == []) (
-        "${indent}snapshot_dir          ${src.snapshotDir}\n" +
-        "${indent}snapshot_preserve_min ${resolvedPreserveMin}\n" +
-        "${indent}snapshot_preserve     ${resolvedPreserve}\n"
+      volume_attrs = optionalString (src.subvolumes == []) (
+        "${indent}snapshot_dir          ${src.snapshot_dir}\n" +
+        "${indent}snapshot_preserve_min ${resolved_preserve_min}\n" +
+        "${indent}snapshot_preserve     ${resolved_preserve}\n"
       );
 
       # Selective: one `subvolume` block per path, indented under volume
-      subvolumeBlocks = optionalString (src.subvolumes != [])
+      subvolume_blocks = optionalString (src.subvolumes != [])
         (concatMapStringsSep "\n" (sv:
           "${indent}subvolume ${sv}\n" +
-          "${indent}${indent}snapshot_dir          ${src.snapshotDir}\n" +
-          "${indent}${indent}snapshot_preserve_min ${resolvedPreserveMin}\n" +
-          "${indent}${indent}snapshot_preserve     ${resolvedPreserve}\n"
+          "${indent}${indent}snapshot_dir          ${src.snapshot_dir}\n" +
+          "${indent}${indent}snapshot_preserve_min ${resolved_preserve_min}\n" +
+          "${indent}${indent}snapshot_preserve     ${resolved_preserve}\n"
         ) src.subvolumes);
 
     in
-      "volume ${src.mountPoint}\n" +
-      volumeAttrs +        # snapshot_dir / retention BEFORE target
-      subvolumeBlocks +    # subvolume blocks BEFORE target
+      "volume ${src.mount_point}\n" +
+      volume_attrs +        # snapshot_dir / retention BEFORE target
+      subvolume_blocks +    # subvolume blocks BEFORE target
       "${indent}target ${cfg.target.path}\n" +
       "\n";
 
   # ionice class number
-  ioniceClassNum = {
+  ionice_class_num = {
     "idle"        = "3";
     "best-effort" = "2";
     "realtime"    = "1";
-  }.${cfg.performance.ioClass};
+  }.${cfg.performance.io_class};
 
 in {
 
@@ -132,15 +132,15 @@ in {
 
     # ── Sources ───────────────────────────────────────────────
     sources = mkOption {
-      type    = types.listOf sourceType;
+      type    = types.listOf source_type;
       default = [];
       example = literalExpression ''
         [
           # Back up an entire btrfs disk
-          { mountPoint = "/disks/data"; subvolumes = []; }
+          { mount_point = "/disks/data"; subvolumes = []; }
 
           # Back up only specific subvolumes on root
-          { mountPoint = "/"; subvolumes = [ "home" "var/lib" ]; }
+          { mount_point = "/"; subvolumes = [ "home" "var/lib" ]; }
         ]
       '';
       description = ''
@@ -160,7 +160,7 @@ in {
         '';
       };
 
-      preserveMin = mkOption {
+      preserve_min = mkOption {
         type    = types.str;
         default = "no";
         example = "2d";
@@ -183,13 +183,13 @@ in {
 
     # ── Retention (local snapshot defaults) ───────────────────
     retention = {
-      preserveMin = mkOption {
+      preserve_min = mkOption {
         type    = types.str;
         default = "2d";
         example = "1d";
         description = ''
           Global default for the minimum age of local snapshots to keep.
-          Can be overridden per source with `sources[].preserveMin`.
+          Can be overridden per source with `sources[].preserve_min`.
         '';
       };
 
@@ -241,19 +241,19 @@ in {
         '';
       };
 
-      ioClass = mkOption {
+      io_class = mkOption {
         type    = types.enum [ "idle" "best-effort" "realtime" ];
         default = "idle";
         example = "best-effort";
         description = ''
           I/O scheduling class (passed to `ionice -c`):
             idle        — only use disk I/O when nothing else needs it.
-            best-effort — normal scheduling, priority set by `ioLevel`.
+            best-effort — normal scheduling, priority set by `io_level`.
             realtime    — highest I/O priority (use with care).
         '';
       };
 
-      ioLevel = mkOption {
+      io_level = mkOption {
         type    = types.ints.between 0 7;
         default = 7;
         example = 4;
@@ -265,7 +265,7 @@ in {
     };
 
     # ── Escape hatch ──────────────────────────────────────────
-    extraConfig = mkOption {
+    extra_config = mkOption {
       type    = types.lines;
       default = "";
       example = "stream_compress zstd";
@@ -290,16 +290,16 @@ in {
       # ------------------------------------------------------------
 
       timestamp_format    long
-      target_preserve_min ${cfg.target.preserveMin}
+      target_preserve_min ${cfg.target.preserve_min}
       target_preserve     ${cfg.target.preserve}
 
-      ${cfg.extraConfig}
+      ${cfg.extra_config}
 
-      ${concatMapStringsSep "\n" mkVolumeBlock cfg.sources}
+      ${concatMapStringsSep "\n" mk_volume_block cfg.sources}
     '';
 
     # ── Auto-create snapshot and target subvolumes ───────────
-    # btrbk requires both snapshotDir (on each source) and the target
+    # btrbk requires both snapshot_dir (on each source) and the target
     # directory to exist as btrfs subvolumes before running.
     # This script is idempotent — it checks before creating.
     system.activationScripts.btrbk-snapshot-dirs = {
@@ -307,13 +307,13 @@ in {
         # One snapshot subvolume per source — paths are Nix values, interpolated at build time
         concatMapStringsSep "\n" (s:
           let
-            snapDir   = s.mountPoint + "/" + s.snapshotDir;
+            snap_dir  = s.mount_point + "/" + s.snapshot_dir;
             btrfs     = "${pkgs.btrfs-progs}/bin/btrfs";
           in
           ''
-            if ! ${btrfs} subvolume show "${snapDir}" &>/dev/null; then
-              echo "btrbk: creating snapshot subvolume ${snapDir}"
-              ${btrfs} subvolume create "${snapDir}"
+            if ! ${btrfs} subvolume show "${snap_dir}" &>/dev/null; then
+              echo "btrbk: creating snapshot subvolume ${snap_dir}"
+              ${btrfs} subvolume create "${snap_dir}"
             fi
           ''
         ) cfg.sources
@@ -321,15 +321,15 @@ in {
         # Target subvolume
         (
           let
-            btrfs      = "${pkgs.btrfs-progs}/bin/btrfs";
-            targetPath = cfg.target.path;
-            parentDir  = builtins.dirOf targetPath;
+            btrfs       = "${pkgs.btrfs-progs}/bin/btrfs";
+            target_path = cfg.target.path;
+            parent_dir  = builtins.dirOf target_path;
           in
           ''
-            if ! ${btrfs} subvolume show "${targetPath}" &>/dev/null; then
-              echo "btrbk: creating target subvolume ${targetPath}"
-              mkdir -p "${parentDir}"
-              ${btrfs} subvolume create "${targetPath}"
+            if ! ${btrfs} subvolume show "${target_path}" &>/dev/null; then
+              echo "btrbk: creating target subvolume ${target_path}"
+              mkdir -p "${parent_dir}"
+              ${btrfs} subvolume create "${target_path}"
             fi
           ''
         );
@@ -348,13 +348,13 @@ in {
 
         ExecStart =
           "${pkgs.util-linux}/bin/ionice"
-          + " -c ${ioniceClassNum}"
-          + " -n ${toString cfg.performance.ioLevel}"
+          + " -c ${ionice_class_num}"
+          + " -n ${toString cfg.performance.io_level}"
           + " ${pkgs.coreutils}/bin/nice -n ${toString cfg.performance.niceness}"
           + " ${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf run";
 
         ProtectSystem  = "strict";
-        ReadWritePaths = [ cfg.target.path ] ++ map (s: s.mountPoint) cfg.sources;
+        ReadWritePaths = [ cfg.target.path ] ++ map (s: s.mount_point) cfg.sources;
         PrivateTmp      = true;
         NoNewPrivileges = true;
       };

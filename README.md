@@ -230,7 +230,8 @@ sudo nixos-rebuild switch --flake .#<hostname>
 | Path | Role |
 | --- | --- |
 | `globals.nix` | Single source of truth for `hostName`, `username` and values derived from them — edit this to personalize a clone (see the file's own comments) |
-| `flake.nix` | Entry point: defines `nixosConfigurations.${globals.hostName}` and `homeConfigurations.${globals.username}`, passing `globals` to every module via `specialArgs`/`extraSpecialArgs` |
+| `modules.nix` | Single source of truth for which custom modules (user *and* system) are enabled and their options — edit this to toggle features instead of hunting through `user/base/imports.nix`, `user/desktop/wm/hyprland/imports.nix` and `system/import.nix` (see the file's own comments) |
+| `flake.nix` | Entry point: defines `nixosConfigurations.${globals.hostName}` and `homeConfigurations.${globals.username}`, passing `globals` and `moduleConfig` to every module via `specialArgs`/`extraSpecialArgs` |
 | `system/configuration.nix` | NixOS system config |
 | `system/hardware-configuration.nix` | Machine-specific, generated — **don't commit another machine's version** |
 | `system/boot-uefi-grub.nix` / `system/boot-bios-grub.nix` | Ready-to-use bootloader presets |
