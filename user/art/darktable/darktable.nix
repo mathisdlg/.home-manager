@@ -24,12 +24,16 @@ in
       context_help/url=https://docs.darktable.org/usermanual/
       context_help/use_default_url=true
 
+      plugins/darkroom/basecurve/auto_apply_percamera_presets=TRUE
+
       plugins/darkroom/modulegroups_preset=Modules : Tous
 
       plugins/darkroom/clipping/extra_aspect_ratios/insta_square=100:100
       plugins/darkroom/clipping/extra_aspect_ratios/insta_portrait=400:500
       plugins/darkroom/clipping/extra_aspect_ratios/insta_landscape=300:400
       plugins/darkroom/clipping/extra_aspect_ratios/insta_landscape=100:191
+
+      plugins/darkroom/workflow=none
 
       plugins/imageio/storage/disk/file_directory=$(FILE_FOLDER)/Final/$(FILE_NAME)
     '';
