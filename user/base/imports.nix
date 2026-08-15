@@ -74,7 +74,7 @@
 
   services = {
     art = {
-      audacity.enable = true;
+      audacity.enable = false;
       blender.enable = false;
       darktable.enable = true;
       davinci-resolve.enable = true;
