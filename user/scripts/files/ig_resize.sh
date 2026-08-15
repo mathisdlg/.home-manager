@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-SIZE="${1:-1440x}"
+SIZE="${1:-1080x}"
 JOBS="${2:-$(( $(nproc) / 2 ))}"
 JOBS=$(( JOBS < 1 ? 1 : JOBS ))
 
