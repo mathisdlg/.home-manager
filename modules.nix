@@ -291,7 +291,7 @@
     rgb.openrgb.enable = false;
 
     zram = {
-      enable = false;
+      enable = true;
       size = 100;
     };
   };
