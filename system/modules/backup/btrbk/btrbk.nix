@@ -121,6 +121,71 @@ let
     "realtime"    = "1";
   }.${cfg.performance.ioClass};
 
+  # ============================================================
+  #  Rolling cleanup script (free-space based snapshot pruning)
+  # ============================================================
+  #
+  #  Runs as ExecStartPre before every btrbk run, when
+  #  rollingCleanup.enable is true. For each source's snapshot
+  #  directory and for the target, it repeatedly deletes the
+  #  OLDEST snapshot subvolume until filesystem usage drops below
+  #  rollingCleanup.threshold, or until only rollingCleanup.minKeep
+  #  snapshots remain — i.e. a rolling window instead of a hard
+  #  failure on "No space left on device".
+  #
+  #  Relies on timestamp_format = long (set below), so snapshot
+  #  subvolume names sort lexically in chronological order: the
+  #  "oldest" one is simply the first name alphabetically.
+  #
+  rollingCleanupScript = pkgs.writeShellScript "btrbk-rolling-cleanup" ''
+    set -u
+    BTRFS=${pkgs.btrfs-progs}/bin/btrfs
+
+    prune_dir() {
+      dir="$1"
+      threshold="$2"
+      minKeep="$3"
+
+      [ -d "$dir" ] || return 0
+
+      while true; do
+        used=$(df --output=pcent "$dir" 2>/dev/null | tail -n1 | tr -dc '0-9')
+        if [ -z "$used" ]; then
+          echo "btrbk-rolling-cleanup: impossible de lire l'usage disque de $dir, on ignore" >&2
+          return 0
+        fi
+        if [ "$used" -lt "$threshold" ]; then
+          break
+        fi
+
+        # ne garder que les vrais sous-volumes btrfs, tries du plus ancien
+        # au plus recent (fiable car timestamp_format = long)
+        mapfile -t snaps < <(
+          find "$dir" -mindepth 1 -maxdepth 1 -type d | sort |
+          while read -r d; do
+            "$BTRFS" subvolume show "$d" >/dev/null 2>&1 && echo "$d"
+          done
+        )
+        count=''${#snaps[@]}
+
+        if [ "$count" -le "$minKeep" ]; then
+          echo "btrbk-rolling-cleanup: $dir a ''${used}% d'usage mais il ne reste que $count snapshot(s) (minKeep=$minKeep), on arrete" >&2
+          break
+        fi
+
+        oldest="''${snaps[0]}"
+        echo "btrbk-rolling-cleanup: $dir a ''${used}% (seuil ''${threshold}%), suppression du plus ancien : $oldest"
+        "$BTRFS" subvolume delete "$oldest"
+      done
+    }
+
+    ${concatMapStringsSep "\n" (s:
+      ''prune_dir "${s.mountPoint}/${s.snapshotDir}" ${toString cfg.rollingCleanup.threshold} ${toString cfg.rollingCleanup.minKeep}''
+    ) cfg.sources}
+
+    prune_dir "${cfg.target.path}" ${toString cfg.rollingCleanup.threshold} ${toString cfg.rollingCleanup.minKeep}
+  '';
+
 in {
 
   # ============================================================
@@ -274,6 +339,40 @@ in {
         Useful for directives not exposed as module options.
       '';
     };
+
+    # ── Rolling cleanup (free-space based pruning) ────────────
+    rollingCleanup = {
+      enable = mkEnableOption ''
+        automatic pruning of the oldest snapshot when a source or the
+        target is nearly full, instead of letting btrbk fail with
+        "No space left on device". Runs as ExecStartPre before each
+        backup and deletes the oldest snapshot subvolume, repeatedly,
+        until usage is back under `threshold` (or `minKeep` is reached)
+      '';
+
+      threshold = mkOption {
+        type    = types.ints.between 1 99;
+        default = 90;
+        example = 85;
+        description = ''
+          Filesystem usage percentage (as reported by `df`) that
+          triggers pruning of the oldest snapshot, checked on each
+          source's snapshot directory and on the target directory.
+        '';
+      };
+
+      minKeep = mkOption {
+        type    = types.ints.positive;
+        default = 1;
+        example = 3;
+        description = ''
+          Minimum number of snapshots to always keep in a given
+          directory (a source's snapshotDir, or the target). Pruning
+          stops here even if usage is still above `threshold`, so you
+          never end up with zero backups.
+        '';
+      };
+    };
   };
 
   # ============================================================
@@ -345,6 +444,8 @@ in {
       serviceConfig = {
         Type = "oneshot";
         User = "root";
+
+        ExecStartPre = optional cfg.rollingCleanup.enable "${rollingCleanupScript}";
 
         ExecStart =
           "${pkgs.util-linux}/bin/ionice"
