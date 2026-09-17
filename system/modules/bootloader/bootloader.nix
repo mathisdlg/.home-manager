@@ -27,7 +27,7 @@ in
           devices = [ "nodev" ];
           efiInstallAsRemovable = true;
           configurationLimit = 10;
-          theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
+          theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Lycoris Recoil/Nishikigi Chisato/Chisato";
         };
       };
 
