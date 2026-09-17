@@ -69,8 +69,8 @@
         # ── Rolling cleanup ──────────────────────────────────────────
         rollingCleanup = {
           enable = true;
-          threshold = "90";
-          minKeep = "5";
+          threshold = 90;
+          minKeep = 5;
         };
       };
     };
