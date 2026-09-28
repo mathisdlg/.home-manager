@@ -1,4 +1,4 @@
-# Thin wrapper around home-manager's own services.nextcloud-client, same
+# Thin wrapper around home-manager's own services.opencloud-client, same
 # idea as dunst.nix wrapping services.dunst — gives this repo one
 # consistent on/off switch instead of reaching for the upstream option name
 # directly in modules.nix.
@@ -14,16 +14,15 @@
 }:
 with lib;
 let
-  cfg = config.services.apps.cloud.nextcloud;
+  cfg = config.services.apps.cloud.opencloud;
 in
 {
-  options.services.apps.cloud.nextcloud.enable =
-    mkEnableOption "Enable the Nextcloud desktop sync client.";
+  options.services.apps.cloud.opencloud.enable =
+    mkEnableOption "Enable the opencloud desktop sync client.";
 
   config = mkIf cfg.enable {
-    services.nextcloud-client = {
-      enable = true;
-      startInBackground = true;
-    };
+    home.packages = with pkgs; [
+      opencloud-desktop
+    ];
   };
 }
