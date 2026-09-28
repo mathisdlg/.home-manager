@@ -7,13 +7,16 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+
+    ./boot.nix
+
     ../patches/nvidia.nix
 
     ./import.nix
   ];
 
   networking = {
-    hostName = "NixosMathisLaptop"; # Define your hostname.
+    hostName = "NixosMathis"; # Define your hostname.
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
@@ -46,7 +49,7 @@
 
   services = {
     displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+    desktopManager.gnome.enable = false;
 
     xserver = {
       enable = true;
@@ -184,7 +187,7 @@
 
     # Steam
     steam = {
-      enable = true;
+      enable = false;
     };
   };
 

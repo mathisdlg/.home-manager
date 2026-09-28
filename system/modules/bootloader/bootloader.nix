@@ -14,16 +14,16 @@ in
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        efi = {
-          canTouchEfiVariables = false;
-          efiSysMountPoint = "/boot/efi";
-        };
+        # efi = { # Manage by boot.nix
+        #   canTouchEfiVariables = false;
+        #   efiSysMountPoint = "/boot/efi";
+        # };
         timeout = 1;
         grub = {
-          enable = true;
-          efiSupport = true;
-          useOSProber = true;
-          devices = [ "nodev" ];
+          # enable = true; # Manage by boot.nix
+          # efiSupport = true;
+          # useOSProber = true;
+          # devices = [ "nodev" ];
           # efiInstallAsRemovable = false;
           theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
         };
