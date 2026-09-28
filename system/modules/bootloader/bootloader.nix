@@ -2,32 +2,31 @@
   config,
   pkgs,
   lib,
+  globals,
   ...
 }:
 with lib;
 let
-  cfg = config.services.bootloader-mod;
+  cfg = config.services.bootloader_mod;
 in
 {
-  options.services.bootloader-mod.enable = mkEnableOption "Enable grub bootloader with theme.";
+  options.services.bootloader_mod.enable = mkEnableOption "Enable grub bootloader with theme.";
 
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        systemd-boot.enable = false;
-        efi = {
-          canTouchEfiVariables = false;
-          efiSysMountPoint = "/boot";
-        };
+        # efi = { # Manage by boot.nix
+        #   canTouchEfiVariables = false;
+        #   efiSysMountPoint = "/boot/efi";
+        # };
         timeout = 1;
         grub = {
-          enable = true;
-          efiSupport = true;
-          useOSProber = true;
-          devices = [ "nodev" ];
-          efiInstallAsRemovable = true;
-          configurationLimit = 10;
-          theme = "/home/mathisdlg/.home-manager/system/modules/bootloader/GRUB-Theme/Lycoris Recoil/Nishikigi Chisato/Chisato";
+          # enable = true; # Manage by boot.nix
+          # efiSupport = true;
+          # useOSProber = true;
+          # devices = [ "nodev" ];
+          # efiInstallAsRemovable = false;
+          theme = "${globals.repoPath}/system/modules/bootloader/GRUB-Theme/Lycoris Recoil/Nishikigi Chisato/Chisato";
         };
       };
 

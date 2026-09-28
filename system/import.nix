@@ -1,89 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, module_config, ... }:
+let
+  auto_import = import ../lib/auto-import.nix { inherit lib; };
+in
 {
-  imports = [
-    ./modules/backup/btrbk/btrbk.nix
+  # Every *.nix file under system/modules/ is picked up automatically.
+  imports = auto_import { dir = ./modules; };
 
-    ./modules/bootloader/bootloader.nix
-    
-    ./modules/openrgb/openrgb.nix
-
-    ./modules/zram/zram.nix
-  ];
-
-  services = {
-    module = {
-      backup.btrbk = {
-        enable = true;
-
-        # ── Sources ──────────────────────────────────────────────────
-        sources = [
-          # Whole btrfs disk — subvolumes = [] snapshots everything
-          {
-            mountPoint  = "/disks/data";
-            subvolumes  = [ "." ];
-            snapshotDir = ".snapshots";
-            # preserveMin / preserve are optional: falls back to retention.*
-          }
-
-          # Selected subvolumes only, with a custom per-source retention
-          # {
-          #   mountPoint  = "/";
-          #   subvolumes  = [ "home" "var/lib" ];
-          #   snapshotDir = ".snapshots";
-          #   preserveMin = "1d";
-          #   preserve    = "7d 4w";
-          # }
-        ];
-
-        # ── Target ───────────────────────────────────────────────────
-        target = {
-          path        = "/disks/save/btrbk";  # must be on a btrfs filesystem
-          preserveMin = "1w";
-          preserve    = "30d";
-        };
-
-        # ── Retention (global defaults for local snapshots) ──────────
-        retention = {
-          preserveMin = "3d";
-          preserve    = "7d";
-        };
-
-        # ── Scheduling ───────────────────────────────────────────────
-        scheduling = {
-          calendar   = "daily";   # or "*-*-* 02:30:00"
-          persistent = true;      # catch up on missed runs after boot
-        };
-
-        # ── Performance ──────────────────────────────────────────────
-        performance = {
-          niceness = 19;         # CPU: lowest priority
-          ioClass  = "idle";     # I/O: only when disk is free
-          ioLevel  = 7;          # gentlest level within the class
-        };
-
-        # ── Extra btrbk.conf directives ──────────────────────────────
-        extraConfig = ''
-          stream_compress zstd
-        '';
-
-        # ── Rolling cleanup ──────────────────────────────────────────
-        rollingCleanup = {
-          enable = true;
-          threshold = 80;
-          minKeep = 3;
-        };
-      };
-    };
-
-    bootloader-mod.enable = true;
-
-    rgb.openrgb = {
-        enable = false;
-    };
-
-    zram = {
-        enable = true;
-        size = 100;
-    };
-  };
+  # All toggles and options for these modules live in modules.nix — see
+  # that file's header comment for how this is wired.
+  services = module_config.system;
 }

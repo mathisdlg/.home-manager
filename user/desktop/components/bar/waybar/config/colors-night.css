@@ -1,0 +1,8 @@
+/* Night (current/default) shell colours for waybar. Per-module accent
+   badges (cpu/memory/disk/network/...) are intentionally left as their own
+   fixed colours in style.css — they're self-contained colour badges, not
+   really a "light vs dark" concern. Only the bar chrome switches. */
+@define-color shell-bg rgb(27, 27, 27);
+@define-color shell-fg #ffffff;
+@define-color tooltip-bg #205376;
+@define-color tooltip-fg #ffffff;

@@ -1,0 +1,29 @@
+# Thin wrapper around home-manager's own services.opencloud-client, same
+# idea as dunst.nix wrapping services.dunst — gives this repo one
+# consistent on/off switch instead of reaching for the upstream option name
+# directly in modules.nix.
+#
+# This only installs and autostarts the sync client. It doesn't configure
+# which server/account it points at — that's set up once, interactively,
+# on first launch (Settings > Add account), since it needs credentials this
+# repo shouldn't be storing in the Nix store.
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+let
+  cfg = config.services.apps.cloud.opencloud;
+in
+{
+  options.services.apps.cloud.opencloud.enable =
+    mkEnableOption "Enable the opencloud desktop sync client.";
+
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      opencloud-desktop
+    ];
+  };
+}
