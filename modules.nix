@@ -73,7 +73,7 @@
         prusa_slicer.enable = false;
       };
 
-      cloud.nextcloud.enable = false;
+      cloud.opencloud.enable = true;
 
       communication = {
         discord.enable = false;
