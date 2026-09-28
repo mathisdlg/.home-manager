@@ -26,7 +26,7 @@ in
           # useOSProber = true;
           # devices = [ "nodev" ];
           # efiInstallAsRemovable = false;
-          theme = "${globals.repoPath}/system/modules/bootloader/GRUB-Theme/Nishikigi Chisato/Chisato";
+          theme = "${globals.repoPath}/system/modules/bootloader/GRUB-Theme/Lycoris Recoil/Nishikigi Chisato/Chisato";
         };
       };
 
