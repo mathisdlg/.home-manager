@@ -9,6 +9,7 @@
 # repo shouldn't be storing in the Nix store.
 {
   config,
+  pkgs,
   lib,
   ...
 }:
