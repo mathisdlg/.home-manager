@@ -19,16 +19,30 @@
       ...
     }:
     let
-      nixLib = nixpkgs.lib;
-      homeCfg = home-manager.lib.homeManagerConfiguration;
+      nix_lib = nixpkgs.lib;
+      home_cfg = home-manager.lib.homeManagerConfiguration;
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      unstablePkgs = nixpkgs-unstable.legacyPackages.${system};
+      # Standalone home-manager (below) doesn't see system/configuration.nix's
+      # own nixpkgs.config — it evaluates independently with whatever `pkgs`
+      # is handed to it here, so the allowlist for unfree packages installed
+      # via home-manager (currently: vscode, if you ever flip
+      # services.apps.editor.vscodium.fork to "vscode") has to live on this
+      # `pkgs`, not over there. Add more names to the list as needed.
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfreePredicate = pkg: builtins.elem (nix_lib.getName pkg) [
+          "vscode"
+        ];
+      };
+      unstable_pkgs = nixpkgs-unstable.legacyPackages.${system};
+      globals = import ./globals.nix;
+      module_config = import ./modules.nix { inherit pkgs globals; };
     in
     {
       nixosConfigurations = {
-        NixosMathisLaptop = nixLib.nixosSystem {
+        ${globals.hostName} = nix_lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit globals module_config; };
           modules = [
             ./system/configuration.nix
           ];
@@ -36,12 +50,12 @@
       };
 
       homeConfigurations = {
-        mathisdlg = homeCfg {
+        ${globals.username} = home_cfg {
           inherit pkgs;
           modules = [ 
             ./user/base/home.nix 
           ];
-          extraSpecialArgs = { inherit unstablePkgs; };
+          extraSpecialArgs = { inherit unstable_pkgs globals module_config; };
         };
       };
     };
