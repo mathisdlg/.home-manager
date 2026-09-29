@@ -6,11 +6,11 @@
 }:
 with lib;
 let
-  cfg = config.services.apps.communication.discord;
+  cfg = config.services.apps.communication.vesktop;
 in
 {
-  options.services.apps.communication.discord.enable =
-    mkEnableOption "Enable discord.";
+  options.services.apps.communication.vesktop.enable =
+    mkEnableOption "Enable vesktop.";
 
   config = mkIf cfg.enable {
     # Vesktop, not the official pkgs.discord: same service, but an actual
@@ -18,7 +18,7 @@ in
     # Electron app. Note this only covers the client — Discord's own
     # server/protocol stays closed regardless of which client talks to it.
     home.packages = with pkgs; [
-      discord
+      vesktop
     ];
   };
 }

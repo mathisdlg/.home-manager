@@ -36,7 +36,7 @@ in
           "0" = {
             left = [ "dashboard" "workspaces" "windowtitle" ];
             middle = [ "media" ];
-            right = [ "battery" "volume" "network" "bluetooth" "hypridle" "clock" "notifications" ];
+            right = [ "volume" "network" "bluetooth" "hypridle" "systray" "clock" "notifications" ];
           };
           "1" = {
             left = [ "dashboard" "workspaces" "windowtitle" ];

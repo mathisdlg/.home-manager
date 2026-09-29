@@ -30,6 +30,7 @@ in
       settings = {
         exec-once = [
           "hypridle"
+          "hyprpaper"
         ];
 
         env = [

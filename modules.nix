@@ -73,11 +73,15 @@
         prusa_slicer.enable = false;
       };
 
-      cloud.opencloud.enable = true;
+      cloud = {
+        opencloud.enable = true;
+        trayscale.enable = true;
+      };
 
       communication = {
-        discord.enable = false;
+        discord.enable = true;
         thunderbird.enable = false;
+        vesktop.enable = false;
       };
 
       editor = {
@@ -101,7 +105,7 @@
         heroic.enable = false;
         puzzles.enable = false;
         minecraft.enable = false;
-        mines.enable = true;
+        mines.enable = false;
         osu.enable = false;
       };
 
