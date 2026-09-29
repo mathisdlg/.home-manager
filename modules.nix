@@ -78,6 +78,7 @@
       communication = {
         discord.enable = true;
         thunderbird.enable = false;
+        vesktop.enable = false;
       };
 
       editor = {
