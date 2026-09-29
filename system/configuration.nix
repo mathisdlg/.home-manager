@@ -159,7 +159,7 @@
 
     # Steam
     steam = {
-      enable = false;
+      enable = true;
     };
   };
 
