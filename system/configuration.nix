@@ -48,6 +48,8 @@
   };
 
   services = {
+    tailscale.enable = false;
+    
     xserver = {
       enable = true;
 

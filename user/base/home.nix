@@ -18,6 +18,11 @@
     packages = with pkgs; [ ];
 
     sessionVariables = { };
+
+    file = {
+      "Data".source = config.lib.file.mkOutOfStoreSymlink "/disks/data";
+      "Save".source = config.lib.file.mkOutOfStoreSymlink "/disks/save";
+    };
   };
 
   nixpkgs.config.allowUnfree = true;

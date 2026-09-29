@@ -8,9 +8,8 @@
     wayland.windowManager.hyprland = {
       settings = {
         monitor = [
-          "eDP-1, 1920x1080, auto, 1"
-          "desc:Samsung Electric Company SyncMaster H1ERC05595, preferred, auto-right, 1"
-          "desc:Sentronic International Corp. 24 PIXEL VIEW, 1920x1080, auto-right, 1"
+          "HDMI-A-1, 1920x1080@60, 2560x360, 1"
+          "DP-3, 2560x1440@179.95, 0x0, 1"
         ];
       };
     };

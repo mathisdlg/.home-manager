@@ -31,7 +31,7 @@ in
         "$lock" = binOf pkgs.wlogout;
         "$colorPicker" = "${binOf pkgs.hyprpicker} -a -r -n";
         "$codeEditor" = binOf config.services.apps.editor.vscodium.package;
-        "$discord" = "${binOf pkgs.vesktop} & disown";
+        "$discord" = "${binOf pkgs.discord} & disown";
 
         bind = [
           "$mainMod, RETURN, exec, $terminal"
