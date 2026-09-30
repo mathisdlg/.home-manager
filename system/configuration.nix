@@ -22,13 +22,6 @@
       enable = true;
       wifi.backend = "iwd";
     };
-    extraHosts = ''
-      100.64.0.1 cloud.home.lan
-      100.64.0.1 dns.home.lan
-      100.64.0.1 nas.home.lan
-      100.64.0.1 npm.home.lan
-      100.64.0.1 pdf.home.lan
-    '';
   };
 
   # Configure network proxy if necessary
