@@ -64,7 +64,7 @@
 
         brave.enable = true;
         firefox.enable = false;
-        firefox_dev.enable = false;
+        firefox_dev.enable = true;
       };
 
       cad = {
