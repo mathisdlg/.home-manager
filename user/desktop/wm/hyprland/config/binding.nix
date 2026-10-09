@@ -68,6 +68,16 @@ in
           "$mainMod, underscore, workspace, 8"
           "$mainMod, ccedilla, workspace, 9"
           "$mainMod, agrave, workspace, 10"
+          "$mainMod, f1, workspace, 11"
+          "$mainMod, f2, workspace, 12"
+          "$mainMod, f3, workspace, 13"
+          "$mainMod, f4, workspace, 14"
+          "$mainMod, f5, workspace, 15"
+          "$mainMod, f6, workspace, 16"
+          "$mainMod, f7, workspace, 17"
+          "$mainMod, f8, workspace, 18"
+          "$mainMod, f9, workspace, 19"
+          "$mainMod, f10, workspace, 20"
 
           # Move active window to a workspace with mainMod + SHIFT + [0-9]
           "$mainMod SHIFT, ampersand, movetoworkspace, 1"
@@ -80,6 +90,16 @@ in
           "$mainMod SHIFT, underscore, movetoworkspace, 8"
           "$mainMod SHIFT, ccedilla, movetoworkspace, 9"
           "$mainMod SHIFT, agrave, movetoworkspace, 10"
+          "$mainMod SHIFT, f1, movetoworkspace, 11"
+          "$mainMod SHIFT, f2, movetoworkspace, 12"
+          "$mainMod SHIFT, f3, movetoworkspace, 13"
+          "$mainMod SHIFT, f4, movetoworkspace, 14"
+          "$mainMod SHIFT, f5, movetoworkspace, 15"
+          "$mainMod SHIFT, f6, movetoworkspace, 16"
+          "$mainMod SHIFT, f7, movetoworkspace, 17"
+          "$mainMod SHIFT, f8, movetoworkspace, 18"
+          "$mainMod SHIFT, f9, movetoworkspace, 19"
+          "$mainMod SHIFT, f10, movetoworkspace, 20"
 
           # Example special workspace (scratchpad)
           # bind=$mainMod, S, togglespecialworkspace, magic
