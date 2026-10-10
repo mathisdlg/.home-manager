@@ -52,7 +52,10 @@
     apps = {
       art = {
         blender.enable = false;
-        darktable.enable = true;
+        darktable = {
+          enable = true;
+          extraSettings."ui_last/theme" = "darktable-icons-grey";
+        };
         gimp.enable = false;
         gphoto2.enable = false;
         imagemagick.enable = false;
