@@ -47,14 +47,14 @@ let
   };
 
   aiSettings = {
-  "plugins/ai/enabled" = "TRUE";
-  "plugins/ai/provider" = "auto";
-  "plugins/ai/repository" = "darktable-org/darktable-ai";
-  "plugins/ai/models/active/mask" = "mask-object-sam21-small";
-  "plugins/ai/models/active/denoise" = "denoise-nind";
-  "plugins/ai/models/active/rawdenoise" = "rawdenoise-nind";
-  "plugins/ai/ort_library_path" = "${unstable_pkgs.onnxruntime}/lib/libonnxruntime.so";
-};
+    "plugins/ai/enabled" = "TRUE";
+    "plugins/ai/provider" = "auto";
+    "plugins/ai/repository" = "darktable-org/darktable-ai";
+    "plugins/ai/models/active/mask" = "mask-object-sam21-small";
+    "plugins/ai/models/active/denoise" = "denoise-nind";
+    "plugins/ai/models/active/rawdenoise" = "rawdenoise-nind";
+    "plugins/ai/ort_library_path" = "${unstable_pkgs.onnxruntime}/lib/libonnxruntime.so";
+  };
 
   settings = baseSettings // optionalAttrs cfg.ai.enable aiSettings // cfg.extraSettings;
 
