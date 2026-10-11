@@ -55,6 +55,7 @@
         darktable = {
           enable = true;
           extraSettings."ui_last/theme" = "darktable-icons-grey";
+          opencl.mode = "rusticl";
         };
         gimp.enable = true;
         gphoto2.enable = true;
