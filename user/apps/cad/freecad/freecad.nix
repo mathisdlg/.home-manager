@@ -13,7 +13,7 @@ in
   options.services.apps.cad.freecad.enable = mkEnableOption "Enable freecad.";
 
   config = mkIf cfg.enable {
-    home.packages = with unstable_pkgs; [
+    home.packages = with pkgs; [
       freecad
     ];
   };
