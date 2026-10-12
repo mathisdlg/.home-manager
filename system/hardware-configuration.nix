@@ -6,6 +6,7 @@
   lib,
   pkgs,
   modulesPath,
+  globals,
   ...
 }:
 {
@@ -72,6 +73,12 @@
         "nofail"
         "compress=zstd"
       ];
+    };
+
+    "/home/globals.${globals.username}/OpenCloud/Photos" = {
+      device = "/disks/data/Photo";
+      options = [ "bind" "nofail" ];
+      depends = [ "/disks/data" ];
     };
   };
 
