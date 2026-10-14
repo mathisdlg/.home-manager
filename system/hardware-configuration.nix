@@ -75,7 +75,7 @@
       ];
     };
 
-    "/home/${globals.username}/OpenCloud/Photos" = {
+    "/home/${globals.username}/OpenCloud/Personnel/Photo" = {
       device = "/disks/data/Photo";
       fsType = "none";
       options = [ "bind" "nofail" ];
