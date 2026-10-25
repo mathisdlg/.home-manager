@@ -56,6 +56,11 @@
           enable = true;
           extraSettings."ui_last/theme" = "darktable-icons-grey";
           opencl.mode = "rusticl";
+          importPlaces = [
+            "${globals.homeDirectory}/Data/Photo"
+            "${globals.homeDirectory}/Data/Photo/Conv"
+            "${globals.homeDirectory}/Data/Photo/Working"
+          ];
         };
         gimp.enable = true;
         gphoto2.enable = true;

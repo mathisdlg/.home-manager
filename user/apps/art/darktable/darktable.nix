@@ -64,11 +64,7 @@ let
 
   baseSettings = {
     "ui_last/theme" = "darktable-icons-grey";
-    "ui_last/import_custom_places" = concatStringsSep "," [
-      "${globals.homeDirectory}/Data/Photo"
-      "${globals.homeDirectory}/Data/Photo/Conv"
-      "${globals.homeDirectory}/OpenCloud/Personnel/Photo/Working"
-    ];
+    "ui_last/import_custom_places" = concatStringsSep "," cfg.importPlaces;
 
     "context_help/url" = "https://docs.darktable.org/usermanual/";
     "context_help/use_default_url" = "true";
@@ -141,6 +137,16 @@ in
       type = types.attrsOf types.str;
       default = { };
       description = "Clés darktablerc supplémentaires ou surchargées, propres à une machine.";
+    };
+
+    importPlaces = mkOption {
+      type = types.listOf types.str;
+      default = [
+        "${globals.homeDirectory}/Data/Photo"
+        "${globals.homeDirectory}/Data/Photo/Conv"
+        "${globals.homeDirectory}/OpenCloud/Personnel/Photo/Working"
+      ];
+      description = "Dossiers affichés dans les emplacements personnalisés du module d'import (ui_last/import_custom_places).";
     };
   };
 
