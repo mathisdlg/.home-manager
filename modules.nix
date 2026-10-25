@@ -99,6 +99,7 @@
         # (pkgs.vscodium, open source). See user/apps/editor/vscodium/vscodium.nix.
         vscodium.enable = true;
         neovim.enable = true;
+        gnome_text_editor.enable = true;
       };
 
       files = {
