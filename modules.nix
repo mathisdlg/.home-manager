@@ -186,6 +186,8 @@
         qdirstat.enable = false;
       };
 
+      raw_thumbnailer.enable = true;
+
       scripts.enable = true;
 
       system_monitor = {
