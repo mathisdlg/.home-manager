@@ -70,6 +70,7 @@ let
     "context_help/use_default_url" = "true";
 
     "plugins/darkroom/basecurve/auto_apply_percamera_presets" = "TRUE";
+    "plugins/darkroom/modulegroups/last_preset" = "Modules : Tous";
     "plugins/darkroom/modulegroups_preset" = "Modules : Tous";
 
     "plugins/darkroom/clipping/extra_aspect_ratios/insta_square" = "100:100";
