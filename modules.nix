@@ -161,7 +161,11 @@
       screenshare.screenshare.enable = true;
 
       themes = {
-        enable = true;
+        day_night = {
+          enable = true;
+          latitude = "45.78N";
+          longitude = "3.1E";
+        };
 
         fonts = {
           jetbrains.enable = true;
@@ -169,11 +173,7 @@
           noto.enable = true;
         };
 
-        day_night = {
-          enable = true;
-          latitude = "45.78N";
-          longitude = "3.1E";
-        };
+        themes.enable = true;
       };
     };
 
