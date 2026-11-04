@@ -161,6 +161,8 @@
       screenshare.screenshare.enable = true;
 
       themes = {
+        enable = true;
+
         fonts = {
           jetbrains.enable = true;
           nerd.enable = true;
@@ -172,8 +174,6 @@
           latitude = "45.78N";
           longitude = "3.1E";
         };
-
-        themes.enable = true;
       };
     };
 
