@@ -237,6 +237,16 @@
   # networking.firewall.allowedUDPPorts = [ 9876 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking = {
+    interfaces = {
+      enp7s0 = {
+        wakeOnLan.enable = true;
+      };
+    };
+    firewall = {
+      allowedUDPPorts = [ 9 ];
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
