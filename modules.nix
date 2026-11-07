@@ -191,6 +191,8 @@ in
     };
 
     dev = {
+      esphome.enable = true;
+      esptool.enable = true;
       python.enable = true;
       swift.enable = false;
     };
