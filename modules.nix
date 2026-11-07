@@ -42,6 +42,33 @@
 #     option this repo declares itself, so it keeps NixOS's own spelling
 #     and isn't nested under anything.
 { pkgs, globals }:
+let
+  # Options communes à firefox et firefox_dev
+  firefoxCommon = {
+    languagePacks = [
+      "fr"
+      "en-US"
+    ];
+
+    # KeePassXC-Browser s'ajoute tout seul via security.keepassxc.enable.
+    extensions = {
+      "uBlock0@raymondhill.net" = "ublock-origin";
+    };
+
+    # CA / certificat des services en .home.lan
+    # (erreur MOZILLA_PKIX_ERROR_SELF_SIGNED_CERT).
+    # Chemin relatif à ce fichier.
+    trustedCertificates = [
+      # ./certs/home-lan.crt
+    ];
+
+    extraSettings = {
+      # "dom.security.https_only_mode" = false;
+    };
+
+    extraPolicies = { };
+  };
+in
 {
   # ---------------------------------------------------------------------
   # user/ — every custom home-manager module (except hyprland's own
@@ -71,8 +98,22 @@
       browser = {
         default = "firefox_dev";
 
-        firefox.enable = false;
-        firefox_dev.enable = true;
+        # Un seul des deux peut être activé : ils utilisent tous deux
+        # programs.firefox (une assertion le vérifie).
+        firefox = firefoxCommon // {
+          enable = false;
+        };
+
+        firefox_dev = firefoxCommon // {
+          enable = true;
+
+          # Extensions non signées autorisées (true par défaut, réservé à la
+          # Developer Edition). Ajoute ici tes .xpi pour les installer
+          # automatiquement ; l'ID est celui de ton manifest.json.
+          localExtensions = {
+            # "mon-extension@xxx" = ./extensions/mon-extension.xpi;
+          };
+        };
       };
 
       cad = {
