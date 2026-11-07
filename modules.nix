@@ -69,9 +69,8 @@
       };
 
       browser = {
-        default = "brave";
+        default = "firefox_dev";
 
-        brave.enable = true;
         firefox.enable = false;
         firefox_dev.enable = true;
       };
