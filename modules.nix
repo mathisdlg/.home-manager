@@ -84,9 +84,9 @@ in
           extraSettings."ui_last/theme" = "darktable-icons-grey";
           opencl.mode = "rusticl";
           importPlaces = [
-            "${globals.homeDirectory}/Opencloud/Photo"
-            "${globals.homeDirectory}/Opencloud/Photo/Conv"
-            "${globals.homeDirectory}/Opencloud/Photo/Working"
+            "${globals.homeDirectory}/Opencloud/Personnel/Photo"
+            "${globals.homeDirectory}/Opencloud/Personnel/Photo/Conv"
+            "${globals.homeDirectory}/Opencloud/Personnel/Photo/Working"
           ];
         };
         gimp.enable = true;
