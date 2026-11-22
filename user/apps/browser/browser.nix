@@ -14,7 +14,6 @@ let
   # Plain launch command for each browser — used for "just open the browser"
   # (e.g. a bare keybind).
   launch_commands = {
-    brave = "brave";
     firefox = "firefox";
     firefox_dev = "firefox-devedition";
   };
@@ -24,7 +23,6 @@ let
   # `-new-tab` to reuse the existing window instead of spawning a new one;
   # Brave (Chromium-based) already does that when just given a URL.
   notify_commands = {
-    brave = "/usr/bin/env brave";
     firefox = "/usr/bin/env firefox -new-tab";
     firefox_dev = "/usr/bin/env firefox-devedition -new-tab";
   };
@@ -32,11 +30,10 @@ in
 {
   options.services.apps.browser.default = mkOption {
     type = types.enum [
-      "brave"
       "firefox"
       "firefox_dev"
     ];
-    default = "brave"; # matches whichever of the browsers below is enabled today
+    default = "firefox_dev"; # matches whichever of the browsers below is enabled today
     description = ''
       Which browser other modules (hyprland's $browser keybind, dunst's
       notification-click browser, ...) should treat as "the" browser.
@@ -75,7 +72,6 @@ in
     # definitions to resolve cfg.default. Infinite recursion. Each branch
     # below has a fixed, static attribute name, so there's nothing circular
     # left — only whether the branch is active depends on cfg.default.
-    services.apps.browser.brave.enable = mkIf (cfg.default == "brave") (mkForce true);
     services.apps.browser.firefox.enable = mkIf (cfg.default == "firefox") (mkForce true);
     services.apps.browser.firefox_dev.enable = mkIf (cfg.default == "firefox_dev") (mkForce true);
   };

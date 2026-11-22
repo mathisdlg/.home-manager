@@ -161,7 +161,7 @@
 
     # Steam
     steam = {
-      enable = false;
+      enable = true;
     };
   };
 
@@ -227,7 +227,21 @@
     };
   };
 
-  systemd.services.nix-daemon.environment.TMPDIR = "/var/tmp";
+  systemd.services = {
+    nix-daemon.environment.TMPDIR = "/var/tmp";
+
+    # wake-on-lan = {
+    #   description = "Enable Wake-on-LAN on enp7s0";
+    #   wantedBy = [ "multi-user.target" ];
+    #   after = [ "network-pre.target" ];
+    #   before = [ "network.target" ];
+
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     ExecStart = "${pkgs.ethtool}/sbin/ethtool -s enp7s0 wol g";
+    #   };
+    # };
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
@@ -237,6 +251,12 @@
   # networking.firewall.allowedUDPPorts = [ 9876 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # networking = {
+  #   interfaces.enp7s0.wakeOnLan.enable = true;
+  #   firewall = {
+  #     allowedUDPPorts = [ 9 ];
+  #   };
+  # };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

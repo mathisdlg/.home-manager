@@ -42,6 +42,33 @@
 #     option this repo declares itself, so it keeps NixOS's own spelling
 #     and isn't nested under anything.
 { pkgs, globals }:
+let
+  # Options communes à firefox et firefox_dev
+  firefoxCommon = {
+    languagePacks = [
+      "fr"
+      "en-US"
+    ];
+
+    # KeePassXC-Browser s'ajoute tout seul via security.keepassxc.enable.
+    extensions = {
+      "uBlock0@raymondhill.net" = "ublock-origin";
+    };
+
+    # CA / certificat des services en .home.lan
+    # (erreur MOZILLA_PKIX_ERROR_SELF_SIGNED_CERT).
+    # Chemin relatif à ce fichier.
+    trustedCertificates = [
+      # ./certs/home-lan.crt
+    ];
+
+    extraSettings = {
+      # "dom.security.https_only_mode" = false;
+    };
+
+    extraPolicies = { };
+  };
+in
 {
   # ---------------------------------------------------------------------
   # user/ — every custom home-manager module (except hyprland's own
@@ -55,25 +82,44 @@
         darktable = {
           enable = true;
           extraSettings."ui_last/theme" = "darktable-icons-grey";
+          opencl.mode = "rusticl";
+          importPlaces = [
+            "${globals.homeDirectory}/Opencloud/Photo"
+            "${globals.homeDirectory}/Opencloud/Photo/Conv"
+            "${globals.homeDirectory}/Opencloud/Photo/Working"
+          ];
         };
-        gimp.enable = false;
-        gphoto2.enable = false;
-        imagemagick.enable = false;
-        krita.enable = false;
+        gimp.enable = true;
+        gphoto2.enable = true;
+        imagemagick.enable = true;
+        krita.enable = true;
       };
 
       browser = {
-        default = "brave";
+        default = "firefox_dev";
 
-        brave.enable = true;
-        firefox.enable = false;
-        firefox_dev.enable = true;
+        # Un seul des deux peut être activé : ils utilisent tous deux
+        # programs.firefox (une assertion le vérifie).
+        firefox = firefoxCommon // {
+          enable = false;
+        };
+
+        firefox_dev = firefoxCommon // {
+          enable = true;
+
+          # Extensions non signées autorisées (true par défaut, réservé à la
+          # Developer Edition). Ajoute ici tes .xpi pour les installer
+          # automatiquement ; l'ID est celui de ton manifest.json.
+          localExtensions = {
+            # "mon-extension@xxx" = ./extensions/mon-extension.xpi;
+          };
+        };
       };
 
       cad = {
-        freecad.enable = false;
-        kicad.enable = false;
-        prusa_slicer.enable = false;
+        freecad.enable = true;
+        kicad.enable = true;
+        prusa_slicer.enable = true;
       };
 
       cloud = {
@@ -93,6 +139,7 @@
         # (pkgs.vscodium, open source). See user/apps/editor/vscodium/vscodium.nix.
         vscodium.enable = true;
         neovim.enable = true;
+        gnome_text_editor.enable = true;
       };
 
       files = {
@@ -107,9 +154,9 @@
         beammp.enable = false;
         heroic.enable = false;
         puzzles.enable = false;
-        minecraft.enable = false;
-        mines.enable = false;
-        osu.enable = false;
+        minecraft.enable = true;
+        mines.enable = true;
+        osu.enable = true;
       };
 
       ia.tabby.enable = false;
@@ -144,6 +191,8 @@
     };
 
     dev = {
+      esphome.enable = false;
+      esptool.enable = true;
       python.enable = true;
       swift.enable = false;
     };
@@ -154,16 +203,16 @@
       screenshare.screenshare.enable = true;
 
       themes = {
-        fonts = {
-          jetbrains.enable = true;
-          nerd.enable = true;
-          noto.enable = true;
-        };
-
         day_night = {
           enable = true;
           latitude = "45.78N";
           longitude = "3.1E";
+        };
+
+        fonts = {
+          jetbrains.enable = true;
+          nerd.enable = true;
+          noto.enable = true;
         };
 
         themes.enable = true;
@@ -178,6 +227,8 @@
         filelight.enable = false;
         qdirstat.enable = false;
       };
+
+      raw_thumbnailer.enable = true;
 
       scripts.enable = true;
 

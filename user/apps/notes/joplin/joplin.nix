@@ -1,6 +1,6 @@
 {
   config,
-  pkgs,
+  unstable_pkgs,
   lib,
   ...
 }:
@@ -13,7 +13,7 @@ in
     mkEnableOption "Enable Joplin (open source).";
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
+    home.packages = with unstable_pkgs; [
       joplin-desktop
     ];
   };
