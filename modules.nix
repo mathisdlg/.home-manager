@@ -114,6 +114,8 @@ in
             # "mon-extension@xxx" = ./extensions/mon-extension.xpi;
           };
         };
+
+        tor.enable = true;
       };
 
       cad = {
